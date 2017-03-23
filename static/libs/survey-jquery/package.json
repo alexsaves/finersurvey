@@ -1,0 +1,96 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "survey-jquery",
+        "scope": null,
+        "escapedName": "survey-jquery",
+        "name": "survey-jquery",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/whitehawk/Documents/coding/survey"
+    ]
+  ],
+  "_from": "survey-jquery@latest",
+  "_id": "survey-jquery@0.12.4",
+  "_inCache": true,
+  "_location": "/survey-jquery",
+  "_nodeVersion": "6.10.0",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/survey-jquery-0.12.4.tgz_1489752360791_0.24650022038258612"
+  },
+  "_npmUser": {
+    "name": "andrewtelnov",
+    "email": "andrew.telnov@gmail.com"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "survey-jquery",
+    "scope": null,
+    "escapedName": "survey-jquery",
+    "name": "survey-jquery",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/survey-jquery/-/survey-jquery-0.12.4.tgz",
+  "_shasum": "d004052978952f6a93b979e62367481725f0f46e",
+  "_shrinkwrap": null,
+  "_spec": "survey-jquery",
+  "_where": "/Users/whitehawk/Documents/coding/survey",
+  "bugs": {
+    "url": "https://github.com/surveyjs/surveyjs/issues"
+  },
+  "dependencies": {
+    "@types/react": "0.0.0",
+    "jquery": ">=1.12.4"
+  },
+  "description": "survey.js is a JavaScript Survey Library. It is a modern way to add a survey to your website. It uses JSON for survey metadata and results.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "d004052978952f6a93b979e62367481725f0f46e",
+    "tarball": "https://registry.npmjs.org/survey-jquery/-/survey-jquery-0.12.4.tgz"
+  },
+  "files": [
+    "survey.css",
+    "survey.jquery.d.ts",
+    "survey.jquery.js",
+    "survey.jquery.min.js"
+  ],
+  "homepage": "https://surveyjs.org/",
+  "keywords": [
+    "Survey",
+    "JavaScript",
+    "Bootstrap",
+    "Library",
+    "jquery",
+    "jquery-plugin"
+  ],
+  "license": "MIT",
+  "main": "survey.jquery.min.js",
+  "maintainers": [
+    {
+      "name": "andrewtelnov",
+      "email": "andrew.telnov@gmail.com"
+    }
+  ],
+  "name": "survey-jquery",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/surveyjs/surveyjs.git"
+  },
+  "scripts": {},
+  "typings": "survey.jquery.d.ts",
+  "version": "0.12.4"
+}

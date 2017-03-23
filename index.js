@@ -1,23 +1,30 @@
-const Koa = require('koa');
-const app = new Koa();
-const enforceHttps = require('koa-sslify');
-
-console.log("ENV: ", process.env.NODE_ENV);
-
+// Only run clustering in production
 if (process.env.NODE_ENV == 'production') {
-  app.use(enforceHttps({ trustProtoHeader: true }));
+  var forever = require('forever-monitor');
+  
+  var child = new (forever.Monitor)('svr.js', {
+    'silent': false,
+    'options': [],
+    'killTree': true
+  });
+  
+  child.on('exit', function () {
+    console.log('svr.js has exited after undermined restarts');
+  });
+  
+  child.on('watch:restart', function(info) {
+    console.error('Restarting script because ' + info.file + ' changed');
+  });
+  
+  child.on('restart', function() {
+    console.error('Forever restarting script for ' + child.times + ' time');
+  });
+  
+  child.on('exit:code', function(code) {
+    console.error('Forever detected script exited with code ' + code);
+  });
+  
+  child.start();
+} else {
+  var app = require('./svr');
 }
-
-app.use(ctx => {
-  ctx.body = 'Survey';
-});
-
-const portval = process.env.PORT || 3001
-
-app.listen(portval);
-app.port = 18000;
-app.timeout = 10000;
-/**
-* Expose it
-*/
-module.exports = app;

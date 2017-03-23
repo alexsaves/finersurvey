@@ -1,0 +1,2 @@
+$(document).ready(function(){var e=$('script[type="finer/survey"]').first()[0],n=e.innerText,t=atob(n),a=JSON.parse(t);Survey.defaultBootstrapCss.navigationButton="btn btn-primary",Survey.Survey.cssType="bootstrap";var o=new Survey.Model(a),r={name:"John Doe",email:"johndoe@nobody.com",car:["Ford"]},u=function(e,n){var t=document.getElementById(n.name);t&&(t.value=n.value)};$("#surveyElement").Survey({model:o,data:r,onValueChanged:u})});
+//# sourceMappingURL=maps/main.js.map
