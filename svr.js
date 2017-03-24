@@ -61,14 +61,17 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
   app = express(),
   bodyParser = require('body-parser'),
   session = require('express-session'),
-  RedisStore = require('connect-redis')(session);
-  redisClient = redis.createClient(pjson.config.cache),
+  FileStore = require('session-file-store')(session),
+  /*RedisStore = require('connect-redis')(session);
+  redisClient = redis.createClient(pjson.config.cache),*/
   enforce = require('express-sslify'),
-  templs = new templates(),
-  templs.addAllFromFolder('./app/views'),
+  templs = new templates(),  
   models = finercommon.models,
   SurveyController = require('./app/controllers/survey');
   
+  // Add the templates
+  templs.addAllFromFolder('./app/views');
+
   // Turn on AWS SSL when its needed
   if (pjson.config.db.ssl.toString().toLowerCase() == 'true') {
     dbCluster.ssl = "Amazon RDS";
@@ -105,9 +108,10 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
   app.use(bodyParser.urlencoded({extended: true}));
   
   // Set up the session handler
-  pjson.config.session.store = new RedisStore({
+  /*pjson.config.session.store = new RedisStore({
     client: redisClient
-  });
+  });*/
+  pjson.config.session.store = new FileStore();
   app.use(session(pjson.config.session));
   
   /**
