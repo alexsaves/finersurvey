@@ -1,0 +1,21 @@
+@import "vars";
+
+.surveyButton {
+    background-color: $button-color;
+    border: $border-width solid $button-color;
+    display: inline-block;
+    color: $button-text-color;
+    -webkit-border-radius: $border-radius;
+    -moz-border-radius: $border-radius;
+    -ms-border-radius: $border-radius;
+    border-radius: $border-radius;
+    &:hover {
+        border-color: darken( $button-color, 10%);
+        background-color: darken( $button-color, 10%);
+    }
+    &.checked {
+        border-color: darken($button-color, 20%);
+        background-color: darken( $button-color, 10%);
+        color: darken( $button-text-color, 20%);
+    }
+}

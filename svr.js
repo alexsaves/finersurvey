@@ -173,6 +173,28 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
 
     sv.loadSurveyByGuid(guid, requestEmitter);
   });
+
+  /**
+  * Survey Results Save
+  */
+  app.post('/s/:surveyGuid', (req, res, next) => {
+    var guid = req.params.surveyGuid,
+      sv = new SurveyController(pjson.config);
+    
+    var requestEmitter = new events.EventEmitter();
+    requestEmitter.setMaxListeners(1);
+
+    requestEmitter.on('done', function(srvObj) {
+      res.end("{}");
+        //_outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {title: srvObj.name, session: req.session, model: srvObj.survey_model, modelstr: btoa(JSON.stringify(srvObj.survey_model))}));
+    });
+
+    requestEmitter.on('error', function() {
+        console.log("error!!", arguments);
+    });
+
+    sv.saveSurveyResults(guid, req.body, requestEmitter);
+  });
   
   /**
   * Cross domain xml for flash

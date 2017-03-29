@@ -1,0 +1,44 @@
+@import "vars";
+@import "buttons";
+@import "progress";
+body {
+    #surveyElement {
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        max-width: 35em;
+        font-size: $question-font-size;
+        margin-bottom: $general-spacing;
+        .qtitle {
+            font-size: 1em;
+        }
+        .form-inline {
+            padding-left: 20%;
+            padding-right: 20%;
+            @media screen and (max-width: $break-small) {
+              padding-left: 10%;
+              padding-right: 10%;
+            }
+        }
+        .question {
+            margin-top: 1em;
+            text-align: center;
+            .radio input[type=radio],
+            .checkbox input[type=checkbox] {
+                display: none;
+            }
+            .radio,
+            .checkbox {
+                label {
+                    @extend .surveyButton;
+                    width: 100%;
+                    font-size: 0.8em;
+                    margin-bottom: $general-spacing;
+                    padding: $general-spacing;
+                }
+            }
+        }
+        .panel-footer {
+            background-color: transparent;
+            text-align: center;
+        }
+    }
+}
