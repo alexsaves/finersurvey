@@ -1,25 +1,60 @@
 @import "vars";
 @import "buttons";
 @import "progress";
+@import "fonts";
+
 body {
     #surveyElement {
-        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: $lightfont;
         max-width: 45em;
         font-size: $question-font-size;
         margin-bottom: $general-spacing;
         -webkit-font-smoothing: subpixel-antialiased !important;
-        font-weight: lighter;        
+        padding-top: 5em;
+        .panel-body {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 3em;
+            padding-right: 3em;
+            @media screen and (max-width: $break-small) {
+                padding-left: 1.6em;
+                padding-right: 1.0em;
+            }
+        }
         .qtitle {
             font-size: 1em;
         }
         .form-inline {
-            
-            @media screen and (max-width: $break-small) {
-              
-            }
+            @media screen and (max-width: $break-small) {}
         }
         .question {
             margin-top: 1em;
+            b {
+              font-weight: normal;
+              font-family: $heavierfont;
+            }
+            h1 {
+                font-family: $heavierfont;
+                font-size: 1.3em;
+                font-weight: normal;
+                color: $question-text-color;
+                position: relative;
+                &::before {
+                    position: absolute;
+                    content: "※";
+                    font-size: 1.5em;
+                    top: -0.15em;
+                    left: -1em;
+                    color: lighten($question-text-color, 70%);
+                    font-weight: lighter;
+                    @media screen and (max-width: $break-small) {
+                        font-size: 0.8em;
+                        top: 0.22em;
+                        left: -0.95em;
+                        color: lighten($question-text-color, 80%);
+                    }
+                }
+            }
             .radio input[type=radio],
             .checkbox input[type=checkbox] {
                 display: none;

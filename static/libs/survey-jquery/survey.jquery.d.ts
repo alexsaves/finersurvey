@@ -1,4 +1,4 @@
-/*Type definitions for Survey JavaScript library v0.12.4
+/*Type definitions for Survey JavaScript library v0.12.5
 Project: http://surveyjs.org/
 Definitions by: Devsoft Baltic O� <https://github.com/surveyjs/>
 */
@@ -10,6 +10,7 @@ import * as React from 'react';
 import './chunks/localization';
 
 import "../../main.scss";
+export let Version: string;
 
 export var __assign: any;
 export function __extends(thisClass: any, baseClass: any): void;
@@ -550,6 +551,7 @@ export interface IQuestion extends IConditionRunner {
     onSurveyValueChanged(newValue: any): any;
     onSurveyLoad(): any;
     supportGoNextPageAutomatic(): boolean;
+    clearUnusedValues(): any;
 }
 export interface IPage extends IConditionRunner {
     visible: boolean;
@@ -1066,6 +1068,7 @@ export declare class QuestionBase extends Base implements IQuestion, IConditionR
     onSurveyLoad(): void;
     setVisibleIndex(value: number): void;
     supportGoNextPageAutomatic(): boolean;
+    clearUnusedValues(): void;
 }
 
 export declare class QuestionSelectBase extends Question {
@@ -1097,6 +1100,7 @@ export declare class QuestionSelectBase extends Question {
     protected onCheckForErrors(errors: Array<SurveyError>): void;
     protected getStoreOthersAsComment(): boolean;
     onSurveyLoad(): void;
+    clearUnusedValues(): void;
 }
 export declare class QuestionCheckboxBase extends QuestionSelectBase {
     name: string;
@@ -1321,8 +1325,10 @@ export declare class SurveyModel extends Base implements ISurvey, ISurveyTrigger
     protected getUnbindValue(value: any): any;
     getValue(name: string): any;
     setValue(name: string, newValue: any): void;
+    protected tryGoNextPageAutomatic(name: string): void;
     getComment(name: string): string;
     setComment(name: string, newValue: string): void;
+    clearValue(name: string): void;
     questionVisibilityChanged(question: IQuestion, newValue: boolean): void;
     pageVisibilityChanged(page: IPage, newValue: boolean): void;
     questionAdded(question: IQuestion, index: number): void;

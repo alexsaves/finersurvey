@@ -52,7 +52,7 @@ gulp.task('libs', function () {
  * SurveyJS
  */
 gulp.task('surveyjs', function () {
-  return gulp.src('./node_modules/survey-jquery/**/*')
+  return gulp.src('./node_modules/surveyjs/packages/survey-jquery/**/*')
     .pipe(gulp.dest('./static/libs/survey-jquery'));
 });
 
