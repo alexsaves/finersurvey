@@ -4,23 +4,22 @@
 body {
     #surveyElement {
         font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        max-width: 35em;
+        max-width: 45em;
         font-size: $question-font-size;
         margin-bottom: $general-spacing;
+        -webkit-font-smoothing: subpixel-antialiased !important;
+        font-weight: lighter;        
         .qtitle {
             font-size: 1em;
         }
         .form-inline {
-            padding-left: 20%;
-            padding-right: 20%;
+            
             @media screen and (max-width: $break-small) {
-              padding-left: 10%;
-              padding-right: 10%;
+              
             }
         }
         .question {
             margin-top: 1em;
-            text-align: center;
             .radio input[type=radio],
             .checkbox input[type=checkbox] {
                 display: none;
@@ -29,7 +28,7 @@ body {
             .checkbox {
                 label {
                     @extend .surveyButton;
-                    width: 100%;
+                    //width: 100%;
                     font-size: 0.8em;
                     margin-bottom: $general-spacing;
                     padding: $general-spacing;
