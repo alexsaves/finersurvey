@@ -7,10 +7,11 @@ $(document).ready(function () {
   Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
   Survey.Survey.cssType = "bootstrap";  
   srvMdl.completedHtml = "<div class=\"completion\"></div>";
-console.log(srvMdl);
+  srvMdl.questionTitleTemplate = "{title} {require}";
+
   var survey = new Survey.Model(srvMdl);
   survey.showProgressBar = "top";
-  survey.showQuestionNumbers = false;
+  //survey.showQuestionNumbers = false;
 
   var data = { name: "John Doe", email: "johndoe@nobody.com", car: ["Ford"] };
   var surveyValueChanged = function (sender, options) {
@@ -22,7 +23,7 @@ console.log(srvMdl);
 
   
 
-  surveyNode.Survey({
+  surveyNode.Survey({    
     "model": survey,
     "data": data,
     "css": cssOverrides,

@@ -8,6 +8,7 @@ body {
         font-family: $lightfont;
         max-width: 45em;
         font-size: $question-font-size;
+        line-height: $question-line-height;
         margin-bottom: $general-spacing;
         -webkit-font-smoothing: subpixel-antialiased !important;
         padding-top: 5em;
@@ -22,7 +23,7 @@ body {
             }
         }
         .qtitle {
-            font-size: 1em;
+            font-size: 1.2em;
         }
         .form-inline {
             @media screen and (max-width: $break-small) {}
@@ -43,7 +44,7 @@ body {
                     position: absolute;
                     content: "※";
                     font-size: 1.5em;
-                    top: -0.15em;
+                    top: -0.17em;
                     left: -1em;
                     color: lighten($question-text-color, 70%);
                     font-weight: lighter;

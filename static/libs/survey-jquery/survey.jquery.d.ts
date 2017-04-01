@@ -536,6 +536,7 @@ export interface ISurvey extends ISurveyData {
     requiredText: string;
     questionStartIndex: string;
     questionTitleTemplate: string;
+    questionNoTemplate: string;
     storeOthersAsComment: boolean;
     uploadFile(name: string, file: File, storeDataAsText: boolean, uploadingCallback: (status: string) => any): boolean;
     afterRenderQuestion(question: IQuestion, htmlElement: any): any;
@@ -996,6 +997,7 @@ export declare class Question extends QuestionBase implements IValidatorOwner {
     readonly inputId: string;
     title: string;
     readonly processedTitle: string;
+    readonly fullNo: string;
     readonly fullTitle: string;
     focus(onError?: boolean): void;
     protected getFirstInputElementId(): string;
@@ -1220,6 +1222,7 @@ export declare class SurveyModel extends Base implements ISurvey, ISurveyTrigger
     requiredText: string;
     questionStartIndex: string;
     questionTitleTemplate: string;
+    questionNoTemplate: string;
     showProgressBar: string;
     storeOthersAsComment: boolean;
     goNextPageAutomatic: boolean;
