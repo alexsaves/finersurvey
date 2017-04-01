@@ -2,7 +2,6 @@
 @import "buttons";
 @import "progress";
 @import "fonts";
-
 body {
     #surveyElement {
         font-family: $lightfont;
@@ -23,20 +22,49 @@ body {
             }
         }
         .qtitle {
-            font-size: 1.2em;
+            font-size: $heading-font-size;
+            position: relative;            
+            .qNum {
+                position: absolute;
+                left: -3em;
+                top: 0;
+                width: 2em;
+                text-align: right;
+                color: lighten($question-text-color, 70%);
+                @media screen and (max-width: $break-small) {
+                    position: static;
+                    left: 0;
+                    top: 0;
+                    margin-right: 0.5em;
+                }
+                &::after {
+                    content: "›";
+                    position: absolute;
+                    top: 0;
+                    right: -0.5em;
+                    color: lighten($button-text-color, 30%);
+                    @media screen and (max-width: $break-small) {
+                        position: static;
+                        left: 0;
+                        top: 0;
+                        padding-left: 0.2em;
+                    }
+                }
+            }
         }
         .form-inline {
             @media screen and (max-width: $break-small) {}
         }
         .question {
             margin-top: 1em;
+            margin-bottom: 4em;
             b {
-              font-weight: normal;
-              font-family: $heavierfont;
+                font-weight: normal;
+                font-family: $heavierfont;
             }
             h1 {
                 font-family: $heavierfont;
-                font-size: 1.3em;
+                font-size: $heading-font-size;
                 font-weight: normal;
                 color: $question-text-color;
                 position: relative;
@@ -63,8 +91,7 @@ body {
             .radio,
             .checkbox {
                 label {
-                    @extend .surveyButton;
-                    //width: 100%;
+                    @extend .surveyButton;                    
                     font-size: 0.8em;
                     margin-bottom: $general-spacing;
                     padding: $general-spacing;

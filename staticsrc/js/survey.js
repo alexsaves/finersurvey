@@ -8,12 +8,15 @@ $(document).ready(function () {
   Survey.Survey.cssType = "bootstrap";  
   srvMdl.completedHtml = "<div class=\"completion\"></div>";
   srvMdl.questionTitleTemplate = "{title} {require}";
+  srvMdl.questionNoTemplate = "{no}";
 
   var survey = new Survey.Model(srvMdl);
   survey.showProgressBar = "top";
   //survey.showQuestionNumbers = false;
 
-  var data = { name: "John Doe", email: "johndoe@nobody.com", car: ["Ford"] };
+  var data = {
+    // Meta data goes here
+  };
   var surveyValueChanged = function (sender, options) {
     var el = document.getElementById(options.name);
     if (el) {

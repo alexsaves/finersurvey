@@ -5,7 +5,8 @@
 var cssOverrides = {
   "question": {
 		"root": "question",
-		"title": "qtitle"		
+		"title": "qtitle",
+		"questionNumber": "qNum"
 	},
 	"navigation": {
 		"complete": "navButton complete",

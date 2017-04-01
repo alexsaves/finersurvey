@@ -391,7 +391,7 @@ export declare class SurveyQuestionRadiogroup extends SurveyQuestionElementBase 
     render(): JSX.Element;
     protected getItems(): Array<any>;
     protected readonly textStyle: any;
-    protected renderRadio(key: string, item: ItemValue, isChecked: boolean, divStyle: any, otherItem: JSX.Element, isFirst: boolean): JSX.Element;
+    protected renderRadio(key: string, item: ItemValue, isChecked: boolean, divStyle: any, otherItem: JSX.Element, isFirst: boolean, divClass: any): JSX.Element;
     protected renderOther(): JSX.Element;
 }
 
@@ -923,6 +923,7 @@ export declare class QuestionMultipleTextModel extends Question implements IMult
     name: string;
     colCountChangedCallback: () => void;
     itemSize: number;
+    inputType: string;
     constructor(name: string);
     getType(): string;
     items: Array<MultipleTextItemModel>;
@@ -944,6 +945,7 @@ export declare class QuestionRowModel {
     visibilityChangedCallback: () => void;
     constructor(page: PageModel, question: QuestionBase);
     questions: Array<QuestionBase>;
+    readonly questionType: string;
     visible: boolean;
     updateVisible(): void;
     addQuestion(q: QuestionBase): void;
@@ -985,6 +987,7 @@ export declare class PageModel extends Base implements IPage, IConditionRunner {
 
 export declare class Question extends QuestionBase implements IValidatorOwner {
     name: string;
+    inputType: string;
     errors: Array<SurveyError>;
     validators: Array<SurveyValidator>;
     valueChangedCallback: () => void;
@@ -1038,6 +1041,7 @@ export declare class Question extends QuestionBase implements IValidatorOwner {
 export declare class QuestionBase extends Base implements IQuestion, IConditionRunner {
     name: string;
     protected data: ISurveyData;
+    inputType: string;
     customWidget: QuestionCustomWidget;
     visibleIf: string;
     startWithNewLine: boolean;
@@ -1079,6 +1083,7 @@ export declare class QuestionSelectBase extends Question {
     choicesByUrl: ChoicesRestfull;
     otherErrorText: string;
     storeOthersAsComment: boolean;
+    inputType: string;
     choicesChangedCallback: () => void;
     constructor(name: string);
     readonly isOtherSelected: boolean;
@@ -1113,6 +1118,7 @@ export declare class QuestionCheckboxBase extends QuestionSelectBase {
 
 export declare class QuestionCheckboxModel extends QuestionCheckboxBase {
     name: string;
+    inputType: string;
     constructor(name: string);
     protected getHasOther(val: any): boolean;
     protected valueFromDataCore(val: any): any;
@@ -1132,6 +1138,7 @@ export declare class QuestionCommentModel extends Question {
 
 export declare class QuestionDropdownModel extends QuestionSelectBase {
     name: string;
+    inputType: string;
     constructor(name: string);
     optionsCaption: string;
     getType(): string;
@@ -1172,6 +1179,7 @@ export declare class QuestionHtmlModel extends QuestionBase {
 
 export declare class QuestionRadiogroupModel extends QuestionCheckboxBase {
     name: string;
+    inputType: string;
     constructor(name: string);
     getType(): string;
     supportGoNextPageAutomatic(): boolean;
@@ -1180,6 +1188,7 @@ export declare class QuestionRadiogroupModel extends QuestionCheckboxBase {
 export declare class QuestionRatingModel extends Question {
     name: string;
     static defaultRateValues: ItemValue[];
+    inputType: string;
     minRateDescription: string;
     maxRateDescription: string;
     rateValuesChangedCallback: () => void;
