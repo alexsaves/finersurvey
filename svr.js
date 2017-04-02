@@ -29,7 +29,6 @@ AWS.config.region = pjson.config.aws.region;
 
 // Code to run if we're in the master process
 if (cluster.isMaster && process.env.NODE_ENV == 'production') {
-
   // Count the machine's CPUs
   var cpuCount = require('os').cpus().length;
 
@@ -101,9 +100,6 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
   // Trust the first proxy
   app.set('trust proxy', 1);
 
-  // Set the page loade timeout
-  app.use(timeout(pjson.config.pageTimeout, { respond: false }));
-
   // Add body parser url parser
   app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -157,7 +153,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
   * Survey Display
   */
   app.get('/s/:surveyGuid', (req, res, next) => {
-    var guid = req.params.surveyGuid,
+    /*var guid = req.params.surveyGuid,
       sv = new SurveyController(pjson.config);
 
     var requestEmitter = new events.EventEmitter();
@@ -170,10 +166,19 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     });
 
     requestEmitter.on('error', function () {
+      requestEmitter.removeAllListeners();
       console.log("error!!", arguments);
     });
 
-    sv.loadSurveyByGuid(guid, requestEmitter);
+    requestEmitter.on('timeout', function() {
+      requestEmitter.removeAllListeners();
+      console.log("Timed out");
+      _outputResponse(res, templs.renderWithBase('surveybase', 'servertimeout', { title: "Timed out", session: req.session }));
+    });
+
+    sv.loadSurveyByGuid(guid, requestEmitter);*/
+    var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
+    _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', { title: "test", session: req.session, model: defaultModel, modelstr: btoa(JSON.stringify(defaultModel)) }));
   });
 
   /**

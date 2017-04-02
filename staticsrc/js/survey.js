@@ -1,6 +1,9 @@
 $(document).ready(function () {
-  var srvNd = $("script[type=\"finer/survey\"]").first()[0],
-    srvB64 = srvNd.innerText,
+  var srvNd = $("script[type=\"finer/survey\"]").first()[0];
+  if (!srvNd) {
+    return;
+  }
+  var srvB64 = srvNd.innerText,
     srvJSONStr = atob(srvB64),
     srvMdl = JSON.parse(srvJSONStr),
     surveyNode = $("#surveyElement");
@@ -23,8 +26,6 @@ $(document).ready(function () {
       el.value = options.value;
     }
   };
-
-  
 
   surveyNode.Survey({    
     "model": survey,

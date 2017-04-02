@@ -3,6 +3,7 @@
 @import "progress";
 @import "fonts";
 body {
+    -webkit-text-size-adjust: 100% !important;
     #surveyElement {
         font-family: $lightfont;
         max-width: 45em;
@@ -15,6 +16,10 @@ body {
             margin-right: $general-spacing;
             display: inline-block;
         }
+        .instructions {
+            font-family: $faintfont;
+            color: $light-text-color;
+        }
         .rating,
         .radio,
         .checkbox {
@@ -23,22 +28,33 @@ body {
                 color: $button-text-color;
                 padding-left: 12px;
                 display: inline-block;
+                font-family: $heavierfont;
+                vertical-align: text-top;
                 @media screen and (max-width: $break-small) {
-                    font-size: 1.25em;
+                    font-size: 1.1em;
                 }
                 span {
                     font-size: 0.7em;
                     position: relative;
                     top: -2px;
+                    white-space: pre-wrap;
+                }
+            }
+        }
+        .rating {
+            label.btn.btn-default {
+                @media screen and (max-width: $break-small) {
+                    padding: 6px 10px;
                 }
             }
         }
         .checkbox {
+            vertical-align: top;
             label.btn.btn-default {
                 margin-right: $general-spacing;
                 margin-bottom: $general-spacing;
                 span {
-                    min-width: 12em;
+                    width: 12em;
                     display: inline-block;
                     text-align: left;
                 }

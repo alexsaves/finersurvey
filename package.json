@@ -14,7 +14,7 @@
   "author": "Alexei White <alexei@finer.ink>",
   "license": "ISC",
   "config": {
-    "pageTimeout": 10000,
+    "pageTimeout": 5000,
     "session": {
       "secret": "olly0xenfr33!",
       "resave": false,

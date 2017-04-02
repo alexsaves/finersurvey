@@ -11,7 +11,11 @@ var SurveyController = function (cfg) {
  * Load survey by guid
  */
 SurveyController.prototype.loadSurveyByGuid = function (guid, requestEmitter) {
+  var timeouttimer = setTimeout(function() {
+      requestEmitter.emit('timeout');
+  }, this.cfg.pageTimeout);
   finercommon.models.Survey.GetByGuid(this.cfg, guid, function (err, srv) {
+    clearTimeout(timeouttimer);
     if (err) {
       requestEmitter.emit('error', err);
     } else {

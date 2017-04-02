@@ -316,7 +316,7 @@ export declare class SurveyQuestionCheckboxItem extends SurveyElementBase {
     handleOnChange(event: any): void;
     render(): JSX.Element;
     protected readonly inputStyle: any;
-    protected renderCheckbox(isChecked: boolean, divStyle: any, otherItem: JSX.Element): JSX.Element;
+    protected renderCheckbox(isChecked: boolean, divStyle: any, otherItem: JSX.Element, hasInstructions: boolean): JSX.Element;
     protected renderOther(): JSX.Element;
 }
 
@@ -1113,6 +1113,8 @@ export declare class QuestionSelectBase extends Question {
 }
 export declare class QuestionCheckboxBase extends QuestionSelectBase {
     name: string;
+    colCountValue: number;
+    instructions: string;
     colCountChangedCallback: () => void;
     constructor(name: string);
     colCount: number;
