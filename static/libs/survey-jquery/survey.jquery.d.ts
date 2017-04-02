@@ -50,6 +50,7 @@ export declare var defaultStandardCss: {
         root: string;
         item: string;
         other: string;
+        label: string;
     };
     comment: string;
     dropdown: {
@@ -125,6 +126,7 @@ export declare var defaultBootstrapCss: {
         root: string;
         item: string;
         other: string;
+        label: string;
     };
     comment: string;
     dropdown: {

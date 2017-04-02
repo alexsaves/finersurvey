@@ -11,6 +11,44 @@ body {
         margin-bottom: $general-spacing;
         -webkit-font-smoothing: subpixel-antialiased !important;
         padding-top: 5em;
+        div.radio {
+            margin-right: $general-spacing;
+            display: inline-block;
+        }
+        .rating,
+        .radio,
+        .checkbox {
+            label.btn.btn-default {
+                font-size: 1.5em;
+                color: $button-text-color;
+                padding-left: 12px;
+                display: inline-block;
+                @media screen and (max-width: $break-small) {
+                    font-size: 1.25em;
+                }
+                span {
+                    font-size: 0.7em;
+                    position: relative;
+                    top: -2px;
+                }
+            }
+        }
+        .checkbox {
+            label.btn.btn-default {
+                margin-right: $general-spacing;
+                margin-bottom: $general-spacing;
+                span {
+                    min-width: 12em;
+                    display: inline-block;
+                    text-align: left;
+                }
+            }
+            .otherCb {
+                input[type=text] {
+                    min-width: 15.6em;
+                }
+            }
+        }
         .panel-body {
             padding-top: 0;
             padding-bottom: 0;
@@ -23,7 +61,7 @@ body {
         }
         .qtitle {
             font-size: $heading-font-size;
-            position: relative;            
+            position: relative;
             .qNum {
                 position: absolute;
                 left: -3em;
@@ -90,12 +128,8 @@ body {
             }
             .radio,
             .checkbox {
-                label {
-                    @extend .surveyButton;                    
-                    font-size: 0.8em;
-                    margin-bottom: $general-spacing;
-                    padding: $general-spacing;
-                }
+                width: auto !important;
+                label {}
             }
         }
         .panel-footer {

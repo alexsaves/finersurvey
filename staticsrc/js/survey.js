@@ -33,6 +33,12 @@ $(document).ready(function () {
     "onValueChanged": function() {
       HandleQuestionUpdate(surveyNode);
     },
+    "onCurrentPageChanged": function() {
+      setTimeout(function() {
+        HandleQuestionUpdate(surveyNode);
+      }, 20);
+      
+    },
     "onComplete": function(srv) {
       var dta = srv.data;
       var cmp = new Completer(srvMdl.guid, dta);

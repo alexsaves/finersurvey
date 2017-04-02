@@ -14,5 +14,12 @@ var cssOverrides = {
 		"next": "navButton next"
 	},
 	"progress": "survey-progress",
-	"progressBar": "survey-progress-bar"
+	"progressBar": "survey-progress-bar",
+	"radiogroup": {
+		"label": "btn btn-default"
+	},
+	"checkbox": {
+		"label": "btn btn-default",
+		"other": "otherCb"
+	}
 };

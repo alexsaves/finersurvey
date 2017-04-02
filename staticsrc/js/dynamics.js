@@ -7,10 +7,10 @@ var HandleQuestionUpdate = function (surveyNode) {
       isChecked = value[0].checked;
       
     if (isChecked) {
-      value.parents("label").first().addClass("checked");
+      value.parents("label").first().addClass("checked active");
       value.parents("div." + qtype).first().addClass("checked");
     } else {
-      value.parents("label").first().removeClass("checked");
+      value.parents("label").first().removeClass("checked active");
       value.parents("div." + qtype).first().removeClass("checked");
     }
   });
