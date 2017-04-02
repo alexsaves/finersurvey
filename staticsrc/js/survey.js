@@ -34,16 +34,14 @@ $(document).ready(function () {
     "onValueChanged": function() {
       HandleQuestionUpdate(surveyNode);
     },
-    "onCurrentPageChanged": function() {
+    "onCurrentPageChanged": function(srv) {
       setTimeout(function() {
         HandleQuestionUpdate(surveyNode);
       }, 20);
-      
+      (new Completer(srvMdl.guid, srv.data)).saveResults();
     },
     "onComplete": function(srv) {
-      var dta = srv.data;
-      var cmp = new Completer(srvMdl.guid, dta);
-      cmp.saveResults();
+      (new Completer(srvMdl.guid, srv.data)).saveResults();
     }
   });
 
