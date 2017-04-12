@@ -62,7 +62,7 @@
     "express-sslify": "^1.2.0",
     "express-vue": "^3.9.6",
     "extend": "^3.0.0",
-    "finercommon": "git+https://b7af27e5b52ab6d6a4c579d8e0f447a7c19ec86a:x-oauth-basic@github.com/thefinerink/finercommon.git",
+    "finercommon": "git+https://1e37470bfae9c1cb98c12c99b100edaea16bc73e:x-oauth-basic@github.com/thefinerink/finercommon.git",
     "forever-monitor": "^1.7.1",
     "md5": "^2.2.1",
     "mysql": "^2.13.0",
