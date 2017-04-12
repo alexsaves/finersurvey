@@ -153,7 +153,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
   * Survey Display
   */
   app.get('/s/:surveyGuid', (req, res, next) => {
-    /*var guid = req.params.surveyGuid,
+    var guid = req.params.surveyGuid,
       sv = new SurveyController(pjson.config);
 
     var requestEmitter = new events.EventEmitter();
@@ -176,9 +176,9 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
       _outputResponse(res, templs.renderWithBase('surveybase', 'servertimeout', { title: "Timed out", session: req.session }));
     });
 
-    sv.loadSurveyByGuid(guid, requestEmitter);*/
-    var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
-    _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', { title: "test", session: req.session, model: defaultModel, modelstr: btoa(JSON.stringify(defaultModel)) }));
+    sv.loadSurveyByGuid(guid, requestEmitter);
+    //var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
+    //_outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', { title: "test", session: req.session, model: defaultModel, modelstr: btoa(JSON.stringify(defaultModel)) }));
   });
 
   /**
