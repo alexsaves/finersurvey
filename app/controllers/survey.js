@@ -47,7 +47,7 @@ SurveyController.prototype.getRespondentFromSession = function(session, requestE
             survey_guid: sguid,
             user_agent: ua,
             ip_addr: ip,
-            time_zone: 999
+            time_zone: 99999
         }, function(err, resp) {
             if (err) {
                 requestEmitter.emit('error', err);
@@ -66,7 +66,7 @@ SurveyController.prototype.getRespondentFromSession = function(session, requestE
 /**
  * Save the survey data
  */
-SurveyController.prototype.saveSurveyResults = function(guid, submitBody, respondent, requestEmitter) {
+SurveyController.prototype.saveSurveyResults = function(guid, submitBody, rid, requestEmitter) {
     if (arguments.length < 4) {
         throw new Error("Missing argments in save survey results.");
     }
@@ -75,16 +75,26 @@ SurveyController.prototype.saveSurveyResults = function(guid, submitBody, respon
             requestEmitter.emit('error', err);
         } else {
             srv.survey_model = JSON.parse(srv.survey_model.toString());
-            srv.saveRespondent(this.cfg, submitBody, function(err, resp) {
+            // Get the respondent
+            finercommon.models.Respondent.GetById(this.cfg, rid, function(err, resp) {
                 if (err) {
                     requestEmitter.emit('error', err);
                 } else {
-                    console.log("DONE SAVING", resp);
-                    requestEmitter.emit('done', resp);
+                    if (submitBody.__tz) {
+                        resp.setTimeZone(this.cfg, parseInt(submitBody.__tz));
+                        delete submitBody.__tz;
+                    }
+                    srv.saveRespondent(this.cfg, resp, submitBody, function(err, resp) {
+                        if (err) {
+                            requestEmitter.emit('error', err);
+                        } else {
+                            requestEmitter.emit('done', resp);
+                        }
+                    }.bind(this));
                 }
-            });
+            }.bind(this));
         }
-    });
+    }.bind(this));
 };
 
 /**

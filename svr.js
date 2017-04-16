@@ -15,7 +15,7 @@ var mysql = require('mysql'),
     templates = require('./app/utils/templates'),
     finercommon = require('finercommon'),
     events = require('events'),
-    port = process.env.PORT || 3001,
+    port = process.env.PORT || 8080,
     btoa = require('btoa');
 
 // Set the time zone
@@ -164,12 +164,12 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
 
         requestEmitter.on('error', function() {
             requestEmitter.removeAllListeners();
-            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', { title: "Oops, there's a problem.", details: "We're having difficulties right now, please try again a little later!", session: req.session }));
+            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', { title: "Oops, there's a problem.", details: "We're having difficulties right now, please try again a little later!", session: req.session }, 500));
         });
 
         requestEmitter.on('timeout', function() {
             requestEmitter.removeAllListeners();
-            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', { title: "Oops, there's a problem.", details: "We're having difficulties right now, please try again a little later!", session: req.session }));
+            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', { title: "Oops, there's a problem.", details: "We're having difficulties right now, please try again a little later!", session: req.session }, 500));
         });
 
         // Handle the done value
@@ -178,8 +178,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             sv.getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function(resp) {
                 req.session.rid = resp;
                 req.session.save(function() {
-                    var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
-                    srvObj.survey_model = defaultModel;
+                    //var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
+                    //srvObj.survey_model = defaultModel;
                     _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', { title: srvObj.name, respondent: resp, session: req.session, model: srvObj.survey_model, surveyID: guid, modelstr: btoa(JSON.stringify(srvObj.survey_model)) }));
                 });
             });
@@ -191,25 +191,52 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     });
 
     /**
+     * Survey Display
+     */
+    app.get('/s/:surveyGuid/complete', (req, res, next) => {
+        var guid = req.params.surveyGuid,
+            sv = new SurveyController(pjson.config),
+            usSrc = req.headers['user-agent'],
+            ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+        req.session.destroy(function() {
+
+        });
+    });
+
+    /**
      * Survey Results Save
      */
     app.post('/s/:surveyGuid', (req, res, next) => {
         var guid = req.params.surveyGuid,
-            sv = new SurveyController(pjson.config);
+            sv = new SurveyController(pjson.config),
+            rid = req.session.rid;
 
         var requestEmitter = new events.EventEmitter();
         requestEmitter.setMaxListeners(1);
 
         requestEmitter.on('done', function(srvObj) {
-            res.end("{}");
-            //_outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {title: srvObj.name, session: req.session, model: srvObj.survey_model, modelstr: btoa(JSON.stringify(srvObj.survey_model))}));
+            _outputResponse(res, {
+                body: JSON.stringify({
+                    success: true
+                }),
+                status: 200,
+                headers: { "Content-Type": "application/json" }
+            });
         });
 
         requestEmitter.on('error', function() {
-            console.log("error!!", arguments);
+            requestEmitter.removeAllListeners();
+            _outputResponse(res, {
+                body: JSON.stringify({
+                    error: "There was an error saving the data."
+                }),
+                status: 500,
+                headers: { "Content-Type": "application/json" }
+            });
         });
 
-        sv.saveSurveyResults(guid, req.body, requestEmitter);
+        sv.saveSurveyResults(guid, req.body, rid, requestEmitter);
     });
 
     /**

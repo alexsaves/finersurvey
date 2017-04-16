@@ -8,34 +8,49 @@ const check = require('check-types');
  * Templates loader
  * @constructor
  */
-var Templates = function () {
-  this._templates = {};
+var Templates = function() {
+    this._templates = {};
 };
 
 /**
  * Add and compile a template
  * @param fileName
  */
-Templates.prototype.addTemplateFromFile = function (fileName) {
-  var flContents = fs.readFileSync(fileName).toString('utf-8'),
-    baseFile = path.basename(fileName),
-    rootName = baseFile.substr(0, baseFile.indexOf('.')),
-    ptemp = pug.compile(flContents);
-  this._templates[rootName.toLowerCase()] = ptemp;
+Templates.prototype.addTemplateFromFile = function(fileName) {
+    var flContents = fs.readFileSync(fileName).toString('utf-8'),
+        baseFile = path.basename(fileName),
+        rootName = baseFile.substr(0, baseFile.indexOf('.')),
+        ptemp = pug.compile(flContents);
+    this._templates[rootName.toLowerCase()] = ptemp;
 };
 
 /**
  * Add all the templates from the folder
  * @param folder
  */
-Templates.prototype.addAllFromFolder = function (folder) {
-  fs.readdir(folder, function (err, files) {
-    if (files) {
-      for (var i = 0; i < files.length; i++) {
-        this.addTemplateFromFile(folder + '/' + files[i]);
-      }
+Templates.prototype.addAllFromFolder = function(folder) {
+    fs.readdir(folder, function(err, files) {
+        if (files) {
+            for (var i = 0; i < files.length; i++) {
+                this.addTemplateFromFile(folder + '/' + files[i]);
+            }
+        }
+    }.bind(this));
+};
+
+/**
+ * Render a template
+ * @param templateName
+ * @param data
+ */
+Templates.prototype.render = function(templateName, data) {
+    data = data || {};
+    if (!data.title) {
+        data.title = "Untitled";
+    } else {
+        data.title = data.title;
     }
-  }.bind(this));
+    return this._templates[templateName.toLowerCase()](data);
 };
 
 /**
@@ -43,35 +58,24 @@ Templates.prototype.addAllFromFolder = function (folder) {
  * @param templateName
  * @param data
  */
-Templates.prototype.render = function (templateName, data) {
-  data = data || {};
-  if (!data.title) {
-    data.title = "Untitled";
-  } else {
-    data.title = data.title;
-  }
-  return this._templates[templateName.toLowerCase()](data);
-};
-
-/**
- * Render a template
- * @param templateName
- * @param data
- */
-Templates.prototype.renderWithBase = function () {
-  var previous = "{$content}",
-  data = {};
-  if (check.object(arguments[arguments.length - 1])) {
-    data = arguments[arguments.length - 1];
-  }
-  for (var i = 0; i < arguments.length; i++) {
-    var arg = arguments[i];
-    if (check.string(arg)) {
-      var sub = this.render(arg, data);
-      previous = previous.replace(/\{\$content\}/i, sub);
+Templates.prototype.renderWithBase = function() {
+    var previous = "{$content}",
+        data = {},
+        headers = {},
+        status = 200;
+    if (check.object(arguments[arguments.length - 1])) {
+        data = arguments[arguments.length - 1];
     }
-  }
-  return {body: previous, headers: {}};
+    for (var i = 0; i < arguments.length; i++) {
+        var arg = arguments[i];
+        if (check.string(arg)) {
+            var sub = this.render(arg, data);
+            previous = previous.replace(/\{\$content\}/i, sub);
+        } else if (check.number(arg)) {
+            status = parseInt(arg);
+        }
+    }
+    return { body: previous, headers: headers, status: status };
 };
 
 
@@ -80,9 +84,9 @@ Templates.prototype.renderWithBase = function () {
  * @param templateName
  * @param data
  */
-Templates.prototype.renderError = function (res, session, err) {
-  res.status(404);
-  res.end(this.renderWithBase('error', {title: "Error - " + err.message, session: session, error: err}));
+Templates.prototype.renderError = function(res, session, err) {
+    res.status(404);
+    res.end(this.renderWithBase('error', { title: "Error - " + err.message, session: session, error: err }));
 };
 
 /**
