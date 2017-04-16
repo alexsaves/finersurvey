@@ -1,6 +1,6 @@
 {
     "name": "survey",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
@@ -66,6 +66,7 @@
         "finercommon": "git+https://1e37470bfae9c1cb98c12c99b100edaea16bc73e:x-oauth-basic@github.com/thefinerink/finercommon.git",
         "forever-monitor": "^1.7.1",
         "gulp": "^3.9.1",
+        "jsforce": "^1.7.1",
         "md5": "^2.2.1",
         "mysql": "^2.13.0",
         "passport": "^0.3.2",
