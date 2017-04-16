@@ -194,13 +194,10 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
      * Survey Display
      */
     app.get('/s/:surveyGuid/complete', (req, res, next) => {
-        var guid = req.params.surveyGuid,
-            sv = new SurveyController(pjson.config),
-            usSrc = req.headers['user-agent'],
-            ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        var guid = req.params.surveyGuid;
 
         req.session.destroy(function() {
-
+            _outputResponse(res, templs.renderWithBase('surveybase', 'surveycomplete', { surveyID: guid, title: "Thanks! Discover Win/Loss Analysis with Finer Ink." }));
         });
     });
 

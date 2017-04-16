@@ -1,0 +1,44 @@
+@import "vars";
+@import "buttons";
+@import "fonts";
+table#complete-table {
+    p {
+        padding: 0px;
+        margin: 0px;
+        padding-left: $general-spacing;
+        padding-right: $general-spacing;
+    }
+    p.handwriting {
+        line-height: 1;
+        span {
+            font-family: "jellyka", "Open Sans", sans-serif;
+            font-size: 9em;
+        }
+        @media screen and (max-width: $break-small) {
+            span {
+                font-size: 7em;
+            }
+        }
+    }
+    span.calltoaction {
+        font-family: "latolight";
+        font-size: 2.5em;
+        span.win {
+            color: green;
+            font-family: "latobold";
+        }
+        @media screen and (max-width: $break-small) {
+            font-size: 2em;
+        }
+    }
+    span.logo {
+        img {
+            opacity: 0.2;
+            height: 3.5em;
+        }
+    }
+    a.calltoaction {
+        @extend .lightgreenbutton;
+        margin: ($general-spacing * 2);
+    }
+}

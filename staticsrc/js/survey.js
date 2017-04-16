@@ -44,6 +44,7 @@ $(document).ready(function() {
         },
         "onComplete": function(srv) {
             (new Completer(surveyId, srv.data)).saveResults();
+            window.location = '/s/' + surveyId + '/complete';
         }
     });
 
