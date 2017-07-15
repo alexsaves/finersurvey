@@ -6,6 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node index.js",
+        "debugsurvey": "(cd node_modules/surveyjs/ && webpack --env.buildType dev --env.platform jquery)",
         "prestart": "(cd node_modules/surveyjs/ && webpack --env.buildType prod --env.platform jquery) && gulp"
     },
     "repository": {
@@ -30,6 +31,13 @@
             "return_buffers": true
         },
         "db": {
+            "host": "localhost",
+            "user": "finerAdmin",
+            "pw": "finerPass",
+            "db": "finerinkprod",
+            "ssl": "false"
+        },
+        "dbProd": {
             "host": "finerinkprod.ckumtmamqoyw.us-west-2.rds.amazonaws.com",
             "user": "finerinkadmin",
             "pw": "J39dK$sl_1!",
@@ -67,6 +75,13 @@
         "finercommon": "git+https://1e37470bfae9c1cb98c12c99b100edaea16bc73e:x-oauth-basic@github.com/thefinerink/finercommon.git",
         "forever-monitor": "^1.7.1",
         "gulp": "^3.9.1",
+        "gulp-concat": "^2.6.1",
+        "gulp-if": "^2.0.2",
+        "gulp-rename": "^1.2.2",
+        "gulp-sass": "^3.1.0",
+        "gulp-sourcemaps": "^2.4.1",
+        "gulp-uglify": "^2.0.1",
+        "gulp-watch": "^4.3.11",
         "jsforce": "^1.7.1",
         "md5": "^2.2.1",
         "mysql": "^2.13.0",
@@ -75,13 +90,8 @@
         "redis": "^2.7.1",
         "session-file-store": "^1.0.0",
         "shortid": "^2.2.8",
+        "surveyjs": "git+https://1e37470bfae9c1cb98c12c99b100edaea16bc73e:x-oauth-basic@github.com/thefinerink/surveyjs.git",
         "underscore": "^1.8.3",
-        "utf8": "^2.1.2",
-        "gulp-concat": "^2.6.1",
-        "gulp-rename": "^1.2.2",
-        "gulp-sass": "^3.1.0",
-        "gulp-sourcemaps": "^2.4.1",
-        "gulp-uglify": "^2.0.1",
-        "surveyjs": "git+https://1e37470bfae9c1cb98c12c99b100edaea16bc73e:x-oauth-basic@github.com/thefinerink/surveyjs.git"
+        "utf8": "^2.1.2"
     }
 }
