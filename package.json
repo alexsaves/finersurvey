@@ -1,11 +1,12 @@
 {
     "name": "survey",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node index.js"
+        "start": "node index.js",
+        "prestart": "webpack -p && gulp"
     },
     "repository": {
         "type": "git",
@@ -75,15 +76,12 @@
         "session-file-store": "^1.0.0",
         "shortid": "^2.2.8",
         "underscore": "^1.8.3",
-        "utf8": "^2.1.2"
-    },
-    "devDependencies": {
-        "gulp": "^3.9.1",
+        "utf8": "^2.1.2",
         "gulp-concat": "^2.6.1",
         "gulp-rename": "^1.2.2",
         "gulp-sass": "^3.1.0",
         "gulp-sourcemaps": "^2.4.1",
         "gulp-uglify": "^2.0.1",
-        "surveyjs": "https://github.com/alexsaves/surveyjs.git"
+        "surveyjs": "git+https://1e37470bfae9c1cb98c12c99b100edaea16bc73e:x-oauth-basic@github.com/thefinerink/surveyjs.git"
     }
 }
