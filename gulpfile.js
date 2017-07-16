@@ -62,6 +62,9 @@ gulp.task('libs', function () {
  * SurveyJS
  */
 gulp.task('surveyjs', function () {
+    gulp
+        .src('./node_modules/surveyjs/packages/survey-jquery/**/*')
+        .pipe(gulp.dest(dist + '/libs/survey-jquery'));
     return gulp
         .src('./node_modules/surveyjs/package/survey-jquery/**/*')
         .pipe(gulp.dest(dist + '/libs/survey-jquery'));
