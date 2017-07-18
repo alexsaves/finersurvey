@@ -4,7 +4,7 @@
  */
 var cssOverrides = {
   "question": {
-		"root": "question",
+		"mainRoot": "question",
 		"title": "qtitle",
 		"questionNumber": "qNum"
 	},
