@@ -8,7 +8,8 @@ import { routerReducer } from 'react-router-redux'
  */
 const surveyReducers = combineReducers({
   metadata,
-  pages
+  pages,
+  currentPage: pages
 });
 
 export default surveyReducers;

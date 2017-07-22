@@ -20,11 +20,12 @@ class SurveyComponent extends React.Component {
  */
   render() {
     console.log(this.props);
+    let currentPage = this.props.currentPage;
     return (
       <div className='app-ui app-main'>
         <ProgressComponent />
-        {this.props.pages.map((pg) => {
-          return <div key={pg.id}>page</div>;
+        {this.props.pages.map((pg, idx) => {
+          return <PageComponent key={idx} questions={pg.elements} isSelected={idx === currentPage} />;
         })}
       </div>
     );
@@ -34,7 +35,7 @@ class SurveyComponent extends React.Component {
 // This is our select function that will extract from the state the data slice
 // we want to expose through props to our component.
 const mapStateToProps = (state/*, props*/) => {
-  return {metadata: state.metadata, pages: state.pages}
+  return {metadata: state.metadata, pages: state.pages, currentPage: state.currentPage}
 }
 
 // Connect the survey component
