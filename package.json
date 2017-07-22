@@ -4,10 +4,11 @@
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "gulpwatch": "gulp",
+        "wpwatch": "webpack -d && webpack -d --watch",
+        "prod": "webpack -p",
         "start": "node index.js",
-        "debugsurvey": "(cd node_modules/surveyjs/ && webpack --env.buildType dev --env.platform jquery)",
-        "prestart": "(cd node_modules/surveyjs/ && webpack --env.buildType prod --env.platform jquery) && gulp"
+        "prestart": "webpack -p && gulp"
     },
     "repository": {
         "type": "git",

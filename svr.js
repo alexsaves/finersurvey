@@ -153,7 +153,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     /**
      * Survey Display
      */
-    app.get('/s/:surveyGuid', (req, res, next) => {
+    app.get(['/s/:surveyGuid/:pg', '/s/:surveyGuid'], (req, res, next) => {
         var guid = req.params.surveyGuid,
             sv = new SurveyController(pjson.config),
             usSrc = req.headers['user-agent'],
@@ -180,7 +180,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                 req.session.save(function() {
                     //var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
                     //srvObj.survey_model = defaultModel;
-                    _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', { title: srvObj.name, respondent: resp, session: req.session, model: srvObj.survey_model, surveyID: guid, modelstr: btoa(JSON.stringify(srvObj.survey_model)) }));
+                    _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', { title: srvObj.name, respondent: resp, session: req.session, model: srvObj.survey_model, surveyID: guid, modelstr: btoa(JSON.stringify({metadata: {title: srvObj.name, guid: srvObj.survey_model.guid}, pages: srvObj.survey_model.pages})) }));
                 });
             });
         });
