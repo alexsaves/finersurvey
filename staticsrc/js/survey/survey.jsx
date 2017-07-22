@@ -19,10 +19,13 @@ class SurveyComponent extends React.Component {
  * Render the view
  */
   render() {
+    console.log(this.props);
     return (
       <div className='app-ui app-main'>
         <ProgressComponent />
-        survey
+        {this.props.pages.map((pg) => {
+          return <div key={pg.id}>page</div>;
+        })}
       </div>
     );
   }
