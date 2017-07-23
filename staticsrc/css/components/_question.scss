@@ -1,0 +1,11 @@
+.question {
+  display: inline-block;
+  max-width: 34em;
+  text-align: left;
+  @media (max-width: $screen-md-min) {
+    max-width: 70%;
+  }
+  @media (max-width: $screen-sm-min) {
+    max-width: 85%;
+  }
+}

@@ -1,11 +1,12 @@
 @import "vars";
 @import "components/progress";
 @import "components/paginator";
+@import "components/page";
+@import "components/question";
 @import "fonts";
 @import "reset";
 @import "themes/themes";
 @import "mobilebreakpoints";
-
 html {
   height: 100%;
   margin: 0;
@@ -16,24 +17,33 @@ html {
     margin: 0;
     padding: 0;
     -webkit-text-size-adjust: 100% !important;
-    .app,
-    .app-ui {
+    .app {
       height: 100%;
-      .hidden {
-        display: none;
-      }
-      .logo--finerink {
-        position: absolute;
-        bottom: 0.65em;
-        background-image: url(/static/assets/logos/finerink.svg);
-        height: 2em;
-        width: 100%;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: 5em;
-        z-index: 999999;
-        @media (max-width: $screen-sm-min) {
-          background-image: url(/static/assets/logos/finerink_w.svg);
+      .survey {
+        height: 100%;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;        
+        .hidden {
+          display: none;
+        }
+        &.overflowing {
+          .logo--finerink {
+            background-image: url(/static/assets/logos/finerink_w.svg);
+          }
+        }
+        .logo--finerink {
+          position: fixed;
+          bottom: 0.65em;
+          background-image: url(/static/assets/logos/finerink.svg);
+          height: 2em;
+          width: 100%;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: 5em;
+          z-index: 999999;
+          @media (max-width: $screen-sm-min) {
+            background-image: url(/static/assets/logos/finerink_w.svg);
+          }
         }
       }
     }

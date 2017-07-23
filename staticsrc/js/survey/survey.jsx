@@ -13,13 +13,30 @@ class SurveyComponent extends React.Component {
  */
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isOverflowing: false
+    };
   }
 
+  /**
+   * The UI has mounted
+   */
   componentDidMount() {
+    this.updateOverflowStatus();
     setInterval(() => {
       this.setState({progress: Math.random()})
     }, 1000)
+  }
+
+  /**
+   * Update whether or not the Y axis is overflowing
+   */
+  updateOverflowStatus() {
+    let surveyNode = document.getElementsByClassName("survey")[0];
+    let isOverflowing = surveyNode.scrollHeight > surveyNode.offsetHeight;
+    if (isOverflowing != this.state.isOverflowing) {
+      this.setState({isOverflowing: isOverflowing});
+    }
   }
 
   /**
@@ -27,7 +44,7 @@ class SurveyComponent extends React.Component {
  */
   render() {    
     return (
-      <div className={"app-ui app-main " + this.props.metadata.theme}>
+      <div className={"survey" + (this.state.isOverflowing ? " overflowing" : "")}>
         <ProgressComponent progress={this.state.progress} />
         <PageController />
         <a href="https://www.finer.ink" title="Sales Win/Loss Analysis" target="_blank" className="logo--finerink"></a>      

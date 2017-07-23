@@ -20,11 +20,18 @@ class PageComponent extends React.Component {
   render() {
     console.log(this.props);
     return (
-      <div className={"page " + (this.props.isSelected ? "selected" : "")}>
-        The Page
-        {this.props.questions.map((q, idx) => {
-          return <QuestionComponent key={idx} model={q} />
-        })}
+      <div
+        className={"page " + (this.props.isSelected
+        ? "selected"
+        : "")}>
+        <div className="questions">
+          {this
+            .props
+            .questions
+            .map((q, idx) => {
+              return <QuestionComponent key={idx} model={q}/>
+            })}
+        </div>
       </div>
     );
   }
