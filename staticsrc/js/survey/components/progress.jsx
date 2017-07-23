@@ -17,9 +17,12 @@ class ProgressComponent extends React.Component {
  * Render the view
  */
   render() {
+    let styleInfo = {
+      "width": ((this.props.progress || 0) * 100) + "%"
+    };
     return (
-      <div className='progress'>
-        progress
+      <div className="progress--container">
+        <div style={styleInfo}></div>
       </div>
     );
   }

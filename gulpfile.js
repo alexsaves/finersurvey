@@ -71,7 +71,7 @@ gulp.task('watch', ['default'], function () {
     console.log("Running in DEBUG MODE!".yellow);
     gulp.watch([
         src + '/js/*.js',
-        src + '/css/*.scss',
+        src + '/css/**/*.scss',
         src + '/assets/**/*'
     ], ['default']);
 });

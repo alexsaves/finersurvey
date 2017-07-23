@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
-import PageComponent from './models/page.jsx';
 import ProgressComponent from './components/progress.jsx';
+import PageController from './components/paginationcontroller.jsx';
 
 /**
 * Represents the entire survey
@@ -13,20 +13,24 @@ class SurveyComponent extends React.Component {
  */
   constructor(props) {
     super(props);
+    this.state = {};
+  }
+
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({progress: Math.random()})
+    }, 1000)
   }
 
   /**
  * Render the view
  */
-  render() {
-    console.log(this.props);
-    let currentPage = this.props.currentPage;
+  render() {    
     return (
-      <div className='app-ui app-main'>
-        <ProgressComponent />
-        {this.props.pages.map((pg, idx) => {
-          return <PageComponent key={idx} questions={pg.elements} isSelected={idx === currentPage} />;
-        })}
+      <div className={"app-ui app-main " + this.props.metadata.theme}>
+        <ProgressComponent progress={this.state.progress} />
+        <PageController />
+        <a href="https://www.finer.ink" title="Sales Win/Loss Analysis" target="_blank" className="logo--finerink"></a>      
       </div>
     );
   }

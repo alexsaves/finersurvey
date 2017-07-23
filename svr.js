@@ -209,7 +209,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                 modelstr: btoa(JSON.stringify({
                                     metadata: {
                                         title: srvObj.name,
-                                        guid: srvObj.survey_model.guid                                        
+                                        guid: srvObj.survey_model.guid,
+                                        theme: srvObj.theme                                     
                                     },
                                     currentPage: pg,
                                     pages: srvObj.survey_model.pages

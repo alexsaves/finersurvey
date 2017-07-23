@@ -1,12 +1,41 @@
 @import "vars";
-@import "progress";
+@import "components/progress";
+@import "components/paginator";
 @import "fonts";
+@import "reset";
+@import "themes/themes";
+@import "mobilebreakpoints";
 
 html {
   height: 100%;
+  margin: 0;
+  padding: 0;
   body {
+    font-family: 'proxima-nova', Arial, Helvetica, sans-serif;
     height: 100%;
+    margin: 0;
+    padding: 0;
     -webkit-text-size-adjust: 100% !important;
-
+    .app,
+    .app-ui {
+      height: 100%;
+      .hidden {
+        display: none;
+      }
+      .logo--finerink {
+        position: absolute;
+        bottom: 0.65em;
+        background-image: url(/static/assets/logos/finerink.svg);
+        height: 2em;
+        width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 5em;
+        z-index: 999999;
+        @media (max-width: $screen-sm-min) {
+          background-image: url(/static/assets/logos/finerink_w.svg);
+        }
+      }
+    }
   }
 }
