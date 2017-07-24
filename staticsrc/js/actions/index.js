@@ -4,6 +4,16 @@
 export const MODIFY_METADATA = 'MODIFY_METADATA';
 export const NEXT_PAGE = 'NEXT_PAGE';
 export const PREV_PAGE = 'PREV_PAGE';
+export const CHANGE_ANSWER = 'CHANGE_ANSWER';
+
+/**
+ * Change or add an answer
+ * @param {*} questionName 
+ * @param {*} answerState 
+ */
+export function changeAnswer(questionName, answerState) {
+  return {type: CHANGE_ANSWER, questionName, answerState};
+};
 
 /*
  * Modify meta-data

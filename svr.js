@@ -214,7 +214,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                         theme: srvObj.theme                                     
                                     },
                                     currentPage: pg,
-                                    pages: srvObj.survey_model.pages
+                                    pages: srvObj.survey_model.pages,
+                                    answers: {}
                                 }))
                             }));
                         });
