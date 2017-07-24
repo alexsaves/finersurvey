@@ -13,6 +13,31 @@
     height: $bottombar_height;
     z-index: 9999;
   }
+  &--buttonholder {
+    position: fixed;
+    bottom: 0.5em;
+    z-index: 9999999;
+    &.right {
+      right: ($general_padding / 2);
+    }
+    &.left {
+      left: ($general_padding / 2);
+    }
+    a {
+      display: block;
+      font-size: 150%;
+      color: white;
+      font-family: Courier New, Courier, monospace;
+      border-radius: 5em;
+      width: 1.25em;
+      line-height: 1.25em;
+      text-align: center;
+      cursor: pointer;
+      &:hover {
+        background-color: lighten($greyfill, 7%);
+      }
+    }
+  }
 }
 
 .overflowing {
@@ -28,40 +53,13 @@
 // Medium screens
 @media (max-width: $screen-md-min) and (min-width: $screen-sm-min) {
   .paginator {
-    &--buttonholder,
+    &--buttonholder {
+      a {
+        color: $question_clr;
+      }
+    }
     &--backdropmobile {
       display: none;
-    }
-  }
-}
-
-// Phone UI
-@media (max-width: $screen-sm-min) {
-  .paginator {
-    &--buttonholder {
-      position: fixed;
-      bottom: 0.5em;
-      z-index: 9999999;
-      &.right {
-        right: ($general_padding / 2);
-      }
-      &.left {
-        left: ($general_padding / 2);
-      }
-      a {
-        display: block;
-        font-size: 150%;
-        color: white;
-        font-family: Courier New, Courier, monospace;
-        border-radius: 5em;
-        width: 1.25em;
-        line-height: 1.25em;
-        text-align: center;
-        cursor: pointer;
-        &:hover {
-          background-color: lighten($greyfill, 7%);
-        }
-      }
     }
   }
 }

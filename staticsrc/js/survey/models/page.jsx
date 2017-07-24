@@ -29,7 +29,7 @@ class PageComponent extends React.Component {
             .props
             .questions
             .map((q, idx) => {
-              return <QuestionComponent key={idx} model={q}/>
+              return <QuestionComponent key={idx} {...q}/>
             })}
         </div>
       </div>

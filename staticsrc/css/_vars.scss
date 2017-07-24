@@ -9,6 +9,9 @@ $heavierfont: "latoregular", "Open Sans", "Helvetica Neue", Helvetica, Arial, sa
 $fill: #009CDA;
 $greyfill: #999999;
 
+$question_clr: #000000;
+$instructions_clr: lighten($question_clr, 35%);
+
 // sizes and spacing
 $general_padding: 1em;
 $bottombar_height: 3em;

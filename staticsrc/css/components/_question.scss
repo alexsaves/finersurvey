@@ -1,4 +1,6 @@
 .question {
+  font-family: 'latolight', Arial, Helvetica, sans-serif;
+  color: $question_clr;
   display: inline-block;
   max-width: 34em;
   text-align: left;
@@ -7,5 +9,11 @@
   }
   @media (max-width: $screen-sm-min) {
     max-width: 85%;
+  }
+  h2 {
+    font-size: 1.25em;
+  }
+  .instructions {
+    color: $instructions_clr;
   }
 }
