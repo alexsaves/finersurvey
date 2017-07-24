@@ -21,9 +21,7 @@ class RatingQuestion extends React.Component {
   handleAnswerChange(e) {
     let targ = e.currentTarget,
       val = parseInt(targ.value);
-    console.log(this, this.props, this.props.dispatch);
     this.props.dispatch(changeAnswer(this.props.name, val));
-    console.log(targ);
   }
 
   /**
