@@ -17,7 +17,6 @@ class DropdownQuestion extends React.Component {
  * Render the view
  */
   render() {
-    console.log("dropdown", this.props); 
     return (
       <div className="question--dropdown">
         dropdown

@@ -15,10 +15,18 @@ class PageComponent extends React.Component {
   }
 
   /**
+   * If there is an answer for a question, provide it
+   * @param {*} q 
+   */
+  getAnswerForQuestion(q) {
+    return this.props.answers[q.name];
+  }
+
+  /**
  * Render the view
  */
   render() {
-    console.log(this.props);
+    let ctx = this;
     return (
       <div
         className={"page " + (this.props.isSelected
@@ -29,7 +37,7 @@ class PageComponent extends React.Component {
             .props
             .questions
             .map((q, idx) => {
-              return <QuestionComponent key={idx} {...q}/>
+              return <QuestionComponent key={idx} {...q} answer={ctx.getAnswerForQuestion(q)} />
             })}
         </div>
       </div>

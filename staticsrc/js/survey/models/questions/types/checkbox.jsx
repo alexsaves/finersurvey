@@ -17,7 +17,6 @@ class CheckboxQuestion extends React.Component {
  * Render the view
  */
   render() {
-    console.log("checkbox", this.props); 
     return (
       <div className="question--checkbox">
         checkbox

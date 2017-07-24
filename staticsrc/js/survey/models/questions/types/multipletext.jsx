@@ -17,7 +17,6 @@ class MultipleTextQuestion extends React.Component {
  * Render the view
  */
   render() {
-    console.log("multiple text", this.props); 
     return (
       <div className="question--multipletext">
         multipletext

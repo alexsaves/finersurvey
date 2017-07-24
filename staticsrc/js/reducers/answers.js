@@ -2,12 +2,13 @@ import {CHANGE_ANSWER} from '../actions';
 
 // Handles actions
 function answers(state = {}, action) {
-  let tmp;  
+  let tmp,
+    answer = {};
   switch (action.type) {
     case CHANGE_ANSWER:
       console.log("ANSWERS REDUCER", state, action);
-      tmp = Object.assign({}, state);
-      //tmp = Object.assign(tmp, action.answerState);
+      answer[action.questionName] = action.answerState;
+      tmp = Object.assign({}, state, answer);
       return tmp;
     default:
       return state

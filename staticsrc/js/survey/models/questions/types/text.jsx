@@ -17,7 +17,6 @@ class TextQuestion extends React.Component {
  * Render the view
  */
   render() {
-    console.log("text", this.props); 
     return (
       <div className="question--text">
         text
