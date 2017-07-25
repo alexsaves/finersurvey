@@ -29,6 +29,7 @@ $general_padding: 1em;
 $general_small_padding: ($general_padding * 0.7);
 $bottombar_height: 3em;
 $button_radius: 0.25em;
+$progress_height: 0.25em;
 // timings
 $slow_anim_timing: 0.5s;
 $fast_anim_timing: 0.2s;
@@ -57,6 +58,7 @@ $fast_anim_timing: 0.2s;
     background-color: $fill;
     animation-name: buttonSelectAnimation;
     animation-duration: $fast_anim_timing;
+    color: #ffffff;
     &:hover {
       background-color: darken($fill, 5%);
     }

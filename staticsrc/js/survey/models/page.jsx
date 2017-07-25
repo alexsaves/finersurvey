@@ -26,7 +26,7 @@ class PageComponent extends React.Component {
  * Render the view
  */
   render() {
-    let ctx = this;
+    let ctx = this;    
     return (
       <div
         className={"page " + (this.props.isSelected

@@ -1,0 +1,52 @@
+$rightarrowsize: 1em;
+
+
+@media (min-width: $screen-md-min) {
+  .validation--holder {
+    position: fixed;
+    top: 50%;
+    right: 1em;
+    .validationcontainer {
+      font-size: 0.7em;
+      color: white;
+      background-color: $greyfill;
+      font-family: $lightfont;
+      position: relative;
+      right: 5.5em;
+      line-height: 2em;
+      top: -1em;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+      cursor: default;
+      .rightarrow {
+        width: 0;
+        height: 0;
+        border-top: $rightarrowsize solid transparent;
+        border-bottom: $rightarrowsize solid transparent;
+        border-left: $rightarrowsize solid $greyfill;
+        position: absolute;
+        right: -$rightarrowsize;
+        top: 0;
+      }
+    }
+  }
+}
+
+// Phone
+@media (max-width: $screen-sm-min) {
+  .validation--holder {
+    display: block;
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    bottom: $progress_height;
+    line-height: ($bottombar_height - $progress_height - $progress_height);
+    color: white;
+    z-index: 9999990;
+    background-color: $greyfill;
+    .validationcontainer {
+      font-family: $lightfont;
+      display: inline-block;
+    }
+  }
+}

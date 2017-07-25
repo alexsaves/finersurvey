@@ -15,6 +15,22 @@ class PaginationController extends React.Component {
   }
 
   /**
+   * Handle advancing
+   */
+  handleAdvanceRequest() {
+    let canPass = this.hasRequiredAnswersForPage(this.props.currentPage);
+    console.log("Can we pass?", canPass);
+  }
+
+  /**
+   * Do we have required answers for the question
+   * @param {Number} pageNumber 
+   */
+  hasRequiredAnswersForPage(pageNumber) {
+    return false;
+  }
+
+  /**
  * Render the view
  */
   render() {
@@ -22,12 +38,13 @@ class PaginationController extends React.Component {
       answers = this.props.answers;
     return (
       <div className="paginator">
+        <div className={"validation--holder " + (currentPage === (this.props.pages.length - 1) ? "hidden": "")}><div className="validationcontainer"><div className="rightarrow"></div>This question is required.</div></div>
         {this.props.pages.map((pg, idx) => {
           return <PageComponent key={idx} questions={pg.elements} isSelected={idx === currentPage} answers={answers} />;
         })}
         <div className={"paginator--backdropmobile"}></div>
-        <div className={"paginator--buttonholder left " + (currentPage === 0 ? "hidden": "")}><a className="paginator--button" title="Previous page">&lt;</a></div>
-        <div className={"paginator--buttonholder right " + (currentPage === (this.props.pages.length - 1) ? "hidden": "")}><a className="paginator--button" title="Next page">&gt;</a></div>
+        <div className={"paginator--buttonholder left " + (currentPage === 0 ? "hidden": "")}><a className="paginator--button" title="Previous page">&lt;</a></div>        
+        <div className={"paginator--buttonholder right " + (currentPage === (this.props.pages.length - 1) ? "hidden": "")}><a className="paginator--button" title="Next page" onClick={this.handleAdvanceRequest.bind(this)}>&gt;</a></div>
       </div>
     );
   }

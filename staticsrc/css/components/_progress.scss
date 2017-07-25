@@ -6,7 +6,7 @@
     z-index: 999999;
     background-color: rgba(255, 255, 255, 0.2);
     div {
-      height: 0.25em;
+      height: $progress_height;
       background-color: $fill;
       transition: width $slow_anim_timing;
       transition-timing-function: easeInOutSine;
