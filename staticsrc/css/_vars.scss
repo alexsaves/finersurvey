@@ -1,17 +1,77 @@
 @import "fonts";
-@import "reset";
-
-$faintfont: "latohairline", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$lightfont: "latolight", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$heavierfont: "latoregular", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-
+@import "mobilebreakpoints";
+$faintfont: "latohairline",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
+$lightfont: "latolight",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
+$heavierfont: "latoregular",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
 // colors
 $fill: #009CDA;
 $greyfill: #999999;
-
 $question_clr: #000000;
 $instructions_clr: lighten($question_clr, 35%);
-
+$border_color: #777777;
 // sizes and spacing
 $general_padding: 1em;
+$general_small_padding: ($general_padding * 0.7);
 $bottombar_height: 3em;
+$button_radius: 0.25em;
+// timings
+$slow_anim_timing: 0.5s;
+$fast_anim_timing: 0.2s;
+@keyframes buttonSelectAnimation {
+  0% {
+    background-color: $fill;
+  }
+  50% {
+    background-color: transparent;
+  }
+}
+
+// Base styles
+@mixin button_style {
+  border-top: 1px solid $border_color;
+  border-bottom: 1px solid $border_color;
+  border-left: 1px solid $border_color;
+  background-color: transparent;
+  line-height: 2em;
+  text-align: center;
+  display: inline-block;
+  padding-left: $general_small_padding;
+  padding-right: $general_small_padding;
+  font-size: 1.5em;
+  &.selected {
+    background-color: $fill;
+    animation-name: buttonSelectAnimation;
+    animation-duration: $fast_anim_timing;
+    &:hover {
+      background-color: darken($fill, 5%);
+    }
+  }
+  &:hover {
+    background-color: $greyfill;
+  }
+  &:first-child {
+    border-top-left-radius: $button_radius;
+    border-bottom-left-radius: $button_radius;
+  }
+  cursor: pointer;
+  &:last-child {
+    border-right: 1px solid $border_color;
+    border-top-right-radius: $button_radius;
+    border-bottom-right-radius: $button_radius;
+  }
+}

@@ -1,12 +1,8 @@
-@import "vars";
-@import "components/progress";
-@import "components/paginator";
-@import "components/page";
-@import "components/question";
-@import "fonts";
 @import "reset";
+@import "vars";
+@import "components/all";
 @import "themes/themes";
-@import "mobilebreakpoints";
+
 html {
   height: 100%;
   margin: 0;

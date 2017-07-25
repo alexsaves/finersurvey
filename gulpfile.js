@@ -19,11 +19,9 @@ var isDebug = false;
  */
 gulp.task('sass', function () {
     return gulp
-        .src(src + '/css/*.scss')
-        .pipe(concat('main.css'))
-        .pipe(gulpif(!isDebug, sourcemaps.init()))
+        .src(src + '/css/survey.scss')
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(gulpif(!isDebug, sourcemaps.write('./maps')))
+        .pipe(concat('main.css'))
         .pipe(gulp.dest(dist + '/css'));
 });
 

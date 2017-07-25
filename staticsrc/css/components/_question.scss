@@ -1,3 +1,5 @@
+@import "questiontypes/rating";
+
 .question {
   font-family: 'latolight', Arial, Helvetica, sans-serif;
   color: $question_clr;
@@ -15,5 +17,16 @@
   }
   .instructions {
     color: $instructions_clr;
+  }
+  .selectbutton {
+    @include button_style;
+    input[type=checkbox],
+    input[type=radio] {
+      display: none;
+    }    
+  }
+  .smalllabel {
+    font-size: 0.8em;
+    color: $border_color;
   }
 }

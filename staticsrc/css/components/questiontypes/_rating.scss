@@ -1,0 +1,12 @@
+.question--rating {
+  display: inline-block;
+  @media (max-width: $screen-sm-min) {
+    font-size: 78%;
+  }
+  .buttongroup {
+    margin-bottom: $general_small_padding;
+  }
+  .highlabel {
+    float: right;
+  }
+}
