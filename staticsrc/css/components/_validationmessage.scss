@@ -1,13 +1,35 @@
 $rightarrowsize: 1em;
 
+// When the validation thingy appears
+@keyframes validationAppearAnim {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
+// Desktop
 @media (min-width: $screen-md-min) {
-  .validation--holder {
+  .validation--holder {    
+    &.visible {
+      animation-name: validationAppearAnim;
+      animation-duration: $very_slow_anim_timing;
+      opacity: 0;
+    }
+    opacity: 0;
     position: fixed;
     top: 50%;
     right: 1em;
     .validationcontainer {
-      font-size: 0.7em;
+      font-size: 0.75em;
       color: white;
       background-color: $greyfill;
       font-family: $lightfont;
@@ -35,7 +57,12 @@ $rightarrowsize: 1em;
 // Phone
 @media (max-width: $screen-sm-min) {
   .validation--holder {
-    display: block;
+    &.visible {
+      animation-name: validationAppearAnim;
+      animation-duration: $very_slow_anim_timing;
+      opacity: 0;
+    }
+    opacity: 0;
     position: fixed;
     width: 100%;
     text-align: center;

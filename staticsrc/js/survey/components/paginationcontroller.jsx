@@ -12,14 +12,16 @@ class PaginationController extends React.Component {
  */
   constructor(props) {
     super(props);
+    this.state = {
+      showValidation: false
+    };
   }
 
   /**
    * Handle advancing
    */
   handleAdvanceRequest() {
-    let canPass = this.hasRequiredAnswersForPage(this.props.currentPage);
-    console.log("Can we pass?", canPass);
+    this.setState({showValidation: !this.hasRequiredAnswersForPage(this.props.currentPage)});
   }
 
   /**
@@ -38,7 +40,7 @@ class PaginationController extends React.Component {
       answers = this.props.answers;
     return (
       <div className="paginator">
-        <div className={"validation--holder " + (currentPage === (this.props.pages.length - 1) ? "hidden": "")}><div className="validationcontainer"><div className="rightarrow"></div>This question is required.</div></div>
+        <div className={"validation--holder " + (this.state.showValidation ? "visible " : "") + (currentPage === (this.props.pages.length - 1) ? "hidden": "")}><div className="validationcontainer"><div className="rightarrow"></div>This question is required.</div></div>
         {this.props.pages.map((pg, idx) => {
           return <PageComponent key={idx} questions={pg.elements} isSelected={idx === currentPage} answers={answers} />;
         })}
