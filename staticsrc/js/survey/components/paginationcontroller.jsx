@@ -93,12 +93,20 @@ class PaginationController extends React.Component {
   /**
    * Animation is over
    */
-  handleAnimationEnd() {
-    if (this.state.animatingForward) {
-      this.setState({animatingForward: false});      
-      this
-        .props
-        .dispatch(nextPage());
+  handleAnimationEnd(e) {
+    let targ = e.target;
+    if (targ.className.indexOf('page') > -1) {
+      console.log("done", targ, targ.classList);
+      this.setState({animatingForward: false, animatingBackward: false});
+      if (this.state.animatingForward) {
+        this
+          .props
+          .dispatch(nextPage());
+      } else if (this.state.animatingBackward) {
+        this
+          .props
+          .dispatch(prevPage());
+      }
     }
   }
 

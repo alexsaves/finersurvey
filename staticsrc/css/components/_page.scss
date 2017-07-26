@@ -1,4 +1,4 @@
-@keyframes pageAnimateInAnimation {
+@keyframes pageAnimateInForwardAnimation {
   0% {
     opacity: 0;
     left: 15%;
@@ -6,6 +6,21 @@
   25% {
     opacity: 0;
     left: 15%;
+  }
+  100% {
+    opacity: 1;
+    left: 0;
+  }
+}
+
+@keyframes pageAnimateInBackwardAnimation {
+  0% {
+    opacity: 0;
+    left: -15%;
+  }
+  25% {
+    opacity: 0;
+    left: -15%;
   }
   100% {
     opacity: 1;
@@ -27,13 +42,26 @@
     left: -15%;
     opacity: 0;
   }
+  &.animatingoutbackward {
+    left: 15%;
+    opacity: 0;
+  }
   &.animatinginforward {
     position: absolute;
     top: 0;
     left: 0;
     display: block;
     opacity: 1;    
-    animation-name: pageAnimateInAnimation;
+    animation-name: pageAnimateInForwardAnimation;
+    animation-duration: ($slow_anim_timing * 1.5);
+  }
+  &.animatinginbackward {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    opacity: 1;    
+    animation-name: pageAnimateInBackwardAnimation;
     animation-duration: ($slow_anim_timing * 1.5);
   }
   &.selected {
