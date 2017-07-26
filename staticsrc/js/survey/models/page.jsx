@@ -31,7 +31,7 @@ class PageComponent extends React.Component {
       <div
         className={"page " + (this.props.isSelected
         ? "selected"
-        : "")}>
+        : "") + (this.props.animatingOutForward ? " animatingoutforward" : (this.props.animatingOutBackward ? " animatingoutbackward" : "")) + (this.props.animatingInForward ? " animatinginforward" : (this.props.animatingInBackward ? " animatinginbackward" : ""))}>
         <div className="questions">
           {this
             .props

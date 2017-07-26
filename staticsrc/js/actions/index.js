@@ -35,3 +35,4 @@ export function nextPage() {
 export function prevPage() {
   return {type: PREV_PAGE};
 };
+
