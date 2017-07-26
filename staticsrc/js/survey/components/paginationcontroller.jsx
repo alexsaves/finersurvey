@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import PageComponent from '../models/page.jsx';
 import Validator from './validator.js';
-import {nextPage} from '../../actions';
+import {nextPage, prevPage} from '../../actions';
 
 /**
 * Represents the entire survey
@@ -32,6 +32,13 @@ class PaginationController extends React.Component {
     } else {
       this.props.dispatch(nextPage());
     }
+  }
+
+  /**
+   * Handle previous page
+   */
+  handlePreviousRequest() {
+    this.props.dispatch(prevPage());
   }
 
   /**
@@ -74,7 +81,7 @@ class PaginationController extends React.Component {
           return <PageComponent key={idx} questions={pg.elements} isSelected={idx === currentPage} answers={answers} />;
         })}
         <div className={"paginator--backdropmobile"}></div>
-        <div className={"paginator--buttonholder left " + (currentPage === 0 ? "hidden": "")}><a className="paginator--button" title="Previous page">&lt;</a></div>        
+        <div className={"paginator--buttonholder left " + (currentPage === 0 ? "hidden": "")}><a className="paginator--button" title="Previous page" onClick={this.handlePreviousRequest.bind(this)}>&lt;</a></div>        
         <div className={"paginator--buttonholder right " + (currentPage === (this.props.pages.length - 1) ? "hidden": "")}><a className="paginator--button" title="Next page" onClick={this.handleAdvanceRequest.bind(this)}>&gt;</a></div>
       </div>
     );
