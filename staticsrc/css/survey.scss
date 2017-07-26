@@ -1,12 +1,15 @@
 @import "reset";
 @import "vars";
 @import "components/all";
-@import "themes/themes";
 
 html {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url($bgimage);
   body {
     font-family: 'proxima-nova', Arial, Helvetica, sans-serif;
     height: 100%;

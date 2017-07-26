@@ -1,5 +1,6 @@
 .question--rating {
   display: inline-block;
+  text-align: left;
   @media (max-width: $screen-sm-min) {
     font-size: 78%;
   }

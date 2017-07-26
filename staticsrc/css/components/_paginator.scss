@@ -33,6 +33,9 @@
       line-height: 1.25em;
       text-align: center;
       cursor: pointer;
+      &.validated {
+       background-color: $fill; 
+      }
       &:hover {
         background-color: lighten($greyfill, 7%);
       }

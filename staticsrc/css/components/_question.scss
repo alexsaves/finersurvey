@@ -5,7 +5,7 @@
   color: $question_clr;
   display: inline-block;
   max-width: 34em;
-  text-align: left;
+  text-align: center;
   @media (max-width: $screen-md-min) {
     max-width: 70%;
   }

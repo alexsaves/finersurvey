@@ -116,7 +116,8 @@ class PaginationController extends React.Component {
     let currentPage = this.props.currentPage,
       answers = this.props.answers,
       isAnimatingForward = this.state.animatingForward,
-      isAnimatingBackward = this.state.animatingBackward;
+      isAnimatingBackward = this.state.animatingBackward,
+      isValidated = this.hasRequiredAnswersForPage(this.props.currentPage);
     return (
       <div
         className="paginator"
@@ -163,7 +164,7 @@ class PaginationController extends React.Component {
           ? "hidden"
           : "")}>
           <a
-            className="paginator--button"
+            className={"paginator--button " + (isValidated ? "validated" : "")}
             title="Next page"
             onClick={this
             .handleAdvanceRequest

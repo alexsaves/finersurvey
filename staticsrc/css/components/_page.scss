@@ -37,7 +37,7 @@
   left: 0;
   opacity: 1;
   transition-timing-function: ease-out;
-  transition: left $slow_anim_timing, opacity $slow_anim_timing;
+  transition: left ($slow_anim_timing * 0.6666), opacity ($slow_anim_timing * 0.6666);
   &.animatingoutforward {
     left: -15%;
     opacity: 0;
@@ -53,7 +53,7 @@
     display: block;
     opacity: 1;    
     animation-name: pageAnimateInForwardAnimation;
-    animation-duration: ($slow_anim_timing * 1.5);
+    animation-duration: ($slow_anim_timing);
   }
   &.animatinginbackward {
     position: absolute;
@@ -62,7 +62,7 @@
     display: block;
     opacity: 1;    
     animation-name: pageAnimateInBackwardAnimation;
-    animation-duration: ($slow_anim_timing * 1.5);
+    animation-duration: ($slow_anim_timing);
   }
   &.selected {
     display: block;
