@@ -28,6 +28,8 @@
   .smalllabel {
     font-size: 0.8em;
     color: $border_color;
+    user-select: none;
+    cursor: default;
     @media (max-width: $screen-sm-min) {
       font-size: 0.9em;
     }

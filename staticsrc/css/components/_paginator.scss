@@ -16,6 +16,7 @@
     position: fixed;
     bottom: 0.5em;
     z-index: 9999999;
+    user-select: none;
     &.right {
       right: ($general_padding / 2);
     }

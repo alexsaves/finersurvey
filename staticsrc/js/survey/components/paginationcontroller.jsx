@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import PageComponent from '../models/page.jsx';
+import Validator from './validator.js';
+import {nextPage} from '../../actions';
 
 /**
 * Represents the entire survey
@@ -21,7 +23,15 @@ class PaginationController extends React.Component {
    * Handle advancing
    */
   handleAdvanceRequest() {
-    this.setState({showValidation: !this.hasRequiredAnswersForPage(this.props.currentPage)});
+    let validated = this.hasRequiredAnswersForPage(this.props.currentPage);
+    this.setState({showValidation: false});
+    if (!validated) {      
+      setTimeout(() => {
+        this.setState({showValidation: true});
+      }, 20);
+    } else {
+      this.props.dispatch(nextPage());
+    }
   }
 
   /**
@@ -29,7 +39,26 @@ class PaginationController extends React.Component {
    * @param {Number} pageNumber 
    */
   hasRequiredAnswersForPage(pageNumber) {
-    return false;
+    let pageObj = this.props.pages[pageNumber],
+      didPass = true,
+      answers = this.props.answers,
+      validator = new Validator();
+    
+    pageObj.elements.forEach((elm) => {
+      if (elm.required) {
+        // Required question
+        let theanswer = answers[elm.name];
+        if (!theanswer) {
+          didPass = false;
+        } else {
+          if (!validator.validate(elm, theanswer)) {
+            didPass = false;
+          }
+        }
+      }
+    });
+
+    return didPass;
   }
 
   /**
@@ -40,7 +69,7 @@ class PaginationController extends React.Component {
       answers = this.props.answers;
     return (
       <div className="paginator">
-        <div className={"validation--holder " + (this.state.showValidation ? "visible " : "") + (currentPage === (this.props.pages.length - 1) ? "hidden": "")}><div className="validationcontainer"><div className="rightarrow"></div>This question is required.</div></div>
+        {this.state.showValidation && <div className={"validation--holder " + (this.state.showValidation ? "visible " : "") + (currentPage === (this.props.pages.length - 1) ? "hidden": "")}><div className="validationcontainer"><div className="rightarrow"></div>This question is required.</div></div>}
         {this.props.pages.map((pg, idx) => {
           return <PageComponent key={idx} questions={pg.elements} isSelected={idx === currentPage} answers={answers} />;
         })}

@@ -19,6 +19,7 @@ $rightarrowsize: 1em;
 // Desktop
 @media (min-width: $screen-md-min) {
   .validation--holder {    
+    user-select: none;
     &.visible {
       animation-name: validationAppearAnim;
       animation-duration: $very_slow_anim_timing;

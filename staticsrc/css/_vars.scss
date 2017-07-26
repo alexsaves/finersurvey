@@ -45,6 +45,7 @@ $fast_anim_timing: 0.2s;
 
 // Base styles
 @mixin button_style {
+  user-select: none;
   border-top: 1px solid $border_color;
   border-bottom: 1px solid $border_color;
   border-left: 1px solid $border_color;
