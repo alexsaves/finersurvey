@@ -1,5 +1,4 @@
 @import "validationmessage";
-
 // Generic paginator styles
 .paginator {
   width: 100%;
@@ -17,11 +16,20 @@
     bottom: 0.5em;
     z-index: 9999999;
     user-select: none;
+    opacity: 1;
+    transition: opacity $slow_anim_timing;
     &.right {
       right: ($general_padding / 2);
     }
     &.left {
       left: ($general_padding / 2);
+    }
+    &.hidden {
+      display: block !important;
+      opacity: 0;
+      a {
+        cursor: default;
+      }
     }
     a {
       display: block;
@@ -34,7 +42,10 @@
       text-align: center;
       cursor: pointer;
       &.validated {
-       background-color: $fill; 
+        background-color: $fill;
+        &:hover {
+          background-color: lighten($fill, 7%);
+        }
       }
       &:hover {
         background-color: lighten($greyfill, 7%);

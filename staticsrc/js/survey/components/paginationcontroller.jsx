@@ -54,11 +54,13 @@ class PaginationController extends React.Component {
    * Handle previous page
    */
   handlePreviousRequest() {
-    this.animateBackward(() => {
-      this
-        .props
-        .dispatch(prevPage());
-    });
+    if (this.props.currentPage > 0) {
+      this.animateBackward(() => {
+        this
+          .props
+          .dispatch(prevPage());
+      });
+    }
   }
 
   /**
@@ -164,7 +166,9 @@ class PaginationController extends React.Component {
           ? "hidden"
           : "")}>
           <a
-            className={"paginator--button " + (isValidated ? "validated" : "")}
+            className={"paginator--button " + (isValidated
+            ? "validated"
+            : "")}
             title="Next page"
             onClick={this
             .handleAdvanceRequest
