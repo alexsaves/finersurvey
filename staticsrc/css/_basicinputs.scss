@@ -7,5 +7,11 @@
     line-height: $button_lineheight;
     width: 100%;
     box-sizing: border-box;
+    padding-left: $general_small_padding;
+    padding-right: $general_small_padding;
+    &::placeholder {
+      color: $greyfill;
+      font-family: $lightfont;
+    }
   }
 }
