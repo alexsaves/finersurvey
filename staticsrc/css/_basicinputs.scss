@@ -1,0 +1,11 @@
+.question {
+  input[type=text],
+  select {
+    display: block;
+    border: 1px solid $border_color;
+    border-radius: $button_radius;
+    line-height: $button_lineheight;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

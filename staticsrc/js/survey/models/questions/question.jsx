@@ -25,7 +25,7 @@ class QuestionComponent extends React.Component {
     return (
       <div className="question">        
         {(this.props.title || this.props.name) && <h2>{this.props.title || this.props.name}</h2>}
-        {this.props.instructions && <p className="instructions">{this.props.instructions}</p>}
+        {this.props.instructions && <p className="instructions"><span className="fa fa-info-circle"></span> {this.props.instructions}</p>}
         {this.props.type == "checkbox" && <CheckboxQuestion {...this.props} />}
         {this.props.type == "dropdown" && <DropdownQuestion {...this.props} />}
         {this.props.type == "multipletext" && <MultipleTextQuestion {...this.props} />}

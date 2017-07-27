@@ -1,4 +1,5 @@
 @import "questiontypes/rating";
+@import "questiontypes/checkbox";
 
 .question {
   font-family: 'latolight', Arial, Helvetica, sans-serif;
@@ -14,9 +15,13 @@
   }
   h2 {
     font-size: 1.25em;
+    margin-top: 0;
   }
   .instructions {
     color: $instructions_clr;
+    @media (max-width: $screen-sm-min) {
+      font-size: 0.8em;
+    }
   }
   .selectbutton {
     @include button_style;

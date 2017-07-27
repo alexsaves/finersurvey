@@ -27,6 +27,7 @@ $rightarrowsize: 1em;
     }
     opacity: 0;
     position: fixed;
+    z-index: 99999;
     top: 50%;
     right: 1em;
     .validationcontainer {
