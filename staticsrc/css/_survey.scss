@@ -11,7 +11,7 @@ html {
   background-position: center center;
   background-image: url($bgimage);
   body {
-    font-family: 'proxima-nova', Arial, Helvetica, sans-serif;
+    font-family: $lightfont;
     height: 100%;
     margin: 0;
     padding: 0;

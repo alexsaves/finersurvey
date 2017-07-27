@@ -18,10 +18,15 @@ var isDebug = false;
  * CSS
  */
 gulp.task('sass', function () {
-    return gulp
-        .src(src + '/css/survey.scss')
+    gulp
+        .src(src + '/css/bokehdark.scss')
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(concat('main.css'))
+        .pipe(concat('bokehdark.css'))
+        .pipe(gulp.dest(dist + '/css'));
+    return gulp
+        .src(src + '/css/bokehlight.scss')
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(concat('bokehlight.css'))
         .pipe(gulp.dest(dist + '/css'));
 });
 
