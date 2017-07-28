@@ -25,6 +25,7 @@ $greyfill: #999999;
 $question_clr: #000000;
 $instructions_clr: lighten($question_clr, 35%);
 $border_color: #999999;
+$alarm_color: #ee6666;
 // sizes and spacing
 $general_padding: 1em;
 $general_small_padding: ($general_padding * 0.7);
@@ -37,6 +38,27 @@ $button_padding: 0.5em;
 $very_slow_anim_timing: 4s;
 $slow_anim_timing: 0.5s;
 $fast_anim_timing: 0.2s;
+
+// Animation for when the instructions are animated
+@keyframes instructionsAnimation {
+  50% {
+    transform: scale(1.2);
+    color: $alarm_color;
+    font-weight: 900;
+  }
+  85% {
+    transform: scale(1.2);
+    color: $alarm_color;
+    font-weight: 900;
+  }
+  100% {
+    transform: scale(1);
+    color: $instructions_clr;
+    font-weight: normal;
+  }
+}
+
+// Animation for when a button is selected
 @keyframes buttonSelectAnimation {
   0% {
     background-color: $fill;

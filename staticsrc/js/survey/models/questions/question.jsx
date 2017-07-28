@@ -17,13 +17,26 @@ class QuestionComponent extends React.Component {
  */
   constructor(props) {
     super(props);
+    this.state = {
+      alarmInstructions: false
+    };
   }
 
   /**
    * Remind users about the rules
    */
   highlightInstructions() {
-    console.log("The ruless!!");
+    this.setState({alarmInstructions: true});
+  }
+
+  /**
+   * Animation is over
+   */
+  handleAnimationEnd(e) {
+    let targ = e.target;
+    if (targ.className.indexOf("instructions") > -1) {
+      this.setState({alarmInstructions: false});
+    }
   }
 
   /**
@@ -31,15 +44,48 @@ class QuestionComponent extends React.Component {
  */
   render() {
     return (
-      <div className="question">        
+      <div
+        className="question"
+        onAnimationEnd={this
+        .handleAnimationEnd
+        .bind(this)}>
         {(this.props.title || this.props.name) && <h2>{this.props.title || this.props.name}</h2>}
-        {this.props.instructions && <p className="instructions"><span className="fa fa-info-circle"></span> {this.props.instructions}</p>}
-        {this.props.type == "checkbox" && <CheckboxQuestion {...this.props} onRemindAboutRules={this.highlightInstructions.bind(this)} />}
-        {this.props.type == "radio" && <RadioQuestion {...this.props} onRemindAboutRules={this.highlightInstructions.bind(this)} />}
-        {this.props.type == "dropdown" && <DropdownQuestion {...this.props} onRemindAboutRules={this.highlightInstructions.bind(this)} />}
-        {this.props.type == "multipletext" && <MultipleTextQuestion {...this.props} onRemindAboutRules={this.highlightInstructions.bind(this)} />}
-        {this.props.type == "rating" && <RatingQuestion {...this.props} onRemindAboutRules={this.highlightInstructions.bind(this)} />}
-        {this.props.type == "text" && <TextQuestion {...this.props} onRemindAboutRules={this.highlightInstructions.bind(this)} />}
+        {this.props.instructions && <p
+          className={"instructions " + (this.state.alarmInstructions
+          ? "alarm"
+          : "")}>
+          <span className="fa fa-info-circle"></span>
+          &nbsp;{this.props.instructions}</p>}
+        {this.props.type == "checkbox" && <CheckboxQuestion
+          {...this.props}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
+        {this.props.type == "radio" && <RadioQuestion
+          {...this.props}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
+        {this.props.type == "dropdown" && <DropdownQuestion
+          {...this.props}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
+        {this.props.type == "multipletext" && <MultipleTextQuestion
+          {...this.props}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
+        {this.props.type == "rating" && <RatingQuestion
+          {...this.props}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
+        {this.props.type == "text" && <TextQuestion
+          {...this.props}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
       </div>
     );
   }

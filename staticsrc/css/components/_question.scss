@@ -20,8 +20,12 @@
   }
   .instructions {
     color: $instructions_clr;
+    animation-duration: $slow_anim_timing !important;
     @media (max-width: $screen-sm-min) {
       font-size: 0.8em;
+    }
+    &.alarm {
+      animation: instructionsAnimation;
     }
   }
   .selectbutton {

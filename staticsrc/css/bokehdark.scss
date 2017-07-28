@@ -18,13 +18,14 @@ Helvetica,
 Arial,
 sans-serif;
 // images
-$bgimage: "/static/assets/other/bokehdark.jpg";
+$bgimage: "/static/assets/other/bokehlight.jpg";
 // colors
 $fill: #3e885b;
 $greyfill: #999999;
 $question_clr: #000000;
 $instructions_clr: lighten($question_clr, 35%);
 $border_color: #999999;
+$alarm_color: #ee6666;
 // sizes and spacing
 $general_padding: 1em;
 $general_small_padding: ($general_padding * 0.7);
@@ -37,14 +38,23 @@ $button_padding: 0.5em;
 $very_slow_anim_timing: 4s;
 $slow_anim_timing: 0.5s;
 $fast_anim_timing: 0.2s;
-@keyframes buttonSelectAnimation {
-  0% {
-    background-color: $fill;
-  }
+
+// Animation for when the instructions are animated
+@keyframes instructionsAnimation {
   50% {
-    background-color: transparent;
+    transform: scale(1.5);
+    color: $alarm_color;
+  }
+  75% {
+    transform: scale(1.5);
+    color: $alarm_color;
+  }
+  100% {
+    transform: scale(1);
+    color: $instructions_clr;
   }
 }
+
 
 // Base styles
 @mixin button_style {
