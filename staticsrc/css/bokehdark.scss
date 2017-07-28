@@ -4,7 +4,7 @@ $faintfont: "latohairline",
 Helvetica,
 Arial,
 sans-serif;
-$lightfont: "proxima-nova", 
+$lightfont: "proxima-nova",
 "latolight",
 "Open Sans",
 "Helvetica Neue",
@@ -18,21 +18,21 @@ Helvetica,
 Arial,
 sans-serif;
 // images
-$bgimage: "/static/assets/other/bokehlight.jpg";
-
+$bgimage: "/static/assets/other/bokehdark.jpg";
 // colors
-$fill: #009CDA;
+$fill: #3e885b;
 $greyfill: #999999;
 $question_clr: #000000;
 $instructions_clr: lighten($question_clr, 35%);
-$border_color: #777777;
+$border_color: #999999;
 // sizes and spacing
 $general_padding: 1em;
 $general_small_padding: ($general_padding * 0.7);
 $bottombar_height: 3em;
 $button_radius: 0.25em;
 $progress_height: 0.25em;
-$button_lineheight: 2em;
+$button_lineheight: 1.25em;
+$button_padding: 0.5em;
 // timings
 $very_slow_anim_timing: 4s;
 $slow_anim_timing: 0.5s;
@@ -46,20 +46,25 @@ $fast_anim_timing: 0.2s;
   }
 }
 
-
 // Base styles
 @mixin button_style {
   user-select: none;
   border-top: 1px solid $border_color;
   border-bottom: 1px solid $border_color;
   border-left: 1px solid $border_color;
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.4);
   line-height: $button_lineheight;
   text-align: center;
   display: inline-block;
   padding-left: $general_small_padding;
   padding-right: $general_small_padding;
   font-size: 1.5em;
+  padding-top: $button_padding;
+  padding-bottom: $button_padding;
+  input[type=checkbox],
+  input[type=radio] {
+    display: none;
+  }
   &.selected {
     background-color: $fill;
     animation-name: buttonSelectAnimation;
@@ -70,7 +75,7 @@ $fast_anim_timing: 0.2s;
     }
   }
   &:hover {
-    background-color: $greyfill;
+    background-color: lighten($greyfill, 17%);
   }
   &:first-child {
     border-top-left-radius: $button_radius;
@@ -81,6 +86,21 @@ $fast_anim_timing: 0.2s;
     border-right: 1px solid $border_color;
     border-top-right-radius: $button_radius;
     border-bottom-right-radius: $button_radius;
+  }
+}
+
+// A lighter button
+@mixin standalone_button_style {
+  @include button_style;
+  display: block;
+  text-align: left;
+  font-size: 0.9em;
+  line-height: ($button_lineheight * 1.3);
+  border-radius: $button_radius;
+  border-right: 1px solid $border_color;
+  margin-bottom: ($general_padding / 2);
+  &:last-child {
+    margin-bottom: 0;
   }
 }
 

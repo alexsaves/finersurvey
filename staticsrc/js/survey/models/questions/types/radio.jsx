@@ -6,7 +6,7 @@ import {changeAnswer} from '../../../../actions';
 /**
 * Represents a question
 */
-class CheckboxQuestion extends React.Component {
+class RadioQuestion extends React.Component {
   /**
  * Constructor for the survey
  */
@@ -23,38 +23,25 @@ class CheckboxQuestion extends React.Component {
     let targ = e.target,
       root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByTagName("input"),
-      responses = [],
+      value = null,
       otherval = "",
-      finalResponse = {},
-      howManySelected = 0;
+      finalResponse = {};
 
     for (let i = 0; i < ipts.length; i++) {
       let ipt = ipts[i];
-      if (ipt.type == "checkbox" && ipt.checked) {
-        responses.push(ipt.name);
-        howManySelected++;
+      if (ipt.type == "radio" && ipt.checked) {
+        value = ipt.value;
       } else if (ipt.type == "text") {
         otherval = ipt.value;
       }
     }
-    finalResponse.responses = responses;
+    finalResponse.response = value;
     if (this.props.other) {
       finalResponse.other = otherval;
     }
-    if (!this.props.maxanswers || this.props.maxanswers >= howManySelected) {
-      this
-        .props
-        .dispatch(changeAnswer(this.props.name, finalResponse));
-    } else if (e) {      
-      if (targ.checked) {
-        targ.checked = false;
-      }
-      e.stopPropagation();
-      e.preventDefault();
-      if (this.props.onRemindAboutRules) {
-        this.props.onRemindAboutRules();
-      }
-    }
+    this
+      .props
+      .dispatch(changeAnswer(this.props.name, finalResponse));
   }
 
   /**
@@ -73,21 +60,18 @@ class CheckboxQuestion extends React.Component {
   render() {
     let qname = this.props.name,
       ctx = this,
-      answers = this.props.answer;
+      answer = this.props.answer;
 
     // Check each value
     let shouldOptionBeSelected = function (val) {
-      if (answers) {
-        let result = answers
-          .responses
-          .indexOf(val.toString());
-        return (result > -1);
+      if (answer) {
+        return (answer.response == val) || (answer.response == val.toString());
       }
       return false;
     };
 
     return (
-      <div className="question--checkbox">
+      <div className="question--radio">
         {this
           .props
           .choices
@@ -97,10 +81,10 @@ class CheckboxQuestion extends React.Component {
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
               ? "selected"
               : "")}>{rt}<input
-              type="checkbox"
-              name={idx}
+              type="radio"
+              name={qname}
               value={idx}
-              onChange={ctx
+              onClick={ctx
               .handleAnswerChange
               .bind(ctx)}/></label>
           })}
@@ -117,7 +101,7 @@ class CheckboxQuestion extends React.Component {
 }
 
 // Connect the component
-const ConnectedCheckboxQuestion = connect()(CheckboxQuestion)
+const ConnectedRadioQuestion = connect()(RadioQuestion)
 
 // Expose the question
-export default ConnectedCheckboxQuestion;
+export default ConnectedRadioQuestion;

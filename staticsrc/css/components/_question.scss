@@ -1,5 +1,6 @@
 @import "questiontypes/rating";
 @import "questiontypes/checkbox";
+@import "questiontypes/radio";
 
 .question {
   font-family: 'latolight', Arial, Helvetica, sans-serif;
@@ -24,15 +25,14 @@
     }
   }
   .selectbutton {
-    @include button_style;
-    input[type=checkbox],
-    input[type=radio] {
-      display: none;
-    }    
+    @include button_style;       
+  }
+  .standalonebutton {
+    @include standalone_button_style;       
   }
   .smalllabel {
     font-size: 0.8em;
-    color: $border_color;
+    color: $instructions_clr;
     user-select: none;
     cursor: default;
     @media (max-width: $screen-sm-min) {
