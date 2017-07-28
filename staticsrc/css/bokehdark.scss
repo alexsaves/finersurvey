@@ -18,7 +18,7 @@ Helvetica,
 Arial,
 sans-serif;
 // images
-$bgimage: "/static/assets/other/bokehlight.jpg";
+$bgimage: "/static/assets/other/bokehdark.jpg";
 // colors
 $fill: #3e885b;
 $greyfill: #999999;
@@ -42,19 +42,31 @@ $fast_anim_timing: 0.2s;
 // Animation for when the instructions are animated
 @keyframes instructionsAnimation {
   50% {
-    transform: scale(1.5);
+    transform: scale(1.2);
     color: $alarm_color;
+    font-weight: 900;
   }
-  75% {
-    transform: scale(1.5);
+  85% {
+    transform: scale(1.2);
     color: $alarm_color;
+    font-weight: 900;
   }
   100% {
     transform: scale(1);
     color: $instructions_clr;
+    font-weight: normal;
   }
 }
 
+// Animation for when a button is selected
+@keyframes buttonSelectAnimation {
+  0% {
+    background-color: $fill;
+  }
+  50% {
+    background-color: transparent;
+  }
+}
 
 // Base styles
 @mixin button_style {
