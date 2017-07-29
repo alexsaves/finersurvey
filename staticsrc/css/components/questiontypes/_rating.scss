@@ -7,7 +7,19 @@
   .buttongroup {
     margin-bottom: $general_small_padding;
   }
-  .highlabel {
-    float: right;
+  .labelcontainer {
+    position: relative;
+    height: $small_label_size;   
+    span {
+      display: inline-block;
+      position: absolute;
+        top: 0;
+      &.lowlabel {
+        left: 0;
+      }
+      &.highlabel {
+        right: 0;
+      }
+    }
   }
 }

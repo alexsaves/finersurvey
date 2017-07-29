@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import PageComponent from '../models/page.jsx';
 import Validator from './validator.js';
-import {nextPage, prevPage} from '../../actions';
+import {nextPage, prevPage, jumpToPage} from '../../actions';
+import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
 
 /**
 * Represents the entire survey
@@ -36,15 +37,27 @@ class PaginationController extends React.Component {
   }
 
   /**
+   * If validation exists, cancel it
+   */
+  cancelValidation() {
+    clearTimeout(this._advanceTimer);
+    this.setState({showValidation: false});
+  }
+
+  /**
    * Handle advancing
    */
-  handleAdvanceRequest() {
+  handleAdvanceRequest(e) {
     let validated = this.hasRequiredAnswersForPage(this.props.currentPage);
     this.setState({showValidation: false});
     if (!validated) {
-      setTimeout(() => {
+      this._advanceTimer = setTimeout(() => {
         this.setState({showValidation: true});
       }, 20);
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
     } else {
       this.animateForward();
     }
@@ -53,13 +66,18 @@ class PaginationController extends React.Component {
   /**
    * Handle previous page
    */
-  handlePreviousRequest() {
+  handlePreviousRequest(e) {
     if (this.props.currentPage > 0) {
       this.animateBackward(() => {
         this
           .props
           .dispatch(prevPage());
       });
+    } else {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
     }
   }
 
@@ -119,7 +137,14 @@ class PaginationController extends React.Component {
       answers = this.props.answers,
       isAnimatingForward = this.state.animatingForward,
       isAnimatingBackward = this.state.animatingBackward,
-      isValidated = this.hasRequiredAnswersForPage(this.props.currentPage);
+      isValidated = this.hasRequiredAnswersForPage(this.props.currentPage),
+      desiredPage = (typeof this.props.desiredPage != 'undefined') ? parseInt(this.props.desiredPage) - 1 : 0
+    if (!this.state.animatingBackward && !this.state.animatingForward && desiredPage != this.props.currentPage) {
+      clearTimeout(this.advancejump);
+      this.advancejump = setTimeout(() => {
+        this.props.dispatch(jumpToPage(desiredPage));
+      }, 20);
+    }
     return (
       <div
         className="paginator"
@@ -154,25 +179,28 @@ class PaginationController extends React.Component {
           className={"paginator--buttonholder left " + (currentPage === 0
           ? "hidden"
           : "")}>
-          <a
+          <Link
+            to={"/s/" + this.props.uid + "/" + (currentPage)}
             className="paginator--button"
             title="Previous page"
             onClick={this
             .handlePreviousRequest
-            .bind(this)}>&lt;</a>
+            .bind(this)}>&lt;</Link>
         </div>
         <div
           className={"paginator--buttonholder right " + (currentPage === (this.props.pages.length - 1)
           ? "hidden"
           : "")}>
-          <a
+          <Link
+            to={"/s/" + this.props.uid + "/" + (currentPage + 2)}
             className={"paginator--button " + (isValidated
             ? "validated"
             : "")}
             title="Next page"
+            onMouseOut={this.cancelValidation.bind(this)}
             onClick={this
             .handleAdvanceRequest
-            .bind(this)}>&gt;</a>
+            .bind(this)}>&gt;</Link>
         </div>
       </div>
     );

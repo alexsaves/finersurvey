@@ -1,0 +1,13 @@
+.question--rating.stars {
+  .star--button {
+    font-size: $icon_button_size;
+    cursor: pointer;
+    margin-right: ($general_small_padding / 6);
+    &:last {
+      margin-right: 0;
+    }
+  }
+  input {
+    display: none;
+  }
+}

@@ -2,7 +2,7 @@
   input[type=text],
   select {
     display: block;
-    border: 1px solid $border_color;
+    border: 1px solid $light_border_color;
     border-radius: $button_radius;
     line-height: ($button_lineheight + $button_padding + $button_padding);
     width: 100%;

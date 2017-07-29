@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import RadioQuestion from './types/radio.jsx';
 import CheckboxQuestion from './types/checkbox.jsx';
 import RatingQuestion from './types/rating.jsx';
+import StarsRatingQuestion from './types/stars.jsx';
 import TextQuestion from './types/text.jsx';
 import MultipleTextQuestion from './types/multipletext.jsx';
 import DropdownQuestion from './types/dropdown.jsx';
@@ -60,7 +61,7 @@ class QuestionComponent extends React.Component {
           {...this.props}
           onRemindAboutRules={this
           .highlightInstructions
-          .bind(this)}/>}
+          .bind(this)}/>}        
         {this.props.type == "radio" && <RadioQuestion
           {...this.props}
           onRemindAboutRules={this
@@ -76,7 +77,12 @@ class QuestionComponent extends React.Component {
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
-        {this.props.type == "rating" && <RatingQuestion
+        {this.props.type == "rating" && !this.props.modifier && <RatingQuestion
+          {...this.props}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
+        {this.props.type == "rating" && this.props.modifier == "stars" && <StarsRatingQuestion
           {...this.props}
           onRemindAboutRules={this
           .highlightInstructions

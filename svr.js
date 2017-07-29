@@ -164,8 +164,10 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             usSrc = req.headers['user-agent'],
             ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-        if (isNaN(pg)) {
+        if (isNaN(pg) || pg < 0) {
             pg = 0;
+        } else {
+            pg--;
         }
 
         var requestEmitter = new events.EventEmitter();
@@ -213,7 +215,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                         guid: srvObj.survey_model.guid,
                                         theme: srvObj.theme                                     
                                     },
-                                    currentPage: pg,
+                                    currentPage: Math.min(pg, srvObj.survey_model.pages.length),
                                     pages: srvObj.survey_model.pages,
                                     answers: {}
                                 }))

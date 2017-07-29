@@ -9,8 +9,8 @@ import SurveyComponent from './survey/survey.jsx';
 const RoutesComponent = () => {
     return (
         <Switch>
-            <Route path="/s/:uid" component={SurveyComponent}/>
             <Route path="/s/:uid/:pg" component={SurveyComponent}/>
+            <Route path="/s/:uid" component={SurveyComponent}/>
         </Switch>
     );
 };

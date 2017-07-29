@@ -42,11 +42,13 @@ class SurveyComponent extends React.Component {
   /**
  * Render the view
  */
-  render() {    
+  render() {
+    let uid = this.props.match.params.uid,
+      desiredPage = this.props.match.params.pg;
     return (
       <div className={"survey" + (this.state.isOverflowing ? " overflowing" : "")}>
-        <ProgressComponent progress={this.state.progress} />
-        <PageController />
+        <ProgressComponent uid={uid} progress={this.state.progress} />
+        <PageController uid={uid} desiredPage={desiredPage} />
         <a href="https://www.finer.ink" title="Sales Win/Loss Analysis" target="_blank" className="logo--finerink"></a>      
       </div>
     );

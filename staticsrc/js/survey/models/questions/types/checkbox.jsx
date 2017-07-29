@@ -20,7 +20,7 @@ class CheckboxQuestion extends React.Component {
    * @param {*} e
    */
   handleAnswerChange(e) {
-    let targ = e.target,
+    let targ = e && e.target,
       root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByTagName("input"),
       responses = [],

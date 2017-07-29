@@ -6,7 +6,7 @@ import {changeAnswer} from '../../../../actions';
 /**
 * Represents a question
 */
-class RatingQuestion extends React.Component {
+class StarsRatingQuestion extends React.Component {
   /**
  * Constructor for the survey
  */
@@ -27,6 +27,15 @@ class RatingQuestion extends React.Component {
   }
 
   /**
+   * User is overed over a star
+   * @param {*} e 
+   */
+  handleStarHover(e) {
+    let targ = e.currentTarget;
+    console.log(targ);
+  }
+
+  /**
  * Render the view
  */
   render() {
@@ -43,14 +52,16 @@ class RatingQuestion extends React.Component {
     let ctx = this;
     let answer = this.props.answer || 0;
     return (
-      <div className="question--rating">
+      <div className="question--rating stars">
         <div className="buttongroup">
           {ratingScale.map((rt, idx) => {
             return <label
               key={idx}
-              className={"selectbutton question--ratingitem" + (!!(rt <= answer)
+              data-which={idx}
+              onMouseEnter={this.handleStarHover.bind(this)}
+              className={"star--button fa fa-star-o" + (!!(rt <= answer)
               ? " selected"
-              : "")}>{rt}<input
+              : "")}><input
               type="checkbox"
               checked={!!(rt <= answer)}
               name={qname}
@@ -70,7 +81,7 @@ class RatingQuestion extends React.Component {
 }
 
 // Connect the component
-const ConnectedRatingQuestion = connect()(RatingQuestion)
+const ConnectedStarsRatingQuestion = connect()(StarsRatingQuestion)
 
 // Expose the question
-export default ConnectedRatingQuestion;
+export default ConnectedStarsRatingQuestion;

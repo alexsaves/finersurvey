@@ -1,6 +1,7 @@
 @import "questiontypes/rating";
 @import "questiontypes/checkbox";
 @import "questiontypes/radio";
+@import "questiontypes/stars";
 
 .question {
   font-family: 'latolight', Arial, Helvetica, sans-serif;
@@ -35,7 +36,7 @@
     @include standalone_button_style;       
   }
   .smalllabel {
-    font-size: 0.8em;
+    font-size: $small_label_size;
     color: $instructions_clr;
     user-select: none;
     cursor: default;
