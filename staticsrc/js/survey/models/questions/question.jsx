@@ -7,6 +7,7 @@ import RatingQuestion from './types/rating.jsx';
 import StarsRatingQuestion from './types/stars.jsx';
 import TextQuestion from './types/text.jsx';
 import DropdownQuestion from './types/dropdown.jsx';
+import MatrixRatingQuestion from './types/matrixrating.jsx';
 
 /**
 * Represents a question
@@ -56,6 +57,11 @@ class QuestionComponent extends React.Component {
           : "")}>
           <span className="fa fa-info-circle"></span>
           &nbsp;{this.props.instructions}</p>}
+        {this.props.type == "matrixrating" && <MatrixRatingQuestion
+          {...this.props}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
         {this.props.type == "checkbox" && <CheckboxQuestion
           {...this.props}
           onRemindAboutRules={this
