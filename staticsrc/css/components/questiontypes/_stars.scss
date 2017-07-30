@@ -2,9 +2,30 @@
   .star--button {
     font-size: $icon_button_size;
     cursor: pointer;
+    position: relative;
+    color: transparent;
     margin-right: ($general_small_padding / 6);
     &:last {
       margin-right: 0;
+    }
+    &.hovered {
+      color: $fill;
+    }
+    .star--inner {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      color: $question_clr;
+    }
+    &.selected {
+      color: white;
+      animation-name: iconSelectAnimation;
+      animation-duration: $fast_anim_timing;
+      .star--inner {
+        color: $fill;
+        animation-name: iconSelectAnimation;
+        animation-duration: $fast_anim_timing;
+      }
     }
   }
   input {

@@ -61,6 +61,16 @@ $fast_anim_timing: 0.2s;
   }
 }
 
+// Animation for when a star thingy is selected
+@keyframes iconSelectAnimation {
+  0% {
+    color: $question_clr;
+  }
+  50% {
+    color: $fill;
+  }
+}
+
 // Animation for when a button is selected
 @keyframes buttonSelectAnimation {
   0% {

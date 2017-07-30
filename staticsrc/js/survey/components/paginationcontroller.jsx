@@ -18,7 +18,8 @@ class PaginationController extends React.Component {
     this.state = {
       showValidation: false,
       animatingForward: false,
-      animatingBackward: false
+      animatingBackward: false,
+      remindInstructionsFor: []
     };
   }
 
@@ -48,11 +49,12 @@ class PaginationController extends React.Component {
    * Handle advancing
    */
   handleAdvanceRequest(e) {
-    let validated = this.hasRequiredAnswersForPage(this.props.currentPage);
-    this.setState({showValidation: false});
+    let failedValidationItems = this.hasRequiredAnswersForPage(this.props.currentPage),
+      validated = failedValidationItems.length === 0;
+    this.setState({showValidation: false, remindInstructionsFor: []});
     if (!validated) {
       this._advanceTimer = setTimeout(() => {
-        this.setState({showValidation: true});
+        this.setState({showValidation: true, remindInstructionsFor: failedValidationItems});
       }, 20);
       if (e) {
         e.stopPropagation();
@@ -89,7 +91,8 @@ class PaginationController extends React.Component {
     let pageObj = this.props.pages[pageNumber],
       didPass = true,
       answers = this.props.answers,
-      validator = new Validator();
+      validator = new Validator(),
+      faledQList = [];
 
     pageObj
       .elements
@@ -99,15 +102,17 @@ class PaginationController extends React.Component {
           let theanswer = answers[elm.name];
           if (!theanswer) {
             didPass = false;
+            faledQList.push(elm.name);
           } else {
             if (!validator.validate(elm, theanswer)) {
               didPass = false;
+              faledQList.push(elm.name);
             }
           }
         }
       });
 
-    return didPass;
+    return faledQList;
   }
 
   /**
@@ -126,6 +131,8 @@ class PaginationController extends React.Component {
           .props
           .dispatch(prevPage());
       }
+    } else if (targ.className.indexOf("instructions") > -1) {
+      this.setState({remindInstructionsFor: []});
     }
   }
 
@@ -137,12 +144,18 @@ class PaginationController extends React.Component {
       answers = this.props.answers,
       isAnimatingForward = this.state.animatingForward,
       isAnimatingBackward = this.state.animatingBackward,
-      isValidated = this.hasRequiredAnswersForPage(this.props.currentPage),
-      desiredPage = (typeof this.props.desiredPage != 'undefined') ? parseInt(this.props.desiredPage) - 1 : 0
+      remindInstructionsFor = this.state.remindInstructionsFor,
+      failedValidationItems = this.hasRequiredAnswersForPage(this.props.currentPage),
+      isValidated = failedValidationItems.length === 0,
+      desiredPage = (typeof this.props.desiredPage != 'undefined')
+        ? parseInt(this.props.desiredPage) - 1
+        : 0
     if (!this.state.animatingBackward && !this.state.animatingForward && desiredPage != this.props.currentPage) {
       clearTimeout(this.advancejump);
       this.advancejump = setTimeout(() => {
-        this.props.dispatch(jumpToPage(desiredPage));
+        this
+          .props
+          .dispatch(jumpToPage(desiredPage));
       }, 20);
     }
     return (
@@ -168,6 +181,7 @@ class PaginationController extends React.Component {
               key={idx}
               questions={pg.elements}
               isSelected={idx === currentPage}
+              remindInstructionsFor={remindInstructionsFor}
               answers={answers}
               animatingOutBackward={idx === currentPage && isAnimatingBackward}
               animatingOutForward={idx === currentPage && isAnimatingForward}
@@ -197,7 +211,9 @@ class PaginationController extends React.Component {
             ? "validated"
             : "")}
             title="Next page"
-            onMouseOut={this.cancelValidation.bind(this)}
+            onMouseOut={this
+            .cancelValidation
+            .bind(this)}
             onClick={this
             .handleAdvanceRequest
             .bind(this)}>&gt;</Link>

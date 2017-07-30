@@ -16,7 +16,7 @@ class PageComponent extends React.Component {
 
   /**
    * If there is an answer for a question, provide it
-   * @param {*} q 
+   * @param {*} q
    */
   getAnswerForQuestion(q) {
     return this.props.answers[q.name];
@@ -26,18 +26,31 @@ class PageComponent extends React.Component {
  * Render the view
  */
   render() {
-    let ctx = this;    
+    let ctx = this,
+      remindInstructionsFor = this.props.remindInstructionsFor;
     return (
-      <div
+      <div        
         className={"page " + (this.props.isSelected
         ? "selected"
-        : "") + (this.props.animatingOutForward ? " animatingoutforward" : (this.props.animatingOutBackward ? " animatingoutbackward" : "")) + (this.props.animatingInForward ? " animatinginforward" : (this.props.animatingInBackward ? " animatinginbackward" : ""))}>
+        : "") + (this.props.animatingOutForward
+        ? " animatingoutforward"
+        : (this.props.animatingOutBackward
+          ? " animatingoutbackward"
+          : "")) + (this.props.animatingInForward
+        ? " animatinginforward"
+        : (this.props.animatingInBackward
+          ? " animatinginbackward"
+          : ""))}>
         <div className="questions">
           {this
             .props
             .questions
             .map((q, idx) => {
-              return <QuestionComponent key={idx} {...q} answer={ctx.getAnswerForQuestion(q)} />
+              return <QuestionComponent
+                key={idx}
+                {...q}
+                answer={ctx.getAnswerForQuestion(q)}
+                remindInstructions={(remindInstructionsFor.indexOf(q.name) > -1)}/>
             })}
         </div>
       </div>

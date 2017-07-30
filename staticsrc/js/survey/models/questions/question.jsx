@@ -52,7 +52,7 @@ class QuestionComponent extends React.Component {
         .bind(this)}>
         {(this.props.title || this.props.name) && <h2>{this.props.title || this.props.name}</h2>}
         {this.props.instructions && <p
-          className={"instructions " + (this.state.alarmInstructions
+          className={"instructions " + ((this.state.alarmInstructions || this.props.remindInstructions)
           ? "alarm"
           : "")}>
           <span className="fa fa-info-circle"></span>
