@@ -31,7 +31,21 @@ class MatrixRatingQuestion extends React.Component {
   render() {
     return (
       <div className="question--matrixrating">
-        
+        <div className="matrix--carousel">
+          {this
+          .props
+          .choices
+          .map((rt, idx) => {
+            return <div
+              key={idx}
+              className={"choiceitem"}><div className="choiceinner">{rt}</div></div>
+          })}
+          <a href="#" className="carousel--control left fa fa-chevron-left" title="Previous"></a>
+          <a href="#" className="carousel--control right fa fa-chevron-right" title="Next"></a>
+        </div>
+        <div className="rating-zone">
+          rater
+        </div>
       </div>
     );
   }

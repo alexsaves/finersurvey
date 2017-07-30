@@ -1,0 +1,43 @@
+.question--matrixrating {
+  .matrix--carousel {
+    width: 100%;
+    position: relative;
+    white-space: nowrap;
+    .choiceitem {
+      height: $carousel_height;
+      line-height: $carousel_height;
+      display: inline-block;
+      width: 100%;
+      padding-left: ($general_padding * 3);
+      padding-right: ($general_padding * 3);
+      .choiceinner {
+        display: inline-block;
+        vertical-align: middle;
+        white-space: normal;
+        line-height: 1.2em;
+        font-size: 1.2em;
+        font-weight: 800;
+      }
+      box-sizing: border-box;
+    }
+    .carousel--control {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      line-height: $carousel_height;
+      text-decoration: none;
+      color: $greyfill;
+      padding-left: ($general_padding / 2);
+      padding-right: ($general_padding / 2);
+      border-radius: $button_radius;
+      &:hover {
+        background-color: $light_border_color;
+        color: $invert_text_color;
+      }
+      &.right {
+        right: 0px;
+        left: auto;
+      }
+    }
+  }
+}
