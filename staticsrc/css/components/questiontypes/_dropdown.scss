@@ -1,0 +1,6 @@
+.question--dropdown {
+  select.dropdown-select {
+    cursor: pointer;
+    height: (($button_lineheight + $button_padding + $button_padding));
+  }
+}

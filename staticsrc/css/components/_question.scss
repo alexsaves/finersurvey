@@ -2,18 +2,20 @@
 @import "questiontypes/checkbox";
 @import "questiontypes/radio";
 @import "questiontypes/stars";
+@import "questiontypes/text";
+@import "questiontypes/dropdown";
 
 .question {
   font-family: 'latolight', Arial, Helvetica, sans-serif;
   color: $question_clr;
   display: inline-block;
-  max-width: 34em;
+  width: $desktop_question_width;
   text-align: center;
   @media (max-width: $screen-md-min) {
-    max-width: 70%;
+    width: 70%;
   }
   @media (max-width: $screen-sm-min) {
-    max-width: 85%;
+    width: 85%;
   }
   h2 {
     font-size: 1.25em;

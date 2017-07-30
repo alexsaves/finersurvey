@@ -1,6 +1,6 @@
 .question {
   input[type=text],
-  select {
+  select, textarea {
     display: block;
     border: 1px solid $light_border_color;
     border-radius: $button_radius;

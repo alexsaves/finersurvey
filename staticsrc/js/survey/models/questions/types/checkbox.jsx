@@ -64,7 +64,7 @@ class CheckboxQuestion extends React.Component {
     clearTimeout(this.iptThrottle);
     this.iptThrottle = setTimeout(() => {
       this.handleAnswerChange();
-    }, 300);
+    }, 200);
   }
 
   /**

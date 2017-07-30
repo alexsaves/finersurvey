@@ -1,0 +1,7 @@
+.question--text {
+  textarea {
+    padding: $button_padding;
+    line-height: $button_lineheight;
+    //height: (($button_lineheight + $button_padding + $button_padding + $button_padding) * 2);    
+  }
+}

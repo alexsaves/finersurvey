@@ -41,6 +41,10 @@ export default class {
         }
       case "radio":
         return answer && (answer.other || typeof answer.response != "undefined");
+      case "text":        
+        return answer && (answer.length > 0);
+      case "dropdown":        
+        return answer && (answer > -1);
       default:
         return false;
     }

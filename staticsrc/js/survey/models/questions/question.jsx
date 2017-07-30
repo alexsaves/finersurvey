@@ -6,7 +6,6 @@ import CheckboxQuestion from './types/checkbox.jsx';
 import RatingQuestion from './types/rating.jsx';
 import StarsRatingQuestion from './types/stars.jsx';
 import TextQuestion from './types/text.jsx';
-import MultipleTextQuestion from './types/multipletext.jsx';
 import DropdownQuestion from './types/dropdown.jsx';
 
 /**
@@ -68,11 +67,6 @@ class QuestionComponent extends React.Component {
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "dropdown" && <DropdownQuestion
-          {...this.props}
-          onRemindAboutRules={this
-          .highlightInstructions
-          .bind(this)}/>}
-        {this.props.type == "multipletext" && <MultipleTextQuestion
           {...this.props}
           onRemindAboutRules={this
           .highlightInstructions
