@@ -6,20 +6,63 @@
     width: 100%;
     position: relative;
     white-space: nowrap;
+    overflow: hidden;
     .choiceitem {
       height: $carousel_height;
-      line-height: $carousel_height;
-      display: inline-block;
+      line-height: $carousel_height;      
       width: 100%;
       padding-left: ($general_padding * 3);
       padding-right: ($general_padding * 3);
+      position: relative;
+      top: 0px;
+      left: 0px;
+      display: none;
+      opacity: 1;      
+      &.selected {
+        display: inline-block;
+      }
+      &.afSelected {
+        transition: left $slow_anim_timing, opacity $slow_anim_timing;
+        left: -30%;
+        opacity: 0;
+      }
+      &.abSelected {
+        transition: left $slow_anim_timing, opacity $slow_anim_timing;
+        left: 30%;
+        opacity: 0;
+      }
+      &.abPrevSelected {
+        transition: left $slow_anim_timing, opacity $slow_anim_timing;
+        left: 0;
+        opacity: 1;
+      }
+      &.nextselected {
+        transition: left $slow_anim_timing, opacity $slow_anim_timing;
+        left: -70%;
+        opacity: 0;
+        display: inline-block;
+        &.afNextSelected {
+          left: -100%;
+          opacity: 1;
+        }
+      }
+      &.prevselected {
+        display: inline-block;
+        position: absolute;
+        left: -30%;
+        opacity: 0;
+        &.afPrevSelected {
+          left: 0;
+          opacity: 1;
+        }
+      }
       .choiceinner {
+        font-family: $heaviestfont;
         display: inline-block;
         vertical-align: middle;
         white-space: normal;
         line-height: 1.2em;
-        font-size: 1.2em;
-        font-weight: 800;
+        font-size: 1.4em;
       }
       box-sizing: border-box;
     }
@@ -27,12 +70,17 @@
       position: absolute;
       top: 0px;
       left: 0px;
+      opacity: 0;
       line-height: $carousel_height;
       text-decoration: none;
       color: $greyfill;
       padding-left: ($general_padding / 2);
       padding-right: ($general_padding / 2);
       border-radius: $button_radius;
+      transition: opacity $fast_anim_timing;
+      &.visible {
+        opacity: 1;
+      }
       &:hover {
         background-color: $light_border_color;
         color: $invert_text_color;
