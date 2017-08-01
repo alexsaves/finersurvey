@@ -100,7 +100,7 @@ class PaginationController extends React.Component {
         if (elm.required) {
           // Required question
           let theanswer = answers[elm.name];
-          if (!theanswer) {
+          if (typeof theanswer == 'undefined') {
             didPass = false;
             faledQList.push(elm.name);
           } else {

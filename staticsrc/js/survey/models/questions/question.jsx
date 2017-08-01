@@ -5,6 +5,7 @@ import RadioQuestion from './types/radio.jsx';
 import CheckboxQuestion from './types/checkbox.jsx';
 import RatingQuestion from './types/rating.jsx';
 import StarsRatingQuestion from './types/stars.jsx';
+import SliderRatingQuestion from './types/slider.jsx';
 import TextQuestion from './types/text.jsx';
 import DropdownQuestion from './types/dropdown.jsx';
 import MatrixRatingQuestion from './types/matrixrating.jsx';
@@ -83,6 +84,11 @@ class QuestionComponent extends React.Component {
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "rating" && this.props.modifier == "stars" && <StarsRatingQuestion
+          {...this.props}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
+        {this.props.type == "rating" && this.props.modifier == "slider" && <SliderRatingQuestion
           {...this.props}
           onRemindAboutRules={this
           .highlightInstructions

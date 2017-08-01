@@ -43,8 +43,10 @@ export default class {
         return answer && (answer.other || typeof answer.response != "undefined");
       case "text":        
         return answer && (answer.length > 0);
-      case "dropdown":        
-        return answer && (answer > -1);
+      case "dropdown":
+        return (typeof answer != undefined) && (answer > -1);
+      case "matrixrating":        
+        return answer.indexOf(-1) == -1;
       default:
         return false;
     }

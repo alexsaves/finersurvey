@@ -15,8 +15,12 @@ class MatrixRatingQuestion extends React.Component {
     this.state = {
       selectedItem: 0,
       animatingForward: false,
-      animatingBackward: false
+      animatingBackward: false,
+      answers: []
     };
+    for (let i = 0; i < this.props.choices.length; i++) {
+      this.state.answers[i] = -1;
+    }
   }
 
   /**
@@ -24,10 +28,19 @@ class MatrixRatingQuestion extends React.Component {
    * @param {*} e
    */
   handleAnswerChange(e) {
-    /* let targ = e && e.target,
-      root = ReactDOM.findDOMNode(this),
-      ipts = root.getElementsByClassName("main--textfield");
-    this.props.dispatch(changeAnswer(this.props.name, ipts[0].value));*/
+    let targ = e && e.target,
+      newAnswers = this
+        .state
+        .answers
+        .splice(0);
+    newAnswers[this.state.selectedItem] = parseInt(targ.value);
+    this.setState({
+      answers: newAnswers
+    });
+    this.props.dispatch(changeAnswer(this.props.name, newAnswers));
+    if (this.state.selectedItem < this.props.choices.length - 1) {
+      this.advanceCarousel(e);
+    }
   }
 
   /**
@@ -75,7 +88,7 @@ class MatrixRatingQuestion extends React.Component {
             animatingForward: false,
             selectedItem: this.state.selectedItem + 1
           });
-        }, 250);
+        }, 150);
       } else if (this.state.animatingBackward) {
         clearTimeout(this.stopAnimationTimer);
         this.stopAnimationTimer = setTimeout(() => {
@@ -84,7 +97,7 @@ class MatrixRatingQuestion extends React.Component {
             animatingForward: false,
             selectedItem: this.state.selectedItem - 1
           });
-        }, 250);
+        }, 150);
       }
     }
   }
@@ -107,7 +120,7 @@ class MatrixRatingQuestion extends React.Component {
       selectedItem = this.state.selectedItem,
       animatingBackward = this.state.animatingBackward,
       animatingForward = this.state.animatingForward,
-      answer = 0;
+      answer = this.state.answers[this.state.selectedItem];
     return (
       <div
         className="question--matrixrating"
