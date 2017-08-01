@@ -71,6 +71,7 @@
       top: 0px;
       left: 0px;
       opacity: 0;
+      cursor: default;
       line-height: $carousel_height;
       text-decoration: none;
       color: $greyfill;
@@ -80,6 +81,7 @@
       transition: opacity $fast_anim_timing;
       &.visible {
         opacity: 1;
+        cursor: pointer;
       }
       &:hover {
         background-color: $light_border_color;

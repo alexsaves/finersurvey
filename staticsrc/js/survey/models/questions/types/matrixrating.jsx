@@ -68,17 +68,23 @@ class MatrixRatingQuestion extends React.Component {
     let targ = e.target;
     if (targ.className.indexOf('choiceitem') > -1) {
       if (this.state.animatingForward) {
-        this.setState({
-          animatingBackward: false,
-          animatingForward: false,
-          selectedItem: this.state.selectedItem + 1
-        });
+        clearTimeout(this.stopAnimationTimer);
+        this.stopAnimationTimer = setTimeout(() => {
+          this.setState({
+            animatingBackward: false,
+            animatingForward: false,
+            selectedItem: this.state.selectedItem + 1
+          });
+        }, 250);
       } else if (this.state.animatingBackward) {
-        this.setState({
-          animatingBackward: false,
-          animatingForward: false,
-          selectedItem: this.state.selectedItem - 1
-        });
+        clearTimeout(this.stopAnimationTimer);
+        this.stopAnimationTimer = setTimeout(() => {
+          this.setState({
+            animatingBackward: false,
+            animatingForward: false,
+            selectedItem: this.state.selectedItem - 1
+          });
+        }, 250);
       }
     }
   }
