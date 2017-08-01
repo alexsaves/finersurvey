@@ -13,7 +13,7 @@ class SliderRatingQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hoverNumber: -1
+      sliderValue: 50
     };
   }
 
@@ -38,7 +38,10 @@ class SliderRatingQuestion extends React.Component {
     let answer = this.props.answer || 0;
     return (
       <div className="question--rating slider">
-        
+        <div className="slider--container">
+          <div className="slider--backdrop"></div>
+          <div className="slider--ball"></div>
+        </div>
         <div className="labelcontainer">
           {this.props.low && <span className="smalllabel lowlabel">{this.props.low}</span>}
           {this.props.high && <span className="smalllabel highlabel">{this.props.high}</span>}
