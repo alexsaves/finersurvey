@@ -22,28 +22,18 @@ class SliderRatingQuestion extends React.Component {
   }
 
   /**
-   * Mobile drag start
-   * @param {*} e
-   */
-  handleMobileDragStart(e) {
-    if (e) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-    console.log("mobile drag start");
-  }
-
-  /**
    * Desktop drag start
    * @param {*} e
    */
   handleMouseDragStart(e) {
     if (e) {
       e.stopPropagation();
-      e.preventDefault();
     }
     var root = ReactDOM.findDOMNode(this),
       ball = root.getElementsByClassName("slider--ball")[0];
+    if (e.touches && e.touches.length > 0) {
+      e = e.touches[0];
+    }
     this.setState({
       startScreenX: e.screenX,
       startScreenY: e.screenY,
@@ -59,9 +49,12 @@ class SliderRatingQuestion extends React.Component {
     this.proxySD = this
       .dropDrag
       .bind(this);
+    window.addEventListener('touchmove', this.proxyDM);
     window.addEventListener('mousemove', this.proxyDM);
     window.addEventListener('mouseup', this.proxySD);
     window.addEventListener('mouseleave', this.proxySD);
+    window.addEventListener('touchcancel', this.proxySD);
+    window.addEventListener('touchend', this.proxySD);
   }
 
   /**
@@ -72,6 +65,9 @@ class SliderRatingQuestion extends React.Component {
     window.removeEventListener('mousemove', this.proxyDM);
     window.removeEventListener('mouseup', this.proxySD);
     window.removeEventListener('mouseleave', this.proxySD);
+    window.removeEventListener('touchmove', this.proxyDM);
+    window.removeEventListener('touchcancel', this.proxySD);
+    window.removeEventListener('touchend', this.proxySD);
     this.setState({isDragging: false});
     this
       .props
@@ -83,6 +79,9 @@ class SliderRatingQuestion extends React.Component {
    * @param {*} e
    */
   handleDragMove(e) {
+    if (e.touches && e.touches.length > 0) {
+      e = e.touches[0];
+    }
     let screenX = e.screenX,
       screenY = e.screenY,
       xDiff = this.state.startScreenX - screenX,
@@ -120,7 +119,7 @@ class SliderRatingQuestion extends React.Component {
             left: sliderValue + '%'
           }}
             onTouchStartCapture={this
-            .handleMobileDragStart
+            .handleMouseDragStart
             .bind(this)}
             onMouseDownCapture={this
             .handleMouseDragStart

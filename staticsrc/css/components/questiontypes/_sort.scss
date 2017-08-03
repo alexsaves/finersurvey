@@ -1,0 +1,18 @@
+.question--sort {
+  .sortable.standalonebutton {
+    cursor: move;
+  }
+  .sortitem--container {
+    width: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    .sorticon {
+      padding-right: 0.75em;
+      padding-top: 0.75em;
+    }
+    input[type=text] {
+      flex-grow: 1;
+    }
+  }
+}

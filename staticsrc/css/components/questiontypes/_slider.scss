@@ -4,6 +4,7 @@ $slider_height: 1.5em;
   .slider--container {
     width: 100%;
     height: $slider_height;
+    cursor: default;
     position: relative;
     @media (max-width: $screen-sm-min) {
       font-size: 150%;
@@ -15,8 +16,10 @@ $slider_height: 1.5em;
       height: ($slider_height / 3);
       border-radius: $button_radius;
       margin-top: ($slider_height / 3);
+      cursor: default;
     }
     .slider--ball {
+      cursor: default;
       display: block;
       border-radius: 10em;
       background-color: $fill;

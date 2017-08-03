@@ -9,6 +9,7 @@ import SliderRatingQuestion from './types/slider.jsx';
 import TextQuestion from './types/text.jsx';
 import DropdownQuestion from './types/dropdown.jsx';
 import MatrixRatingQuestion from './types/matrixrating.jsx';
+import SortQuestion from './types/sort.jsx';
 
 /**
 * Represents a question
@@ -94,6 +95,11 @@ class QuestionComponent extends React.Component {
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "text" && <TextQuestion
+          {...this.props}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
+        {this.props.type == "sort" && <SortQuestion
           {...this.props}
           onRemindAboutRules={this
           .highlightInstructions
