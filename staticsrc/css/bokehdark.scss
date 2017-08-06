@@ -69,7 +69,6 @@ $fast_anim_timing: 0.2s;
     }
   }
 }
-
 // Animation for when the instructions are animated
 @keyframes instructionsAnimation {
   50% {
@@ -111,8 +110,16 @@ $fast_anim_timing: 0.2s;
 
 // Base styles
 @mixin draggable_placeholder {
-  border: 1px dashed $border_color;
+  border: 1px dashed darken($border_color, 25%);
 }
+
+@mixin draggable_otherinput {
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 0;
+  line-height: 2.5em;
+}
+
 @mixin button_style {
   user-select: none;
   border-top: 1px solid $border_color;
