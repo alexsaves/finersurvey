@@ -1,37 +1,47 @@
-.question--sort {
-  .sorticon {
-    padding-right: 0.75em;
-    padding-top: 0.3em;
-  }
-  .sortable.standalonebutton {
-    cursor: move;
-    &.drag--placeholder {
-      @include draggable_placeholder;
-    }
-    &.othercontainer {
-      padding-top: 0px;
-      padding-bottom: 0px;
-      padding-right: 0px;
-      input {
-        @include draggable_otherinput;
-      }
-      .sorticon {
-        padding-top: 0.8em;
-      }
-      .countholder {
-        padding-top: 0.53em;
-        padding-right: 0.5em;
-      }
-    }
-  }
-  .sortitem--container {
-    width: 100%;
+.sorticon {
+  padding-right: 0.75em;
+  padding-top: 0.3em;
+}
+
+.sortable {
+  &.dragging {
+    @include standalone_button_style;
+    position: absolute;
+    top: 0px;
+    left: 0px;
     z-index: 999999;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    input[type=text] {
-      flex-grow: 1;
+  }
+}
+
+.sortable.standalonebutton {
+  cursor: move !important;
+  &.drag--placeholder {
+    @include draggable_placeholder;
+  }
+  &.othercontainer {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+    input {
+      @include draggable_otherinput;
     }
+    .sorticon {
+      padding-top: 0.8em;
+    }
+    .countholder {
+      padding-top: 0.53em;
+      padding-right: 0.5em;
+    }
+  }
+}
+
+.sortitem--container {
+  width: 100%;
+  z-index: 999999;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  input[type=text] {
+    flex-grow: 1;
   }
 }

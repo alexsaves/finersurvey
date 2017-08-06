@@ -52,23 +52,23 @@ $very_slow_anim_timing: 4s;
 $slow_anim_timing: 0.5s;
 $fast_anim_timing: 0.2s;
 // Basic inputs 
-.question {
-  input[type=text],
-  select, textarea {
-    display: block;
-    border: 1px solid $light_border_color;
-    border-radius: $button_radius;
-    line-height: ($button_lineheight + $button_padding + $button_padding);
-    width: 100%;
-    box-sizing: border-box;
-    padding-left: $general_small_padding;
-    padding-right: $general_small_padding;
-    &::placeholder {
-      color: $greyfill;
-      font-family: $lightfont;
-    }
+input[type=text],
+select,
+textarea {
+  display: block;
+  border: 1px solid $light_border_color;
+  border-radius: $button_radius;
+  line-height: ($button_lineheight + $button_padding + $button_padding);
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: $general_small_padding;
+  padding-right: $general_small_padding;
+  &::placeholder {
+    color: $greyfill;
+    font-family: $lightfont;
   }
 }
+
 // Animation for when the instructions are animated
 @keyframes instructionsAnimation {
   50% {

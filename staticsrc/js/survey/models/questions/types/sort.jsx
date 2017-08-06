@@ -72,8 +72,16 @@ class SortQuestion extends React.Component {
       regions.push(getRect(sortables[i]));
     }
     this.regions = regions;
+    this.draggy = targ.cloneNode(true);
+    let internalSpacer = targ.getElementsByClassName('sortitem--container')[0];
+    let internalRect = getRect(internalSpacer);
+    let dragSpacer = this.draggy.getElementsByClassName('sortitem--container')[0];
+    dragSpacer.style = "width: " + internalRect.w + "px;";
+    this.draggy.className += " dragging";
+    document.body.appendChild(this.draggy);
     this.setState({dragItem: targWhich, isDragging: true});
-    console.log(regions);
+    
+    console.log(this.draggy);
   }
 
   /**
