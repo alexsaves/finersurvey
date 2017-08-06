@@ -10,6 +10,21 @@
     top: 0px;
     left: 0px;
     z-index: 999999;
+    box-shadow: 0.1em 0.1em 0.4em rgba(0, 0, 0, 0.15);
+    background-color: $fill;
+    color: $invert_text_color;
+    opacity: 0.75;
+    &:hover {
+      background-color: $fill;
+      color: $invert_text_color;
+      opacity: 0.75;
+    }
+  }
+}
+
+.question--sort {
+  .groupcontainer {
+    margin-bottom: ($general_padding / 2);
   }
 }
 
