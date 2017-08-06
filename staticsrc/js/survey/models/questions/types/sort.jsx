@@ -17,12 +17,15 @@ class SortQuestion extends React.Component {
       isDragging: false,
       dragItem: -1
     };
+    this.initialOther = null;
   }
 
   /**
    * Handle when the text input changes (on a throttle)
    */
-  handleIptThrottleChange() {
+  handleIptThrottleChange(e) {
+    let targ = e.currentTarget;
+    this.initialOther = targ.value;
     clearTimeout(this.iptThrottle);
     this.iptThrottle = setTimeout(() => {
       this.handleAnswerChange();
@@ -82,7 +85,8 @@ class SortQuestion extends React.Component {
       answers = this.props.answer,
       count = 1,
       st = this.state,
-      dragPlaceholderCSS = {};
+      dragPlaceholderCSS = {},
+      initialOther = this.initialOther;
 
     if (st.isDragging) {
       dragPlaceholderCSS.width = this.targetCoords.w;
@@ -137,7 +141,8 @@ class SortQuestion extends React.Component {
               placeholder={this.props.otherplaceholder || ''}
               onKeyUp={ctx
               .handleIptThrottleChange
-              .bind(ctx)}/></div>
+              .bind(ctx)}
+              defaultValue={initialOther}/></div>
         </label>}
       </div>
     );
