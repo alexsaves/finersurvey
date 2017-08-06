@@ -96,6 +96,7 @@ class SortQuestion extends React.Component {
           .choices
           .map((rt, idx) => {
             if (st.isDragging && st.dragItem == idx) {
+              count++;
               return <label key={idx} className={"sortable standalonebutton drag--placeholder"}>&nbsp;</label>;
             } else {
               return <label
@@ -123,7 +124,7 @@ class SortQuestion extends React.Component {
           data-which="9999"
           className={"sortable standalonebutton othercontainer"}>
           <div className="sortitem--container textcontainer">
-            <span className="sorticon fa fa-sort"></span>
+            <span className="sorticon fa fa-sort"></span><span className="countholder">{count}. </span>
             <input
               type="text"
               onMouseDownCapture={this
