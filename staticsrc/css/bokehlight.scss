@@ -51,7 +51,24 @@ $carousel_height: 6em;
 $very_slow_anim_timing: 4s;
 $slow_anim_timing: 0.5s;
 $fast_anim_timing: 0.2s;
-
+// Basic inputs 
+.question {
+  input[type=text],
+  select, textarea {
+    display: block;
+    border: 1px solid $light_border_color;
+    border-radius: $button_radius;
+    line-height: ($button_lineheight + $button_padding + $button_padding);
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: $general_small_padding;
+    padding-right: $general_small_padding;
+    &::placeholder {
+      color: $greyfill;
+      font-family: $lightfont;
+    }
+  }
+}
 // Animation for when the instructions are animated
 @keyframes instructionsAnimation {
   50% {
@@ -92,6 +109,17 @@ $fast_anim_timing: 0.2s;
 }
 
 // Base styles
+@mixin draggable_placeholder {
+  border: 1px dashed darken($border_color, 25%);
+}
+
+@mixin draggable_otherinput {
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 0;
+  line-height: 2.5em;
+}
+
 @mixin button_style {
   user-select: none;
   border-top: 1px solid $border_color;

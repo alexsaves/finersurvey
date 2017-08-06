@@ -13,6 +13,10 @@ class SortQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.iptThrottle = null;
+    this.state = {
+      isDragging: false,
+      dragItem: -1
+    };
   }
 
   /**
@@ -26,28 +30,114 @@ class SortQuestion extends React.Component {
   }
 
   /**
+   * Stop an eventual drag
+   * @param {*} e
+   */
+  preventDrag(e) {
+    e.stopPropagation();
+  }
+
+  /**
+   * Start a drag
+   * @param {*} e
+   */
+  handleDragStart(e) {
+    let regions = [],
+      root = ReactDOM.findDOMNode(this),
+      sortables = root.getElementsByClassName('sortable'),
+      targ = e.currentTarget,
+      targWhich = parseInt(targ.getAttribute("data-which"));
+    console.log(targ);
+    function getRect(elm) {
+      var bodyRect = document
+          .body
+          .getBoundingClientRect(),
+        elemRect = elm.getBoundingClientRect(),
+        offsetY = bodyRect.top - elemRect.top,
+        offsetX = bodyRect.left - elemRect.left;
+      return {
+        x: elemRect.left,
+        y: elemRect.top,
+        x2: elemRect.right,
+        y2: elemRect.bottom,
+        w: elemRect.width,
+        h: elemRect.height
+      };
+    }
+    this.targetCoords = getRect(targ);
+    for (let i = 0; i < sortables.length; i++) {
+      regions.push(getRect(sortables[i]));
+    }
+    this.regions = regions;
+    this.setState({dragItem: targWhich, isDragging: true});
+    console.log(regions);
+  }
+
+  /**
  * Render the view
  */
   render() {
     let qname = this.props.name,
       ctx = this,
-      answers = this.props.answer;
+      answers = this.props.answer,
+      count = 1,
+      st = this.state,
+      dragPlaceholderCSS = {};
 
+    if (st.isDragging) {
+      dragPlaceholderCSS.width = this.targetCoords.w;
+      dragPlaceholderCSS.height = this.targetCoords.h;
+    }
+    console.log(st);
     return (
       <div className="question--sort">
         {this
           .props
           .choices
           .map((rt, idx) => {
-            return <label key={idx} className={"sortable standalonebutton "}><span className="sorticon fa fa-sort" /> {rt}<input type="hidden" name={idx} value={idx}/></label>
+            if (st.isDragging && st.dragItem == idx) {
+              return <label key={idx} className={"sortable standalonebutton drag--placeholder"}>&nbsp;</label>;
+            } else {
+              return <label
+                key={idx}
+                onMouseDown={this
+                .handleDragStart
+                .bind(this)}
+                onTouchStart={this
+                .handleDragStart
+                .bind(this)}
+                data-which={idx}
+                className={"sortable standalonebutton "}>
+                <div className="sortitem--container"><span className="sorticon fa fa-sort"/> {count++}. {rt}<input type="hidden" name={idx} value={idx}/></div>
+              </label>;
+            }
           })}
-        {this.props.other === true && <label className={"sortable standalonebutton"}><div className="sortitem--container"><span className="sorticon fa fa-sort" /> <input
-          type="text"
-          className="other--textfield"
-          placeholder={this.props.otherplaceholder || ''}
-          onKeyUp={ctx
-          .handleIptThrottleChange
-          .bind(ctx)}/></div></label>}
+        {this.props.other === true && ((st.isDragging && st.dragItem == 9999)) && <label className={"sortable standalonebutton drag--placeholder"}>&nbsp;</label>}
+        {this.props.other === true && (!(st.isDragging && st.dragItem == 9999)) && <label
+          onMouseDown={this
+          .handleDragStart
+          .bind(this)}
+          onTouchStart={this
+          .handleDragStart
+          .bind(this)}
+          data-which="9999"
+          className={"sortable standalonebutton othercontainer"}>
+          <div className="sortitem--container textcontainer">
+            <span className="sorticon fa fa-sort"></span>
+            <input
+              type="text"
+              onMouseDownCapture={this
+              .preventDrag
+              .bind(this)}
+              onTouchStartCapture={this
+              .preventDrag
+              .bind(this)}
+              className="other--textfield"
+              placeholder={this.props.otherplaceholder || ''}
+              onKeyUp={ctx
+              .handleIptThrottleChange
+              .bind(ctx)}/></div>
+        </label>}
       </div>
     );
   }
