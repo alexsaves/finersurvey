@@ -141,14 +141,16 @@ class SortQuestion extends React.Component {
       .body
       .appendChild(this.draggy);
     var dragOrder = this.calcDragOrderForSelected(targWhich, targWhich);
-    this.setState({
+    var newState = {
       dragOrder: dragOrder,
       hoverPosition: targWhich,
       dragItem: targWhich,
       isDragging: true,
       startClientX: e.clientX,
       startClientY: e.clientY
-    });
+    };
+    console.log(newState);
+    this.setState(newState);
     return false;
   }
 
@@ -249,7 +251,7 @@ class SortQuestion extends React.Component {
               onMouseDown={this
               .handleDragStart
               .bind(this)}
-              onTouchStart={this
+              onTouchStartCapture={this
               .handleDragStart
               .bind(this)}
               data-which={num}
@@ -280,7 +282,7 @@ class SortQuestion extends React.Component {
               onMouseDown={this
               .handleDragStart
               .bind(this)}
-              onTouchStart={this
+              onTouchStartCapture={this
               .handleDragStart
               .bind(this)}
               data-which={num}

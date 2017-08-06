@@ -10,18 +10,20 @@ html {
   background-repeat: no-repeat;
   background-position: center center;
   background-image: url($bgimage);
-  overflow-x: hidden;
+  overflow: hidden !important;
   body {
     font-family: $lightfont;
     height: 100%;
     margin: 0;
-    overflow-x: hidden;
+    overflow: hidden;
     padding: 0;
     -webkit-text-size-adjust: 100% !important;
     .app {
       height: 100%;
+      overflow: hidden;
       .survey {
         height: 100%;
+        //overflow-y: hidden;
         overflow-y: scroll;
         -webkit-overflow-scrolling: touch;        
         .hidden {

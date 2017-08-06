@@ -1,6 +1,9 @@
 $slider_height: 1.5em;
 .question--rating.slider {
   width: 100%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
   .slider--container {
     width: 100%;
     height: $slider_height;

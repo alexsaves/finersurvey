@@ -79,6 +79,7 @@ class SliderRatingQuestion extends React.Component {
    * @param {*} e
    */
   handleDragMove(e) {
+    e.preventDefault();
     if (e.touches && e.touches.length > 0) {
       e = e.touches[0];
     }

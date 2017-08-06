@@ -4,6 +4,9 @@
 }
 
 .sortable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
   &.dragging {
     @include standalone_button_style;
     position: absolute;
@@ -56,6 +59,9 @@
   display: -webkit-flex;
   display: flex;
   -webkit-flex-direction: row;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
   input[type=text] {
     flex-grow: 1;
   }
