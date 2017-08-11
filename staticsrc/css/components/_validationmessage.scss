@@ -57,7 +57,7 @@ $rightarrowsize: 1em;
 }
 
 // Phone
-@media (max-width: $screen-sm-min) {
+@media (max-width: $screen-md-min) {
   .validation--holder {
     &.visible {
       animation-name: validationAppearAnim;
