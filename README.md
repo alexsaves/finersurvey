@@ -83,3 +83,24 @@ Rules can be recursive and extremely complex. For example, by nesting rules, it'
 }
 ```
 
+#### Dropdown Conditions
+
+For the `dropdown` question type you can only check one of three conditions: user did answer, answer *was* n or answer *was not* n. Choices are numeric.
+
+```
+questionMyDropDown=*
+```
+
+... This would check if there was any answer for a dropdown. This is useful for optional questions.
+
+```
+questionMyDropDown=2
+```
+
+This would check if the user chose the 3rd choice in the dropdown box.
+
+```
+questionMyDropDown!=2
+```
+
+This would check if the user did NOT choose the 3rd choice in the dropdown.

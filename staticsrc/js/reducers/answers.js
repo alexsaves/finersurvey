@@ -1,4 +1,4 @@
-import {CHANGE_ANSWER} from '../actions';
+import {CHANGE_ANSWER, validateSurvey} from '../actions';
 
 // Handles actions
 function answers(state = {}, action) {

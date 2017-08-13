@@ -14,7 +14,7 @@ export default class {
    */
   checkAllLogic(showIfBlock, answers, surveyDef) {
     if (showIfBlock) {
-      if (showIfBlock instanceof String) {
+      if (typeof showIfBlock == "string") {
         return this._checkIndividualLogicRule(showIfBlock, answers, surveyDef);
       } else if (showIfBlock instanceof Array) {
         for (let i = 0; i < showIfBlock.length; i++) {
@@ -32,6 +32,8 @@ export default class {
           }
         }
         return false;
+      } else {
+        throw new Error("Invalid show logic condition: " + showIfBlock);
       }
     } else {
       // There are no conditions, so it passes
@@ -46,10 +48,17 @@ export default class {
    * @private
    */
   _locateQuestionObjectForName(name, surveyDef) {
-
-    debugger;
+    for (let i = 0; i < surveyDef.length; i++) {
+      let pg = surveyDef[i];
+      if (pg.elements) {
+        return pg
+          .elements
+          .find((el) => {
+            return el.name == name;
+          });
+      }
+    }
   }
-
 
   /**
    * Get an answer object from a name
@@ -57,9 +66,10 @@ export default class {
    * @param {*} surveyDef
    * @private
    */
-  _locateAnswerObjectForName(name, surveyDef) {
-
-    debugger;
+  _locateAnswerObjectForName(name, answerObject) {
+    if (answerObject) {
+      return answerObject[name];
+    }
   }
 
   /**
@@ -99,32 +109,96 @@ export default class {
     if (!dependentQuestion) {
       throw new Error("Could not find question for logic rule. Question name was: " + dependentQuestionName);
     } else {
-      let answerObject = this._locateAnswerObjectForName(dependentQuestionName);
+      let answerObject = this._locateAnswerObjectForName(dependentQuestionName, answers);
       console.log("About to evaluate:", ruleStr, "for question", dependentQuestion, "with answer", answerObject);
-      return;
       switch (dependentQuestion.type) {
         case "rating":
-          // Simple rating
-
-          break;
+          return this._evaluateRatingLogic(dependentQuestion, answerObject, ruleStr);
         case "checkbox":
-          
-          break;
+          return this._evaluateCheckboxLogic(dependentQuestion, answerObject, ruleStr);
         case "radio":
-
-          break;
+          return this._evaluateRadioLogic(dependentQuestion, answerObject, ruleStr);
         case "text":
-          break;
+          return this._evaluateTextLogic(dependentQuestion, answerObject, ruleStr);
         case "dropdown":
-          break;
+          return this._evaluateDropdownLogic(dependentQuestion, answerObject, ruleStr);
         case "matrixrating":
-          break;
+          return this._evaluateMatrixRatingLogic(dependentQuestion, answerObject, ruleStr);
         case "sort":
-          break;
+          return this._evaluateSortLogic(dependentQuestion, answerObject, ruleStr);
         default:
           return false;
       }
     }
   }
 
+  /**
+   * Evaluate the show logic for a rating question
+   * @param {*} questionDef
+   * @param {*} answerObj
+   * @param {*} condition
+   */
+  _evaluateRatingLogic(questionDef, answerObj, condition)
+  {}
+
+  /**
+   * Evaluate the show logic for a checkbox question
+   * @param {*} questionDef
+   * @param {*} answerObj
+   * @param {*} condition
+   */
+  _evaluateCheckboxLogic(questionDef, answerObj, condition)
+  {}
+
+  /**
+   * Evaluate the show logic for a radio question
+   * @param {*} questionDef
+   * @param {*} answerObj
+   * @param {*} condition
+   */
+  _evaluateRadioLogic(questionDef, answerObj, condition)
+  {}
+
+  /**
+   * Evaluate the show logic for a text question
+   * @param {*} questionDef
+   * @param {*} answerObj
+   * @param {*} condition
+   */
+  _evaluateTextLogic(questionDef, answerObj, condition)
+  {}
+
+  /**
+   * Evaluate the show logic for a dropdown question
+   * @param {*} questionDef
+   * @param {*} answerObj
+   * @param {*} condition
+   */
+  _evaluateDropdownLogic(questionDef, answerObj, condition)
+  {
+    let conditionChoice = parseInt(condition);
+    if (isNaN(conditionChoice)) {
+      throw new Error("Invalid condition for dropdown question: " + condition + ". Must be a number.");
+    } else {
+      return (answerObj == condition);
+    }
+  }
+
+  /**
+   * Evaluate the show logic for a matrixrating question
+   * @param {*} questionDef
+   * @param {*} answerObj
+   * @param {*} condition
+   */
+  _evaluateMatrixRatingLogic(questionDef, answerObj, condition)
+  {}
+
+  /**
+   * Evaluate the show logic for a sort question
+   * @param {*} questionDef
+   * @param {*} answerObj
+   * @param {*} condition
+   */
+  _evaluateSortLogic(questionDef, answerObj, condition)
+  {}
 };

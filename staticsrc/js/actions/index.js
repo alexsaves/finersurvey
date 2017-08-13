@@ -11,11 +11,24 @@ export const VALIDATE_SURVEY = 'VALIDATE_SURVEY';
 
 /**
  * Change or add an answer
- * @param {*} questionName 
- * @param {*} answerState 
+ * @param {*} questionName
+ * @param {*} answerState
+ */
+function _changeAnswer(questionName, answerState) {
+  return {type: CHANGE_ANSWER, questionName, answerState};
+};
+
+/**
+ * Change or add an answer
+ * @param {*} questionName
+ * @param {*} answerState
  */
 export function changeAnswer(questionName, answerState) {
-  return {type: CHANGE_ANSWER, questionName, answerState};
+  return (dispatch, getState) => {
+    var st = getState();
+    dispatch(_changeAnswer(questionName, answerState));
+    dispatch(validateSurvey());
+  };
 };
 
 /*
@@ -56,6 +69,16 @@ export function removeTheLoadingScreen() {
 /*
  * Validate the entire survey with all the showIf conditions
  */
-export function validateSurvey(answers) {
-  return {type: VALIDATE_SURVEY, answers};
+function _validateSurvey(answers, pages) {
+  return {type: VALIDATE_SURVEY, answers, pages};
+};
+
+/*
+ * Validate the entire survey with all the showIf conditions
+ */
+export function validateSurvey() {
+  return (dispatch, getState) => {
+    var st = getState();
+    dispatch(_validateSurvey(st.answers, st.pages));
+  };
 };
