@@ -1,5 +1,3 @@
-//import {NEXT_PAGE, PREV_PAGE} from '../actions';
-
 // Handles actions
 function pages(state = {}, action) {
   switch (action.type) {

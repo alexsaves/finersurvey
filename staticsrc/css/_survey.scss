@@ -18,6 +18,9 @@ html {
     overflow: hidden;
     padding: 0;
     -webkit-text-size-adjust: 100% !important;
+    @media (max-width: $screen-sm-min) {
+      font-family: $mobile_lightfont;
+    }
     .app {
       height: 100%;
       overflow: hidden;

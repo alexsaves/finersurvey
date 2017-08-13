@@ -9,7 +9,7 @@
 @import "questiontypes/sort";
 
 .question {
-  font-family: 'latolight', Arial, Helvetica, sans-serif;
+  font-family: $desktopfont;
   color: $question_clr;
   display: inline-block;
   width: $desktop_question_width;
@@ -19,6 +19,7 @@
   }
   @media (max-width: $screen-sm-min) {
     width: 85%;
+    font-family: $mobile_lightfont;
   }
   h2 {
     font-size: 1.25em;

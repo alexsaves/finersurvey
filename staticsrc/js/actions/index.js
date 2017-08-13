@@ -6,6 +6,7 @@ export const NEXT_PAGE = 'NEXT_PAGE';
 export const PREV_PAGE = 'PREV_PAGE';
 export const JUMP_TO_PAGE = 'JUMP_TO_PAGE';
 export const CHANGE_ANSWER = 'CHANGE_ANSWER';
+export const LOADING_SCREEN_REMOVE = 'LOADING_SCREEN_REMOVE';
 
 /**
  * Change or add an answer
@@ -44,3 +45,9 @@ export function jumpToPage(pg) {
   return {type: JUMP_TO_PAGE, pg};
 };
 
+/*
+ * Remove a loading screen
+ */
+export function removeTheLoadingScreen() {
+  return {type: LOADING_SCREEN_REMOVE};
+};

@@ -6,6 +6,11 @@
   height: 100%;
   background-color: $background-image-match;
   z-index: 9999999;
+  transition: opacity $fast_anim_timing;
+  opacity: 1;
+  &.complete {
+    opacity: 0;
+  }
   .loading--inner {
     position: fixed;
     width: 100%;
@@ -18,6 +23,16 @@
   .logo--finerink {
     @media (max-width: $screen-sm-min) {
       background-image: url(/static/assets/logos/finerink.svg) !important;
+    }
+  }
+  .fontTestZone {
+    font-family: latobold;
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    .subTest {
+      font-family: jellyka;
+      font-size: 4em;
     }
   }
 }

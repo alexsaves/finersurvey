@@ -15,7 +15,8 @@ class SurveyComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOverflowing: false
+      isOverflowing: false,
+      hideLoadingScreen: false
     };
   }
 
@@ -25,7 +26,9 @@ class SurveyComponent extends React.Component {
   componentDidMount() {
     this.updateOverflowStatus();
     setInterval(() => {
-      this.setState({progress: Math.random()})
+      this.setState({
+        progress: Math.random()
+      })
     }, 1000)
   }
 
@@ -41,17 +44,37 @@ class SurveyComponent extends React.Component {
   }
 
   /**
+   * Deal with the transition end
+   */
+  handleTransitionEnd(e) {
+    let targ = e.target;
+    if (targ.className.indexOf('loading--container') > -1) {
+      this.setState({hideLoadingScreen: true});
+    }    
+  }
+
+  /**
  * Render the view
  */
   render() {
     let uid = this.props.match.params.uid,
       desiredPage = this.props.match.params.pg;
     return (
-      <div className={"survey" + (this.state.isOverflowing ? " overflowing" : "")}>
-        <ProgressComponent uid={uid} progress={this.state.progress} />
-        <PageController uid={uid} desiredPage={desiredPage} />
-        <a href="https://www.finer.ink" title="Sales Win/Loss Analysis" target="_blank" className="logo--finerink"></a>
-        <LoadingScreen />     
+      <div
+        className={"survey" + (this.state.isOverflowing
+        ? " overflowing"
+        : "")}
+        onTransitionEnd={this
+        .handleTransitionEnd
+        .bind(this)}>
+        <ProgressComponent uid={uid} progress={this.state.progress}/>
+        <PageController uid={uid} desiredPage={desiredPage}/>
+        <a
+          href="https://www.finer.ink"
+          title="Sales Win/Loss Analysis"
+          target="_blank"
+          className="logo--finerink"></a>
+        {!this.state.hideLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete}/>}
       </div>
     );
   }
@@ -60,7 +83,12 @@ class SurveyComponent extends React.Component {
 // This is our select function that will extract from the state the data slice
 // we want to expose through props to our component.
 const mapStateToProps = (state/*, props*/) => {
-  return {metadata: state.metadata, pages: state.pages, currentPage: state.currentPage}
+  return {
+    metadata: state.metadata,
+    pages: state.pages,
+    currentPage: state.currentPage,
+    loadingComplete: !!state.loadingComplete
+  }
 }
 
 // Connect the survey component

@@ -4,6 +4,12 @@ $faintfont: "latohairline",
 Helvetica,
 Arial,
 sans-serif;
+$desktopfont: "proxima-nova",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
 $lightfont: "proxima-nova",
 "latolight",
 "Open Sans",
@@ -23,15 +29,22 @@ $heaviestfont: "latobold",
 Helvetica,
 Arial,
 sans-serif;
+$mobile_lightfont: "proxima-nova",
+"latolight",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
 // images
-$bgimage: "/static/assets/other/bokehdark.jpg";
+$bgimage: "/static/assets/other/bokehlight.jpg";
 // colors
 $fill: #3e885b;
 $greyfill: #999999;
 $question_clr: #000000;
 $instructions_clr: lighten($question_clr, 35%);
 $border_color: #999999;
-$background-image-match: #CCCCCC;
+$background-image-match: #EEEEEE;
 $light_border_color: lighten($border_color, 18%);
 $alarm_color: #ee6666;
 $invert_text_color: white;

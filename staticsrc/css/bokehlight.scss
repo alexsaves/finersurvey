@@ -4,6 +4,12 @@ $faintfont: "latohairline",
 Helvetica,
 Arial,
 sans-serif;
+$desktopfont: "latolight",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
 $lightfont: "proxima-nova",
 "latolight",
 "Open Sans",
@@ -19,6 +25,11 @@ Arial,
 sans-serif;
 $heaviestfont: "latobold",
 "Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
+$mobile_lightfont: "Open Sans",
 "Helvetica Neue",
 Helvetica,
 Arial,
@@ -191,6 +202,9 @@ textarea {
   font-weight: 600;
   &:last-child {
     margin-bottom: 0;
+  }
+  @media (max-width: $screen-sm-min) {
+    font-weight: normal;
   }
 }
 
