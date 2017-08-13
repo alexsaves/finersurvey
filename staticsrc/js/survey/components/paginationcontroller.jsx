@@ -127,7 +127,7 @@ class PaginationController extends React.Component {
 
     if (pageObj.elements.length == 1) {
       let qt = pageObj.elements[0].type
-      return (qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio");
+      return (qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio" || qt == "text");
     }
     return false;
   }
@@ -164,7 +164,7 @@ class PaginationController extends React.Component {
         var evObj = document.createEvent('MouseEvents');
         evObj.initMouseEvent('click', true, true, window, 1, 12, 345, 7, 220, false, false, false, false, 0, null);
         advanceButton.dispatchEvent(evObj);
-      }, 500);
+      }, 250);
     }
   }
 

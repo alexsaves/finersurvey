@@ -22,17 +22,28 @@ class TextQuestion extends React.Component {
     let targ = e && e.target,
       root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByClassName("main--textfield");
-    this.props.dispatch(changeAnswer(this.props.name, ipts[0].value));
+    this
+      .props
+      .dispatch(changeAnswer(this.props.name, ipts[0].value));
   }
 
   /**
    * Handle when the text input changes (on a throttle)
    */
-  handleIptThrottleChange() {
-    clearTimeout(this.iptThrottle);
-    this.iptThrottle = setTimeout(() => {
-      this.handleAnswerChange();
-    }, 200);
+  handleIptThrottleChange(e) {
+    if (e && e.keyCode == 13 && !this.props.multiline) {
+      this.handleAnswerChange(e);
+      if (this.props.onFullyAnswerQuestion) {
+        this
+          .props
+          .onFullyAnswerQuestion();
+      }
+    } else {
+      clearTimeout(this.iptThrottle);
+      this.iptThrottle = setTimeout(() => {
+        this.handleAnswerChange();
+      }, 200);
+    }
   }
 
   /**
@@ -54,7 +65,7 @@ class TextQuestion extends React.Component {
           placeholder={this.props.placeholder || ''}
           onKeyUp={this
           .handleIptThrottleChange
-          .bind(this)} />}
+          .bind(this)}/>}
       </div>
     );
   }

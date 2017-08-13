@@ -41,6 +41,13 @@ class MatrixRatingQuestion extends React.Component {
     if (this.state.selectedItem < this.props.choices.length - 1) {
       this.advanceCarousel(e);
     }
+    if (this.state.selectedItem == this.props.choices.length - 1) {
+      if (this.props.onFullyAnswerQuestion) {
+        this
+          .props
+          .onFullyAnswerQuestion();
+      }
+    }
   }
 
   /**
@@ -70,14 +77,7 @@ class MatrixRatingQuestion extends React.Component {
     if (this.state.selectedItem < (this.props.choices.length - 1) && !this.state.animatingBackward && !this.state.animatingForward) {
       // do it
       this.setState({animatingBackward: false, animatingForward: true});
-    }
-    if (this.state.selectedItem == this.props.choices.length - 1) {
-      if (this.props.onFullyAnswerQuestion) {
-        this
-          .props
-          .onFullyAnswerQuestion();
-      }
-    }
+    }    
   }
 
   /**
