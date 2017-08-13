@@ -101,6 +101,8 @@ class QuestionComponent extends React.Component {
           .bind(this)}/>}
         {this.props.type == "sort" && <SortQuestion
           {...this.props}
+          isSelected={this.props.isSelected}
+          isAnimating={this.props.isAnimating}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}

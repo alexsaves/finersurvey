@@ -50,6 +50,8 @@ class PageComponent extends React.Component {
                 key={idx}
                 {...q}
                 answer={ctx.getAnswerForQuestion(q)}
+                isSelected={this.props.isSelected}
+                isAnimating={this.props.animatingOutForward || this.props.animatingOutBackward || this.props.animatingInForward || this.props.animatingInBackward}
                 remindInstructions={(remindInstructionsFor.indexOf(q.name) > -1)}/>
             })}
         </div>

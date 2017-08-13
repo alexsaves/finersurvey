@@ -28,6 +28,7 @@ class SortQuestion extends React.Component {
       otherInputHeight: 50,
       didDrop: false
     };
+    this.isAnimating = false;
     this.initialOther = null;
     for (let j = 0; j < this.props.choices.length; j++) {
       this
@@ -92,7 +93,7 @@ class SortQuestion extends React.Component {
         floatingother = root.getElementsByClassName('floatingother')[0];
       if (floatingother) {
         let pos = floatingother.getBoundingClientRect();
-        if (this.state.otherInputY != pos.top) {
+        if (this.state.otherInputY != pos.top || this.state.otherInputX != pos.left) {
           if (pos.width > 0) {
             this.setState({positionOtherInput: true, otherInputX: pos.left, otherInputY: pos.top, otherInputWidth: pos.width, otherInputHeight: pos.height});
           } else {
@@ -116,11 +117,24 @@ class SortQuestion extends React.Component {
     }, true);
     this.positionOtherInput();
     setInterval(() => {
-      this.positionOtherInput();
-    }, 150);
+      if (this.props.isSelected && !this.props.isAnimating) {
+        this.positionOtherInput();
+      }
+    }, 250);
     setTimeout(() => {
       this.setState({hideOtherOverlay: false});
     }, 500);
+    this.resizeThrottle = null;
+    window.addEventListener("resize", (e) => {
+      if (!this.state.hideOtherOverlay) {
+        this.setState({hideOtherOverlay: true});        
+      }
+      clearTimeout(this.resizeThrottle);
+      this.resizeThrottle = setTimeout(() => {
+        this.positionOtherInput();
+        this.setState({hideOtherOverlay: false}); 
+      }, 500);
+    });
   }
 
   /**
@@ -368,10 +382,17 @@ class SortQuestion extends React.Component {
       dragPlaceholderCSS.width = this.targetCoords.w;
       dragPlaceholderCSS.height = this.targetCoords.h;
     }
-
+    let hideOtherOverlay = this.state.hideOtherOverlay;
+    if (this.isAnimating && !this.props.isAnimating) {
+      hideOtherOverlay = true;
+      setTimeout(() => {
+        this.positionOtherInput();        
+      }, 200);
+    }
+    this.isAnimating = this.props.isAnimating;
     return (
       <div className="question--sort">
-        {(this.state.positionOtherInput && !this.state.isDragging && !this.state.hideOtherOverlay) && <input
+        {(this.state.positionOtherInput && !this.state.isDragging && !hideOtherOverlay && this.props.isSelected && !this.props.isAnimating) && <input
           type="text"
           onFocus={ctx
           .startEditingOther
