@@ -16,7 +16,7 @@ Rules may generally only apply to questions on pages that appeared earlier in th
 
 Here is an example of a single rule, applying to previous question `question8393n4` that the user selected the *2nd* (zero based) option, OR rated (in the case of rating or sort question types) it 2nd.
 
-```
+```json
 {
     "type": "rating",
     "modifier": "slider",
