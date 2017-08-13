@@ -40,8 +40,9 @@ export default class {
         }
         return true;
       } else if (showIfBlock instanceof Object) {
-        for (let i = 0; i < showIfBlock.length; i++) {
-          let res = this.checkAllLogic(showIfBlock, answers, surveyDef);
+        let okeys = Object.keys(showIfBlock);
+        for (let i = 0; i < okeys.length; i++) {
+          let res = this.checkAllLogic(showIfBlock[okeys[i]], answers, surveyDef);
           if (res) {
             return true;
           }
