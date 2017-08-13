@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import ProgressComponent from './components/progress.jsx';
 import PageController from './components/paginationcontroller.jsx';
+import LoadingScreen from './components/loadingscreen.jsx';
 
 /**
 * Represents the entire survey
@@ -49,7 +50,8 @@ class SurveyComponent extends React.Component {
       <div className={"survey" + (this.state.isOverflowing ? " overflowing" : "")}>
         <ProgressComponent uid={uid} progress={this.state.progress} />
         <PageController uid={uid} desiredPage={desiredPage} />
-        <a href="https://www.finer.ink" title="Sales Win/Loss Analysis" target="_blank" className="logo--finerink"></a>      
+        <a href="https://www.finer.ink" title="Sales Win/Loss Analysis" target="_blank" className="logo--finerink"></a>
+        <LoadingScreen />     
       </div>
     );
   }
