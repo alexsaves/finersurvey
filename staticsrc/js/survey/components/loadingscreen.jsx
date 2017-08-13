@@ -14,6 +14,13 @@ class LoadingScreenComponent extends React.Component {
   }
 
   /**
+   * The component rendered
+   */
+  componentDidMount() {
+    
+  }
+
+  /**
  * Render the view
  */
   render() {
