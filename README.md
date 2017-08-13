@@ -6,6 +6,22 @@ Some general information on survey models:
 
 The schema generally follows the schema of SurveyJS but deviates in several ways.
 
+### Question Names
+
+Question names are used to identify questions in the response object, and also for show logic and piping. Question names can contain letters, numbers, or underscores, but no other symbols or spaces. Also, they must begin with a letter or underscore. Examples of valid question names:
+
+ * `myQuestion28`
+ * `_anotherQuestion`
+ * `__3__`
+
+Invalid question name examples:
+
+ * `3`
+ * `another question`
+ * `myAwesomeQuestion!`
+ * `@somequestion`
+ * `mc.favColor`
+
 ### Show Logic
 
 Show logic applies to questions or pages and can be singular (just one rule) additive (all statements must be true) or inclusive (any statement must be true). Rules are specified with the optional `showIf` attribute which can be a string (for singular rules), an array (for additive rules), or an object (for inclusive rules).
