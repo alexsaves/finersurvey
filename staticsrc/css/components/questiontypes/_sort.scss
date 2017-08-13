@@ -49,6 +49,18 @@
       animation-delay: 0.225s;
       -webkit-animation-delay: 0.225s;
     }
+    &.drop10 {
+      animation-delay: 0.25s;
+      -webkit-animation-delay: 0.25s;
+    }
+    &.drop11 {
+      animation-delay: 0.275s;
+      -webkit-animation-delay: 0.275s;
+    }
+    &.drop12 {
+      animation-delay: 0.3s;
+      -webkit-animation-delay: 0.3s;
+    }
   }
   &.dragging {
     @include standalone_button_style;

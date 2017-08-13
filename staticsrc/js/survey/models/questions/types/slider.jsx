@@ -100,6 +100,32 @@ class SliderRatingQuestion extends React.Component {
   }
 
   /**
+   * User tapped on the line specifically
+   * @param {*} e
+   */
+  handleLineTap(e) {
+    let root = ReactDOM.findDOMNode(this),
+      targ = e.target,
+      screenX = e.pageX,
+      backdrop = root.getElementsByClassName('slider--backdrop')[0],
+      bpos = backdrop.getBoundingClientRect();
+
+    let perc = (screenX - bpos.left) / bpos.width;
+
+    this.setState({
+      sliderValue: Math.min(100, Math.max(0, perc * 100))
+    });
+    this
+      .props
+      .dispatch(changeAnswer(this.props.name, this.state.sliderValue));
+    if (this.props.onFullyAnswerQuestion) {
+      this
+        .props
+        .onFullyAnswerQuestion();
+    }
+  }
+
+  /**
  * Render the view
  */
   render() {
@@ -116,7 +142,11 @@ class SliderRatingQuestion extends React.Component {
     return (
       <div className="question--rating slider">
         <div className="slider--container">
-          <div className="slider--backdrop"></div>
+          <div
+            className="slider--backdrop"
+            onMouseDownCapture={this
+            .handleLineTap
+            .bind(this)}></div>
           <div
             className={"slider--ball" + (this.state.isDragging
             ? " dragging"
