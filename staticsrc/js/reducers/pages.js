@@ -1,5 +1,5 @@
 // Handles actions
-function pages(state = {}, action) {
+function pages(state = [], action) {  
   switch (action.type) {
     default:
       return state

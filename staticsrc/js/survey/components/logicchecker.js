@@ -45,7 +45,10 @@ export default class {
    * @param {*} surveyDef
    * @private
    */
-  _locateQuestionObjectForName(name, surveyDef) {}
+  _locateQuestionObjectForName(name, surveyDef) {
+
+    debugger;
+  }
 
 
   /**
@@ -54,7 +57,10 @@ export default class {
    * @param {*} surveyDef
    * @private
    */
-  _locateAnswerObjectForName(name, surveyDef) {}
+  _locateAnswerObjectForName(name, surveyDef) {
+
+    debugger;
+  }
 
   /**
    * Evaluate a specific rule

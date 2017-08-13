@@ -7,6 +7,7 @@ export const PREV_PAGE = 'PREV_PAGE';
 export const JUMP_TO_PAGE = 'JUMP_TO_PAGE';
 export const CHANGE_ANSWER = 'CHANGE_ANSWER';
 export const LOADING_SCREEN_REMOVE = 'LOADING_SCREEN_REMOVE';
+export const VALIDATE_SURVEY = 'VALIDATE_SURVEY';
 
 /**
  * Change or add an answer
@@ -50,4 +51,11 @@ export function jumpToPage(pg) {
  */
 export function removeTheLoadingScreen() {
   return {type: LOADING_SCREEN_REMOVE};
+};
+
+/*
+ * Validate the entire survey with all the showIf conditions
+ */
+export function validateSurvey(answers) {
+  return {type: VALIDATE_SURVEY, answers};
 };
