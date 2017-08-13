@@ -79,7 +79,7 @@ Rules can be recursive and extremely complex. For example, by nesting rules, it'
         "choseB": "questio8393n4=1"
       },
       "question3774=2"
-    }
+    ]
 }
 ```
 
