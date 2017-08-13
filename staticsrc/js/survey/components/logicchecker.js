@@ -125,8 +125,14 @@ export default class {
     }
 
     let splitterSymbol = EQUALITIES[splitterType], 
-      dependentQuestionName = logicRule.substr(0, splitterPos),
-      ruleStr = logicRule.substr(dependentQuestionName.length + splitterSymbol.length);
+      dependentQuestionName = logicRule.substr(0, splitterPos).trim(),
+      ruleStr = logicRule.substr(dependentQuestionName.length + splitterSymbol.length),
+      isOther = false;
+
+    if (dependentQuestionName.toLowerCase().indexOf('[other]') > -1) {
+      isOther = true;
+      dependentQuestionName = dependentQuestionName.substr(0, dependentQuestionName.toLowerCase().indexOf('[other]'));
+    }
 
     if (!dependentQuestionName || dependentQuestionName.length < 1) {
       throw new Error("Invalid question name: " + dependentQuestionName);
@@ -145,19 +151,19 @@ export default class {
       console.log("About to evaluate:", ruleStr, "for question", dependentQuestion, "with answer", answerObject);
       switch (dependentQuestion.type) {
         case "rating":
-          return this._evaluateRatingLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
+          return this._evaluateRatingLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
         case "checkbox":
-          return this._evaluateCheckboxLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
+          return this._evaluateCheckboxLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
         case "radio":
-          return this._evaluateRadioLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
+          return this._evaluateRadioLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
         case "text":
-          return this._evaluateTextLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
+          return this._evaluateTextLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
         case "dropdown":
-          return this._evaluateDropdownLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
+          return this._evaluateDropdownLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
         case "matrixrating":
-          return this._evaluateMatrixRatingLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
+          return this._evaluateMatrixRatingLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
         case "sort":
-          return this._evaluateSortLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
+          return this._evaluateSortLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
         default:
           return false;
       }
@@ -170,7 +176,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateRatingLogic(questionDef, answerObj, condition, equalityExp)
+  _evaluateRatingLogic(questionDef, answerObj, condition, equalityExp, isOther)
   {}
 
   /**
@@ -179,7 +185,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateCheckboxLogic(questionDef, answerObj, condition, equalityExp)
+  _evaluateCheckboxLogic(questionDef, answerObj, condition, equalityExp, isOther)
   {}
 
   /**
@@ -188,7 +194,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateRadioLogic(questionDef, answerObj, condition, equalityExp)
+  _evaluateRadioLogic(questionDef, answerObj, condition, equalityExp, isOther)
   {}
 
   /**
@@ -197,7 +203,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateTextLogic(questionDef, answerObj, condition, equalityExp)
+  _evaluateTextLogic(questionDef, answerObj, condition, equalityExp, isOther)
   {}
 
   /**
@@ -206,7 +212,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateDropdownLogic(questionDef, answerObj, condition, equalityExp)
+  _evaluateDropdownLogic(questionDef, answerObj, condition, equalityExp, isOther)
   {
     let conditionChoice = parseInt(condition);
     if (isNaN(conditionChoice)) {
@@ -223,7 +229,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateMatrixRatingLogic(questionDef, answerObj, condition, equalityExp)
+  _evaluateMatrixRatingLogic(questionDef, answerObj, condition, equalityExp, isOther)
   {}
 
   /**
@@ -232,6 +238,6 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateSortLogic(questionDef, answerObj, condition, equalityExp)
+  _evaluateSortLogic(questionDef, answerObj, condition, equalityExp, isOther)
   {}
 };
