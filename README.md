@@ -82,7 +82,7 @@ Here is an example of an inclusive rule, applying to previous question `question
 
 #### Complex Rules
 
-Rules can be recursive and extremely complex. For example, by nesting rules, it's possible to set up rules like "Show this question if user answered `A` _or_ `B` for question one, _AND_ `C` from question two.
+Rules can be recursive (nested) and offer complex logical statements. For example, by nesting rules, it's possible to set up a statement like "Show this question if user answered `A` _OR_ `B` for question one, _AND_ `C` from question two.
 
 ```json
 {
