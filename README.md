@@ -30,7 +30,7 @@ Here is an example of a single rule, applying to previous question `question8393
 
 Here is an example of an additive rule (all statements must be true), applying to previous question `question8393n4` that the user selected *both* *Apple* (the 2nd item) _and_ *Pear* (the 4th item).
 
-```
+```json
 {
     "type": "rating",
     "modifier": "slider",
@@ -48,7 +48,7 @@ Here is an example of an additive rule (all statements must be true), applying t
 
 Here is an example of an inclusive rule, applying to previous question `question8393n4` that the user selected either *Apple* (the 2nd item) or *Pear* (the 4th item).
 
-```
+```json
 {
     "type": "rating",
     "modifier": "slider",
@@ -66,7 +66,7 @@ Here is an example of an inclusive rule, applying to previous question `question
 
 Rules can be recursive and extremely complex. For example, by nesting rules, it's possible to set up rules like "Show this question if user answered `A` _or_ `B` for question one, _AND_ `C` from question two.
 
-```
+```json
 {
     "type": "rating",
     "modifier": "slider",
