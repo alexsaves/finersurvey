@@ -47,6 +47,8 @@ export default class {
         return (typeof answer != undefined) && (answer > -1);
       case "matrixrating":        
         return answer.indexOf(-1) == -1;
+      case "sort":        
+        return answer && (answer.order && answer.order.length > 0);
       default:
         return false;
     }

@@ -13,12 +13,20 @@ class SortQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.iptThrottle = null;
+    this.stopRepositioning = false;
     this.state = {
       isDragging: false,
       dragItem: -1,
       hoverPosition: -1,
       currentOrder: [],
-      dragOrder: []
+      dragOrder: [],
+      positionOtherInput: false,
+      hideOtherOverlay: true,
+      otherInputX: 0,
+      otherInputY: 0,
+      otherInputWidth: 100,
+      otherInputHeight: 50,
+      didDrop: false
     };
     this.initialOther = null;
     for (let j = 0; j < this.props.choices.length; j++) {
@@ -52,7 +60,6 @@ class SortQuestion extends React.Component {
    * @param {*} e
    */
   preventDrag(e) {
-    console.log("PREVENT");
     e.stopPropagation();
   }
 
@@ -77,19 +84,61 @@ class SortQuestion extends React.Component {
   }
 
   /**
+   * Handle the positioning of the other input
+   */
+  positionOtherInput() {
+    if (this.props.other === true && !this.stopRepositioning) {
+      let root = ReactDOM.findDOMNode(this),
+        floatingother = root.getElementsByClassName('floatingother')[0];
+      if (floatingother) {
+        let pos = floatingother.getBoundingClientRect();
+        if (this.state.otherInputY != pos.top) {
+          if (pos.width > 0) {
+            this.setState({positionOtherInput: true, otherInputX: pos.left, otherInputY: pos.top, otherInputWidth: pos.width, otherInputHeight: pos.height});
+          } else {
+            this.setState({positionOtherInput: false});
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * The component did mount
+   */
+  componentDidMount() {
+    let root = ReactDOM.findDOMNode(this);
+    root.addEventListener("touchstart", (e) => {
+      if (e.target.tagName == "INPUT") {
+        return;
+      }
+      e.preventDefault();
+    }, true);
+    this.positionOtherInput();
+    setInterval(() => {
+      this.positionOtherInput();
+    }, 150);
+    setTimeout(() => {
+      this.setState({hideOtherOverlay: false});
+    }, 500);
+  }
+
+  /**
    * Start a drag
    * @param {*} e
    */
   handleDragStart(e) {
-    console.log("start");
     let regions = [],
       root = ReactDOM.findDOMNode(this),
       sortables = root.getElementsByClassName('sortable'),
       targ = e.currentTarget,
-      targWhich = parseInt(targ.getAttribute("data-which"));
-    if (this.state.isDragging) {
+      targWhich = parseInt(targ.getAttribute("data-which")),
+      hoverIndex = parseInt(targ.getAttribute("data-index"));
+
+    if (this.state.isDragging || e.target.tagName == "INPUT") {
       return;
     }
+    this.stopRepositioning = false;
     this.proxyDM = this
       .handleDragMove
       .bind(this);
@@ -103,7 +152,7 @@ class SortQuestion extends React.Component {
     window.addEventListener('mouseleave', this.proxySD, true);
     window.addEventListener('touchcancel', this.proxySD, true);
     window.addEventListener('touchend', this.proxySD, true);
-    
+
     if (e.touches && e.touches.length > 0) {
       e = e.touches[0];
     }
@@ -130,28 +179,69 @@ class SortQuestion extends React.Component {
     this.regions = regions;
     this.draggy = targ.cloneNode(true);
     let internalSpacer = targ.getElementsByClassName('sortitem--container')[0];
+    let isOther = !internalSpacer;
+    if (isOther) {
+      internalSpacer = targ.getElementsByClassName('other--textfield')[0];
+    }
     let internalRect = getRect(internalSpacer);
     let dragSpacer = this
       .draggy
       .getElementsByClassName('sortitem--container')[0];
-    dragSpacer.style = "width: " + internalRect.w + "px;";
-    this.draggy.style = "top: " + this.targetCoords.y + "px; left: " + this.targetCoords.x + "px;";
+    if (isOther) {
+      dragSpacer = this
+        .draggy
+        .getElementsByClassName('other--textfield')[0];
+    }
+    dragSpacer.style.width = internalRect.w + "px";
+    this.draggy.style.top = this.targetCoords.y + "px";
+    this.draggy.style.left = this.targetCoords.x + "px";
     this.draggy.className += " dragging";
     document
       .body
       .appendChild(this.draggy);
-    var dragOrder = this.calcDragOrderForSelected(targWhich, targWhich);
+    var dragOrder = this.calcDragOrderForSelected(hoverIndex, targWhich);
     var newState = {
       dragOrder: dragOrder,
       hoverPosition: targWhich,
       dragItem: targWhich,
       isDragging: true,
       startClientX: e.clientX,
-      startClientY: e.clientY
+      startClientY: e.clientY,
+      hideOtherOverlay: true
     };
-    console.log(newState);
     this.setState(newState);
     return false;
+  }
+
+  /**
+   * Apply the current data state
+   */
+  applyCurrentDataState() {
+    let root = ReactDOM.findDOMNode(this),
+      otheript = root.getElementsByClassName('otherOverlayInput')[0];
+
+    this
+      .props
+      .dispatch(changeAnswer(this.props.name, {
+        otherValue: (this.props.other && otheript)
+          ? otheript.value
+          : null,
+        order: this.state.currentOrder
+      }));
+  }
+
+  /**
+   * The other IPT changed
+   */
+  handleIptThrottleChange() {
+    clearTimeout(this.iptThrottle);
+    this.iptThrottle = setTimeout(() => {
+      let root = ReactDOM.findDOMNode(this),
+        otheript = root.getElementsByClassName('otherOverlayInput')[0],
+        otherText = otheript.value;
+      this.state.otherText = otherText;
+      this.applyCurrentDataState();
+    }, 250);
   }
 
   /**
@@ -159,10 +249,10 @@ class SortQuestion extends React.Component {
    * @param {*} e
    */
   handleDragMove(e) {
-    console.log("DRAGEVT");
     if (!this.state.isDragging) {
       return;
     }
+    this.stopRepositioning = false;
     e.stopPropagation();
     if (e.touches && e.touches.length > 0) {
       e = e.touches[0];
@@ -170,7 +260,8 @@ class SortQuestion extends React.Component {
     let diffX = e.clientX - this.state.startClientX,
       diffY = e.clientY - this.state.startClientY;
 
-    this.draggy.style = "top: " + (this.targetCoords.y + diffY) + "px; left: " + (this.targetCoords.x + diffX) + "px;";
+    this.draggy.style.top = (this.targetCoords.y + diffY) + "px";
+    this.draggy.style.left = (this.targetCoords.x + diffX) + "px";
 
     let hoverPosition = 0;
     // Determine hover position
@@ -188,14 +279,28 @@ class SortQuestion extends React.Component {
   }
 
   /**
+   * Start editing the other box
+   */
+  startEditingOther() {
+    this.stopRepositioning = true;
+  }
+
+  /**
+   * End editing the other box
+   */
+  endEditingOther() {
+    this.stopRepositioning = false;
+  }
+
+  /**
    * End the drag drop
    * @param {*} e
    */
   dropDrag(e) {
-    console.log("DROP!");
     if (!this.state.isDragging) {
       return;
     }
+    this.stopRepositioning = false;
     window.removeEventListener('touchmove', this.proxyDM, true);
     window.removeEventListener('mousemove', this.proxyDM, true);
     window.removeEventListener('mouseup', this.proxySD, true);
@@ -215,7 +320,23 @@ class SortQuestion extends React.Component {
       }
       finalOrder.push(res);
     }
-    this.setState({isDragging: false, currentOrder: finalOrder, dragOrder: []});
+    this.setState({isDragging: false, currentOrder: finalOrder, dragOrder: [], didDrop: true});
+    this.positionOtherInput();
+    this.applyCurrentDataState();
+    ReactDOM
+      .findDOMNode(this)
+      .focus();
+    setTimeout(() => {
+      ReactDOM
+        .findDOMNode(this)
+        .focus();
+    }, 250);
+    setTimeout(() => {
+      this.setState({hideOtherOverlay: false});
+      ReactDOM
+        .findDOMNode(this)
+        .focus();
+    }, 550);
   }
 
   /**
@@ -231,49 +352,75 @@ class SortQuestion extends React.Component {
       dragPlaceholderCSS = {},
       initialOther = this.initialOther;
 
+    let otherValue = '';
+    if (this.props.other) {
+      otherValue = this.state.otherText || initialOther;
+      if (!otherValue) {
+        otherValue = '';
+      }
+    }
+
     var realOrder = this.state.currentOrder;
     if (this.state.isDragging) {
       realOrder = this.state.dragOrder;
     }
-
     if (st.isDragging) {
       dragPlaceholderCSS.width = this.targetCoords.w;
       dragPlaceholderCSS.height = this.targetCoords.h;
     }
+
     return (
       <div className="question--sort">
+        {(this.state.positionOtherInput && !this.state.isDragging && !this.state.hideOtherOverlay) && <input
+          type="text"
+          onFocus={ctx
+          .startEditingOther
+          .bind(ctx)}
+          onBlurCapture={ctx
+          .endEditingOther
+          .bind(ctx)}
+          onKeyUp={ctx
+          .handleIptThrottleChange
+          .bind(ctx)}
+          className="otherinputfield otherOverlayInput"
+          placeholder={this.props.otherplaceholder || ''}
+          defaultValue={otherValue}
+          style={{
+          left: this.state.otherInputX,
+          top: this.state.otherInputY,
+          width: this.state.otherInputWidth,
+          height: this.state.otherInputHeight
+        }}/>}
         {realOrder.map((num, idx) => {
           if (num == -1) {
             return <label key={idx} className={"sortable standalonebutton drag--placeholder"}>&nbsp;</label>;
           } else if (num == 9999) {
             return <label
-              key={9999}
+              key={idx}
               onMouseDown={this
               .handleDragStart
               .bind(this)}
               onTouchStartCapture={this
               .handleDragStart
               .bind(this)}
+              data-index={idx}
               data-which={num}
-              className={"sortable standalonebutton othercontainer"}>
-              <div className="sortitem--container textcontainer">
-                <span className="sorticon fa fa-sort"></span>
-                <span className="countholder">{idx + 1}.
-                </span>
-                <input
+              className={"sortable standalonebutton otherstandalone " + ((!st.isDragging && st.didDrop)
+              ? " dropAnim drop" + idx
+              : "")}>
+              <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/>
+                <span className="numholder">{idx + 1}.</span><input
                   type="text"
                   onMouseDownCapture={this
-                  .preventDrag
-                  .bind(this)}
+              .preventDrag
+              .bind(this)}
                   onTouchStartCapture={this
-                  .preventDrag
-                  .bind(this)}
-                  className="other--textfield"
+              .preventDrag
+              .bind(this)}
+                  className="other--textfield floatingother"
                   placeholder={this.props.otherplaceholder || ''}
-                  onKeyUp={ctx
-                  .handleIptThrottleChange
-                  .bind(ctx)}
-                  defaultValue={initialOther}/></div>
+                  readOnly={true}
+                  value={otherValue}/><input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
             </label>;
           } else {
             let rt = choices[num];
@@ -285,9 +432,12 @@ class SortQuestion extends React.Component {
               onTouchStartCapture={this
               .handleDragStart
               .bind(this)}
+              data-index={idx}
               data-which={num}
-              className={"sortable standalonebutton "}>
-              <div className="sortitem--container"><span className="sorticon fa fa-sort"/> {idx + 1}. {rt}<input type="hidden" name={idx} value={idx}/></div>
+              className={"sortable standalonebutton" + ((!st.isDragging && st.didDrop)
+              ? " dropAnim drop" + idx
+              : "")}>
+              <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/> {idx + 1}. {rt}<input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
             </label>;
           }
         })}

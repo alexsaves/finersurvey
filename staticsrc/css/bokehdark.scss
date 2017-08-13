@@ -108,6 +108,16 @@ textarea {
   }
 }
 
+// Animation for when a rank question is dropped
+@keyframes rankSortDropAnim {
+  0% {
+    transform: scale(1)
+  }
+  50% {
+    transform: scale(1.25)
+  }
+}
+
 // Base styles
 @mixin draggable_placeholder {
   border: 1px dashed darken($border_color, 25%);
