@@ -42,6 +42,11 @@ class RadioQuestion extends React.Component {
     this
       .props
       .dispatch(changeAnswer(this.props.name, finalResponse));
+    if (this.props.onFullyAnswerQuestion) {
+      this
+        .props
+        .onFullyAnswerQuestion();
+    }
   }
 
   /**

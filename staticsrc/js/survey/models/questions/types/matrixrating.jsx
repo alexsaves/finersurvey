@@ -34,10 +34,10 @@ class MatrixRatingQuestion extends React.Component {
         .answers
         .splice(0);
     newAnswers[this.state.selectedItem] = parseInt(targ.value);
-    this.setState({
-      answers: newAnswers
-    });
-    this.props.dispatch(changeAnswer(this.props.name, newAnswers));
+    this.setState({answers: newAnswers});
+    this
+      .props
+      .dispatch(changeAnswer(this.props.name, newAnswers));
     if (this.state.selectedItem < this.props.choices.length - 1) {
       this.advanceCarousel(e);
     }
@@ -70,6 +70,13 @@ class MatrixRatingQuestion extends React.Component {
     if (this.state.selectedItem < (this.props.choices.length - 1) && !this.state.animatingBackward && !this.state.animatingForward) {
       // do it
       this.setState({animatingBackward: false, animatingForward: true});
+    }
+    if (this.state.selectedItem == this.props.choices.length - 1) {
+      if (this.props.onFullyAnswerQuestion) {
+        this
+          .props
+          .onFullyAnswerQuestion();
+      }
     }
   }
 

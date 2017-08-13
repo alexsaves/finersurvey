@@ -43,6 +43,15 @@ class QuestionComponent extends React.Component {
   }
 
   /**
+   * A question was fully answered
+   */
+  handleFullyAnswerQuestion() {
+    if (this.props.onFullyAnswerQuestion) {
+      this.props.onFullyAnswerQuestion();
+    }
+  }
+
+  /**
  * Render the view
  */
   render() {
@@ -61,46 +70,55 @@ class QuestionComponent extends React.Component {
           &nbsp;{this.props.instructions}</p>}
         {this.props.type == "matrixrating" && <MatrixRatingQuestion
           {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "checkbox" && <CheckboxQuestion
           {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}        
         {this.props.type == "radio" && <RadioQuestion
           {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "dropdown" && <DropdownQuestion
           {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "rating" && !this.props.modifier && <RatingQuestion
           {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "rating" && this.props.modifier == "stars" && <StarsRatingQuestion
           {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "rating" && this.props.modifier == "slider" && <SliderRatingQuestion
           {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "text" && <TextQuestion
           {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "sort" && <SortQuestion
           {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           isSelected={this.props.isSelected}
           isAnimating={this.props.isAnimating}
           onRemindAboutRules={this

@@ -23,6 +23,9 @@ class DropdownQuestion extends React.Component {
       root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByClassName("dropdown-select");
     this.props.dispatch(changeAnswer(this.props.name, parseInt(ipts[0].value)));
+    if (this.props.onFullyAnswerQuestion) {
+      this.props.onFullyAnswerQuestion();
+    }
   }
 
   /**

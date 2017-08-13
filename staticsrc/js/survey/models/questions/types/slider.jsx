@@ -72,6 +72,11 @@ class SliderRatingQuestion extends React.Component {
     this
       .props
       .dispatch(changeAnswer(this.props.name, this.state.sliderValue));
+    if (this.props.onFullyAnswerQuestion) {
+      this
+        .props
+        .onFullyAnswerQuestion();
+    }
   }
 
   /**

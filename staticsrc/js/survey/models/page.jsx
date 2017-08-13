@@ -23,13 +23,22 @@ class PageComponent extends React.Component {
   }
 
   /**
+   * A question was fully answered
+   */
+  handleQuestionFullyAnswered() {
+    if (this.props.onFullyAnswerQuestion) {
+      this.props.onFullyAnswerQuestion();
+    }
+  }
+
+  /**
  * Render the view
  */
   render() {
     let ctx = this,
       remindInstructionsFor = this.props.remindInstructionsFor;
     return (
-      <div        
+      <div
         className={"page " + (this.props.isSelected
         ? "selected"
         : "") + (this.props.animatingOutForward
@@ -50,6 +59,9 @@ class PageComponent extends React.Component {
                 key={idx}
                 {...q}
                 answer={ctx.getAnswerForQuestion(q)}
+                onFullyAnswerQuestion={this
+                .handleQuestionFullyAnswered
+                .bind(this)}
                 isSelected={this.props.isSelected}
                 isAnimating={this.props.animatingOutForward || this.props.animatingOutBackward || this.props.animatingInForward || this.props.animatingInBackward}
                 remindInstructions={(remindInstructionsFor.indexOf(q.name) > -1)}/>

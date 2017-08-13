@@ -24,6 +24,11 @@ class RatingQuestion extends React.Component {
     this
       .props
       .dispatch(changeAnswer(this.props.name, val));
+    if (this.props.onFullyAnswerQuestion) {
+      this
+        .props
+        .onFullyAnswerQuestion();
+    }
   }
 
   /**

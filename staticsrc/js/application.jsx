@@ -1,6 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
+import { browserHistory } from 'react-router';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import RoutesComponent from './routes.jsx';

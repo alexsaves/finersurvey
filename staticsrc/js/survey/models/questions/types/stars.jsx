@@ -27,6 +27,11 @@ class StarsRatingQuestion extends React.Component {
     this
       .props
       .dispatch(changeAnswer(this.props.name, val));
+    if (this.props.onFullyAnswerQuestion) {
+      this
+        .props
+        .onFullyAnswerQuestion();
+    }
   }
 
   /**
@@ -80,7 +85,9 @@ class StarsRatingQuestion extends React.Component {
               .bind(this)}
               className={"star--button fa fa-star" + (!!(rt <= answer)
               ? " selected"
-              : "") + (hoverNumber >= idx ? " hovered " : "")}>
+              : "") + (hoverNumber >= idx
+              ? " hovered "
+              : "")}>
               <span className={"fa fa-star-o star--inner"}></span><input
                 type="checkbox"
                 checked={!!(rt <= answer)}

@@ -127,12 +127,12 @@ class SortQuestion extends React.Component {
     this.resizeThrottle = null;
     window.addEventListener("resize", (e) => {
       if (!this.state.hideOtherOverlay) {
-        this.setState({hideOtherOverlay: true});        
+        this.setState({hideOtherOverlay: true});
       }
       clearTimeout(this.resizeThrottle);
       this.resizeThrottle = setTimeout(() => {
         this.positionOtherInput();
-        this.setState({hideOtherOverlay: false}); 
+        this.setState({hideOtherOverlay: false});
       }, 500);
     });
   }
@@ -242,6 +242,14 @@ class SortQuestion extends React.Component {
           : null,
         order: this.state.currentOrder
       }));
+
+    if (!this.props.other) {
+      if (this.props.onFullyAnswerQuestion) {
+        this
+          .props
+          .onFullyAnswerQuestion();
+      }
+    }
   }
 
   /**
@@ -386,7 +394,7 @@ class SortQuestion extends React.Component {
     if (this.isAnimating && !this.props.isAnimating) {
       hideOtherOverlay = true;
       setTimeout(() => {
-        this.positionOtherInput();        
+        this.positionOtherInput();
       }, 200);
     }
     this.isAnimating = this.props.isAnimating;

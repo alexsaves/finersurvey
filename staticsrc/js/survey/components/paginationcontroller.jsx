@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import PageComponent from '../models/page.jsx';
 import Validator from './validator.js';
 import {nextPage, prevPage, jumpToPage} from '../../actions';
-import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Link, Route, Switch, Redirect} from 'react-router-dom';
 
 /**
 * Represents the entire survey
@@ -116,6 +116,23 @@ class PaginationController extends React.Component {
   }
 
   /**
+   * Does this page qualify for auto-advance?
+   * @param {*} pageNumber
+   */
+  pageCanAutoAdvance(pageNumber) {
+    let pageObj = this.props.pages[pageNumber],
+      didPass = true,
+      answers = this.props.answers,
+      faledQList = [];
+
+    if (pageObj.elements.length == 1) {
+      let qt = pageObj.elements[0].type
+      return (qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio");
+    }
+    return false;
+  }
+
+  /**
    * Animation is over
    */
   handleAnimationEnd(e) {
@@ -133,6 +150,21 @@ class PaginationController extends React.Component {
       }
     } else if (targ.className.indexOf("instructions") > -1) {
       this.setState({remindInstructionsFor: []});
+    }
+  }
+
+  /**
+   * Handle when a question is fully answered
+   */
+  handleFullyAnswerQuestion() {
+    if (this.pageCanAutoAdvance(this.props.currentPage)) {
+      setTimeout(() => {
+        let root = ReactDOM.findDOMNode(this),
+          advanceButton = root.getElementsByClassName('advance--button')[0];
+        var evObj = document.createEvent('MouseEvents');
+        evObj.initMouseEvent('click', true, true, window, 1, 12, 345, 7, 220, false, false, false, false, 0, null);
+        advanceButton.dispatchEvent(evObj);
+      }, 500);
     }
   }
 
@@ -183,6 +215,9 @@ class PaginationController extends React.Component {
               isSelected={idx === currentPage}
               remindInstructionsFor={remindInstructionsFor}
               answers={answers}
+              onFullyAnswerQuestion={this
+              .handleFullyAnswerQuestion
+              .bind(this)}
               animatingOutBackward={idx === currentPage && isAnimatingBackward}
               animatingOutForward={idx === currentPage && isAnimatingForward}
               animatingInBackward={idx === (currentPage - 1) && isAnimatingBackward}
@@ -207,7 +242,7 @@ class PaginationController extends React.Component {
           : "")}>
           <Link
             to={"/s/" + this.props.uid + "/" + (currentPage + 2)}
-            className={"paginator--button " + (isValidated
+            className={"paginator--button advance--button " + (isValidated
             ? "validated"
             : "")}
             title="Next page"
