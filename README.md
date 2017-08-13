@@ -10,7 +10,25 @@ The schema generally follows the schema of SurveyJS but deviates in several ways
 
 Show logic applies to questions or pages and can be singular (just one rule) additive (all statements must be true) or inclusive (any statement must be true). Rules are specified with the optional `showIf` attribute which can be a string (for singular rules), an array (for additive rules), or an object (for inclusive rules).
 
-Rules may generally only apply to questions on pages that appeared earlier in the page sequence.
+Rules may generally only apply to questions on pages that appeared earlier in the page sequence. Rules follow a specific format. They begin with a question name, then an equality operator, then a value (optional). Here are some simple examples of rules:
+
+ * `myQuestionName=2` - The question named `myQuestionName` is equal to item 2 or a rating of 2.
+ * `myQuestionName*=` - The question has any answer.
+ * `myQuestionName!=` - The question was not answered.
+ * `myQuestionName!=3` - The question was not answered with the 4th item.
+ * `myQuestionName~=cool` - The question was *like* "cool". In other words, it contained the text "cool", capitalization not important.
+ * `myQuestionName!~=cool` - The question was *not like* "cool". In other words, it did not contain the text "cool" (irrespective of capitalization).
+ * `myQuestionName>2` - The answer was greater than 2.
+ * `myQuestionName<3` - The answer was less than 3.
+ * `myQuestionName>=3` - The answer was greater than or equal to 3.
+ * `myQuestionName[OTHER]*=` - The answer was `other` or included an `other`.
+ * `myQuestionName[OTHER]~=apple` - The other answer was *like* "apple". In other words, it contained the text "cool", capitalization not important.
+ * `myQuestionName[OTHER]!~=apple` - The other answer was *not like* "apple". In other words, it did not contain the text "cool" (irrespective of capitalization).
+ * `myQuestionName[OTHER]<3` - The other answer value was less than 3. For ranking questions this means it was ranked higher.
+
+#### Zero Based
+
+All numeric values are zero based. For example, in a dropdown question, the first choice is `0` and the second choice is `1` and so-on. 
 
 #### Singular Rules
 
@@ -88,7 +106,7 @@ Rules can be recursive and extremely complex. For example, by nesting rules, it'
 For the `dropdown` question type you can only check one of three conditions: user did answer, answer *was* n or answer *was not* n. Choices are numeric.
 
 ```
-questionMyDropDown=*
+questionMyDropDown*=
 ```
 
 ... This would check if there was any answer for a dropdown. This is useful for optional questions.

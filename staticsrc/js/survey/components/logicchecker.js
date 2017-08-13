@@ -1,4 +1,19 @@
 /**
+ * The types of equality
+ */
+var EQUALITIES = {
+  NOTLIKE: '!~=', 
+  GREATERTHANOREQUAL: '>=', 
+  LESSTHANOREQUAL: '<=', 
+  EQUAL: '=', 
+  NOTEQUAL: '!=', 
+  CONTAINSANY: '*=', 
+  LIKE: '~=', 
+  LESSTHAN: '<', 
+  GREATERTHAN: '>'
+};
+
+/**
  * Show Logic Evaluator
  */
 export default class {
@@ -92,9 +107,26 @@ export default class {
     if (!surveyDef) {
       throw new Error("Missing survey definition.");
     }
-    let ruleBits = logicRule.split('='),
-      dependentQuestionName = ruleBits[0].trim(),
-      ruleStr = ruleBits[1].trim();
+    let equalityKeys = Object.keys(EQUALITIES),
+      splitterType = null,
+      splitterPos = logicRule.length;
+    
+    for (let h = 0; h < equalityKeys.length; h++) {
+      let splitterToTest = EQUALITIES[equalityKeys[h]],
+        testResult = logicRule.indexOf(splitterToTest);
+      if (testResult > -1 && testResult < splitterPos) {
+        splitterType = equalityKeys[h];
+        splitterPos = testResult;
+      }      
+    }
+
+    if (!splitterType) {
+      throw new Error("Invalid equality expression: " + logicRule);
+    }
+
+    let splitterSymbol = EQUALITIES[splitterType], 
+      dependentQuestionName = logicRule.substr(0, splitterPos),
+      ruleStr = logicRule.substr(dependentQuestionName.length + splitterSymbol.length);
 
     if (!dependentQuestionName || dependentQuestionName.length < 1) {
       throw new Error("Invalid question name: " + dependentQuestionName);
@@ -113,19 +145,19 @@ export default class {
       console.log("About to evaluate:", ruleStr, "for question", dependentQuestion, "with answer", answerObject);
       switch (dependentQuestion.type) {
         case "rating":
-          return this._evaluateRatingLogic(dependentQuestion, answerObject, ruleStr);
+          return this._evaluateRatingLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
         case "checkbox":
-          return this._evaluateCheckboxLogic(dependentQuestion, answerObject, ruleStr);
+          return this._evaluateCheckboxLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
         case "radio":
-          return this._evaluateRadioLogic(dependentQuestion, answerObject, ruleStr);
+          return this._evaluateRadioLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
         case "text":
-          return this._evaluateTextLogic(dependentQuestion, answerObject, ruleStr);
+          return this._evaluateTextLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
         case "dropdown":
-          return this._evaluateDropdownLogic(dependentQuestion, answerObject, ruleStr);
+          return this._evaluateDropdownLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
         case "matrixrating":
-          return this._evaluateMatrixRatingLogic(dependentQuestion, answerObject, ruleStr);
+          return this._evaluateMatrixRatingLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
         case "sort":
-          return this._evaluateSortLogic(dependentQuestion, answerObject, ruleStr);
+          return this._evaluateSortLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol);
         default:
           return false;
       }
@@ -138,7 +170,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateRatingLogic(questionDef, answerObj, condition)
+  _evaluateRatingLogic(questionDef, answerObj, condition, equalityExp)
   {}
 
   /**
@@ -147,7 +179,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateCheckboxLogic(questionDef, answerObj, condition)
+  _evaluateCheckboxLogic(questionDef, answerObj, condition, equalityExp)
   {}
 
   /**
@@ -156,7 +188,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateRadioLogic(questionDef, answerObj, condition)
+  _evaluateRadioLogic(questionDef, answerObj, condition, equalityExp)
   {}
 
   /**
@@ -165,7 +197,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateTextLogic(questionDef, answerObj, condition)
+  _evaluateTextLogic(questionDef, answerObj, condition, equalityExp)
   {}
 
   /**
@@ -174,12 +206,13 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateDropdownLogic(questionDef, answerObj, condition)
+  _evaluateDropdownLogic(questionDef, answerObj, condition, equalityExp)
   {
     let conditionChoice = parseInt(condition);
     if (isNaN(conditionChoice)) {
       throw new Error("Invalid condition for dropdown question: " + condition + ". Must be a number.");
     } else {
+      debugger;
       return (answerObj == condition);
     }
   }
@@ -190,7 +223,7 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateMatrixRatingLogic(questionDef, answerObj, condition)
+  _evaluateMatrixRatingLogic(questionDef, answerObj, condition, equalityExp)
   {}
 
   /**
@@ -199,6 +232,6 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateSortLogic(questionDef, answerObj, condition)
+  _evaluateSortLogic(questionDef, answerObj, condition, equalityExp)
   {}
 };
