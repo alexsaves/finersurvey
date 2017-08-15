@@ -144,15 +144,19 @@ However, for `rating` (type: `slider`) which provide floating-point values, it's
 
 Number range | Label to use
 --- | ---
-`0%<20%` | `VERYLOW`
-`20%<40%` | `LOW`
-`40%<60%` | `MEDIUM`
-`60%<80%` | `HIGH`
-`80%<100%` | `VERYHIGH`
+0% < 20% | `VERYLOW`
+20% < 40% | `LOW`
+40% < 60% | `MEDIUM`
+60% < 80% | `HIGH`
+80% < 100% | `VERYHIGH`
 
 #### Rating Conditions
 
-Rating questions (sliders) will have a floating point (decimal) number between `0.0` and `99.9`. It's not very useful to compare against specific numbers because if 
+Rating questions can be of various types: `slider`, `stars`, `buttons`. For `stars`, and `buttons`, doing straight equality operations is easy, Eg: `myButtonQuestion=3` is simple enough. The `slider` type, however will have a floating point (decimal) number between `0.0` and `99.9`. It's not very useful to compare against specific numbers because if you are looking for `10` but the user entered `10.1` you will not find a match. In this case, you can use the plain-language range system mentioned earlier:
+
+ * `myRatingQ=LOW` - Show if the answer was between 20%-40%.
+ * `myRatingQ>MEDIUM` - Show if the answer was either `HIGH` or `VERYHIGH`.
+ * `myRatingQ!=VERYLOW` - Show if the question was *not* between 0% and 20%.
 
 #### Dropdown Conditions
 

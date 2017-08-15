@@ -92,7 +92,7 @@ class QuestionComponent extends React.Component {
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
-        {this.props.type == "rating" && !this.props.modifier && <RatingQuestion
+        {this.props.type == "rating" && (!this.props.modifier || this.props.modifier == "buttons") && <RatingQuestion
           {...this.props}
           onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onRemindAboutRules={this
