@@ -2,15 +2,22 @@
  * The types of equality
  */
 var EQUALITIES = {
-  NOTLIKE: '!~=', 
-  GREATERTHANOREQUAL: '>=', 
-  LESSTHANOREQUAL: '<=', 
-  EQUAL: '=', 
-  NOTEQUAL: '!=', 
-  CONTAINSANY: '*=', 
-  LIKE: '~=', 
-  LESSTHAN: '<', 
+  NOTLIKE: '!~=',
+  GREATERTHANOREQUAL: '>=',
+  LESSTHANOREQUAL: '<=',  
+  EQUAL: '=',
+  NOTEQUAL: '!=',
+  CONTAINSANY: '*=',
+  LIKE: '~=',
+  LESSTHAN: '<',
   GREATERTHAN: '>'
+};
+
+/**
+ * Logic error messages
+ */
+var LOGICERRORMESSAGES = {
+  UNSUPPTYPE: "Unsupported logic type for question"
 };
 
 /**
@@ -111,22 +118,24 @@ export default class {
     let equalityKeys = Object.keys(EQUALITIES),
       splitterType = null,
       splitterPos = logicRule.length;
-    
+
     for (let h = 0; h < equalityKeys.length; h++) {
       let splitterToTest = EQUALITIES[equalityKeys[h]],
         testResult = logicRule.indexOf(splitterToTest);
       if (testResult > -1 && testResult < splitterPos) {
         splitterType = equalityKeys[h];
         splitterPos = testResult;
-      }      
+      }
     }
 
     if (!splitterType) {
       throw new Error("Invalid equality expression: " + logicRule);
     }
 
-    let splitterSymbol = EQUALITIES[splitterType], 
-      dependentQuestionName = logicRule.substr(0, splitterPos).trim(),
+    let splitterSymbol = EQUALITIES[splitterType],
+      dependentQuestionName = logicRule
+        .substr(0, splitterPos)
+        .trim(),
       ruleStr = logicRule.substr(dependentQuestionName.length + splitterSymbol.length),
       isOther = false;
 
@@ -178,7 +187,9 @@ export default class {
    * @param {*} condition
    */
   _evaluateRatingLogic(questionDef, answerObj, condition, equalityExp, isOther)
-  {}
+  {
+    debugger;
+  }
 
   /**
    * Evaluate the show logic for a checkbox question
@@ -215,13 +226,31 @@ export default class {
    */
   _evaluateDropdownLogic(questionDef, answerObj, condition, equalityExp, isOther)
   {
-    let conditionChoice = parseInt(condition);
-    if (isNaN(conditionChoice)) {
-      throw new Error("Invalid condition for dropdown question: " + condition + ". Must be a number.");
+    if (isOther) {
+      throw new Error("Invalid condition for dropdown. Other not supported.");
     } else {
-      debugger;
-      return (answerObj == condition);
+      let conditionChoice = parseInt(condition);
+      switch (equalityExp) {
+        case EQUALITIES.CONTAINSANY:
+          return !!answerObj;
+        case EQUALITIES.EQUAL:
+          return !isNaN(conditionChoice) && answerObj == conditionChoice;
+        case EQUALITIES.GREATERTHAN:
+          return !isNaN(conditionChoice) && answerObj > conditionChoice;
+        case EQUALITIES.GREATERTHANOREQUAL:
+          return !isNaN(conditionChoice) && answerObj >= conditionChoice;
+        case EQUALITIES.LESSTHAN:
+          return !isNaN(conditionChoice) && answerObj < conditionChoice;
+        case EQUALITIES.LESSTHANOREQUAL:
+          return !isNaN(conditionChoice) && answerObj <= conditionChoice;
+        case EQUALITIES.NOTEQUAL:
+          return !isNaN(conditionChoice) && answerObj != conditionChoice;
+        default:
+          throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
+          break;
+      }
     }
+
   }
 
   /**

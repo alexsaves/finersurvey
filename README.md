@@ -6,6 +6,17 @@ Some general information on survey models:
 
 The schema generally follows the schema of SurveyJS but deviates in several ways.
 
+### Question Types
+
+A variety of question types are supported, including:
+
+ * `rating` - Slider or star-rating questions with values between `0.0` and `99.9`.
+ * `dropdown` - Drop down (select boxes) with one possible answer.
+ * `matrixrating` - Multiple rating questions combined into one with a left-right carousel interface.
+ * `text` - Single line or multiline open-ended text input.
+ * `checkbox` - Multiple choice question with a possible "other" text input.
+ * `radio` - Single choice question with a possible "other" text input.
+
 ### Question Names
 
 Question names are used to identify questions in the response object, and also for show logic and piping. Question names can contain letters, numbers, or underscores, but no other symbols or spaces. Also, they must begin with a letter or underscore. Examples of valid question names:
@@ -41,6 +52,7 @@ Rules may generally only apply to questions on pages that appeared earlier in th
  * `myQuestionName[OTHER]~=apple` - The other answer was *like* "apple". In other words, it contained the text "cool", capitalization not important.
  * `myQuestionName[OTHER]!~=apple` - The other answer was *not like* "apple". In other words, it did not contain the text "cool" (irrespective of capitalization).
  * `myQuestionName[OTHER]<3` - The other answer value was less than 3. For ranking questions this means it was ranked higher.
+ * `myQuestionName=HIGH` - The answer was in the high range
 
 #### Zero Based
 
@@ -116,6 +128,31 @@ Rules can be recursive (nested) and offer complex logical statements. For exampl
     ]
 }
 ```
+#### Scale Comparisons
+
+For scale questions like `rating` (type: `stars`), it's possible to do simple comparisons like:
+
+ * `myQuestionName=2` - The question named `myQuestionName` is equal to item 2 or a rating of 2.
+ * `myQuestionName!=` - The question was not answered.
+ * `myQuestionName!=3` - The question was not answered with the 4th item.
+ * `myQuestionName>2` - The answer was greater than 2.
+ * `myQuestionName<3` - The answer was less than 3.
+ * `myQuestionName>=3` - The answer was greater than or equal to 3.
+ * `myQuestionName[OTHER]<3` - The other answer value was less than 3. For ranking questions this means it was ranked higher.
+
+However, for `rating` (type: `slider`) which provide floating-point values, it's impractical to use strict equality. In these cases, we provide a plain-language range system.
+
+Number range | Label to use
+--- | ---
+`0%<20%` | `VERYLOW`
+`20%<40%` | `LOW`
+`40%<60%` | `MEDIUM`
+`60%<80%` | `HIGH`
+`80%<100%` | `VERYHIGH`
+
+#### Rating Conditions
+
+Rating questions (sliders) will have a floating point (decimal) number between `0.0` and `99.9`. It's not very useful to compare against specific numbers because if 
 
 #### Dropdown Conditions
 
