@@ -10,8 +10,9 @@ The schema generally follows the schema of SurveyJS but deviates in several ways
 
 A variety of question types are supported, including:
 
- * `rating` - Slider or star-rating questions with values between `0.0` and `99.9`.
+ * `rating` - Scale questions with values between `0.0` and `99.9`.
  * `dropdown` - Drop down (select boxes) with one possible answer.
+ * `sort` - Drop down (select boxes) with one possible answer.
  * `matrixrating` - Multiple rating questions combined into one with a left-right carousel interface.
  * `text` - Single line or multiline open-ended text input.
  * `checkbox` - Multiple choice question with a possible "other" text input.
