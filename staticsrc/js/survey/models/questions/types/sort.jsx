@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
+import Piper from '../../../components/piper';
 
 /**
 * Represents a question
@@ -12,6 +13,7 @@ class SortQuestion extends React.Component {
  */
   constructor(props) {
     super(props);
+    this.piper = new Piper();
     this.iptThrottle = null;
     this.stopRepositioning = false;
     this.state = {
@@ -237,7 +239,7 @@ class SortQuestion extends React.Component {
     this
       .props
       .dispatch(changeAnswer(this.props.name, {
-        otherValue: (this.props.other && otheript)
+        other: (this.props.other && otheript)
           ? otheript.value
           : null,
         order: this.state.currentOrder
@@ -373,6 +375,10 @@ class SortQuestion extends React.Component {
       st = this.state,
       dragPlaceholderCSS = {},
       initialOther = this.initialOther;
+
+    let piper = this.piper,
+      panswers = this.props.answers,
+      ppages = this.props.allpages;
 
     let otherValue = '';
     if (this.props.other) {

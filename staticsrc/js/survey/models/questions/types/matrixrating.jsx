@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
+import Piper from '../../../components/piper';
 
 /**
 * Represents a question
@@ -21,6 +22,7 @@ class MatrixRatingQuestion extends React.Component {
     for (let i = 0; i < this.props.choices.length; i++) {
       this.state.answers[i] = -1;
     }
+    this.piper = new Piper();
   }
 
   /**
@@ -128,6 +130,10 @@ class MatrixRatingQuestion extends React.Component {
       animatingBackward = this.state.animatingBackward,
       animatingForward = this.state.animatingForward,
       answer = this.state.answers[this.state.selectedItem];
+
+    let piper = this.piper,
+      panswers = this.props.answers,
+      ppages = this.props.allpages;
     return (
       <div
         className="question--matrixrating"

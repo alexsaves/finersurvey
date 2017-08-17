@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
+import Piper from '../../../components/piper';
 
 /**
 * Represents a question
@@ -13,6 +14,7 @@ class RadioQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.iptThrottle = null;
+    this.piper = new Piper();
   }
 
   /**
@@ -74,6 +76,10 @@ class RadioQuestion extends React.Component {
       }
       return false;
     };
+
+    let piper = this.piper,
+      panswers = this.props.answers,
+      ppages = this.props.allpages;
 
     return (
       <div className="question--radio">

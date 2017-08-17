@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
+import Piper from '../../../components/piper';
 
 /**
 * Represents a question
@@ -19,6 +20,7 @@ class SliderRatingQuestion extends React.Component {
       isDragging: false,
       didSetSliderFromAnswer: false
     };
+    this.piper = new Piper();
   }
 
   /**
@@ -139,6 +141,10 @@ class SliderRatingQuestion extends React.Component {
         this.setState({didSetSliderFromAnswer: true});
       }, 20);
     }
+
+    let piper = this.piper,
+      panswers = this.props.answers,
+      ppages = this.props.allpages;
     return (
       <div className="question--rating slider">
         <div className="slider--container">

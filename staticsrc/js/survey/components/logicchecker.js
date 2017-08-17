@@ -15,23 +15,6 @@ var EQUALITIES = {
 };
 
 /**
- * Ranges
- */
-var RANGES = {
-  "VERYLOW": [
-    0, 20
-  ],
-  "LOW": [
-    20, 40
-  ],
-  "MEDIUM": [
-    40, 60
-  ],
-  "HIGH": [60 - 80],
-  "VERYHIGH": [80 - 100.0001]
-};
-
-/**
  * Logic error messages
  */
 var LOGICERRORMESSAGES = {
@@ -115,29 +98,6 @@ export default class {
   }
 
   /**
-   * Get a range from a value
-   * @param {String} val
-   */
-  _getRange(val) {
-    var rangeval = RANGES[
-      val
-        .toUpperCase()
-        .trim()
-    ];
-    if (rangeval) {
-      return {low: rangeval[0], high: rangeval[1]};
-    }
-  }
-
-  /**
-   * Is the value a range?
-   * @param {String} val
-   */
-  _isRange(val) {
-    return !!this._getRange(val);
-  }
-
-  /**
    * Evaluate a specific rule
    * @param {*} logicRule
    * @param {*} answers
@@ -201,7 +161,6 @@ export default class {
       throw new Error("Could not find question for logic rule. Question name was: " + dependentQuestionName);
     } else {
       let answerObject = this._locateAnswerObjectForName(dependentQuestionName, answers);
-      //console.log("About to evaluate:", ruleStr, "for question", dependentQuestion, "with answer", answerObject);
       switch (dependentQuestion.type) {
         case "rating":
           return this._evaluateRatingLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);

@@ -15,12 +15,14 @@ Each question shares a set of common attributes, but also may have some of its o
  * `required` - (_Boolean_) Whether the question must be answered or not.
  * `title` - (_String_) The question text.
  * `instructions` - (_String_) Instructions for the user. Ie: how to interact with the question. This can contain information like any special criteria (like minimum responses or maximum responses).
+ * `placeholder` - (_String_) Additional instructions used in some cases (eg: in `dropdown` questions).
  * `other` - (_Boolean_) Whether the question supports an "other" field. Not all question types support this.
  * `otherplaceholder` - (_String_) The helpful text that appears in any "other" textboxes (if applicable).
  * `choices` - (_Array_) The possible answers (if applicable).
  * `low` - (_String_) The label for the low end of a scale. This is applicable for scale questions.
  * `high` - (_String_) The label for the high end of a scale.
  * `showIf` - (_String_ or _Array_ or _Object_) The show logic for this question. See below for details.
+ * `modifier` - (_String_) Selects a sub-question type from the `type`. Eg: for `text` questions you can add the modifier `multiline` to make the textbox a multi-line text input. For `rating` types there are several modifiers (see the question types explained fully, below).
 
 ### Question Types
 
@@ -210,4 +212,46 @@ The process of injecting previous responses into questions that appear later is 
 }
 ```
 
-This basically means, for the question with the name `firstNameQuestion`, insert the response into this place in the title of this question.
+This basically means, for the question with the name `firstNameQuestion`, insert the response into this place in the title of this question. This is the approach for `text` questions and single-response questions like `radio` and `dropdown` and `rating`.
+
+#### Formatting on Piping
+
+For cleanliness, excess whitespace is removed from responses when piped. If you want to auto-capitalize (for proper names), prefix your rule with `^`:
+
+```json
+{
+  "title": "Hey ${^firstNameQuestion}, Please rank the following attributes in order of importance",
+}
+```
+
+Similarly, to convert to all lowercase, use a preceding period: `.`. Example: `${.reasonForPurchasingQuestion}`.
+
+To select a single *word* from the response, use the `@` symbol, followed by a number at the end of your symbol:
+
+```json
+{
+  "title": "Hey ${firstNameQuestion@0}, Please rank the following attributes in order of importance",
+}
+```
+
+This will chose the first word. If you want to chose the last word (without knowing how many words it will have) just choose a really high number like `99999` and the last word will be chosen automatically.
+
+#### Piping on Rating Questions
+
+Given that rating questions return a number, some formatting is applied when piping. Both `stars` and `buttons` return a whole integer between `0` and `7`. For `scale` types, the piped response will be a rounded whole number with a "%" sign after it.
+
+#### Choosing "Other"
+
+For questions that support an "other" field you can use bracket notation as you do for show logic: `${myRadioQuestion[OTHER]}`.
+
+#### Piping on Checkbox Questions
+
+You can only pipe "other" from checkbox questions. Eg: `${myCBQuestion[OTHER]}`.
+
+#### Piping on Sort Questions
+
+Things are a little different for sort questions. You can pipe from "other" with `${mySortQ[OTHER]}` or you can choose the *nth* slot item with bracket notation like this: `${mySortQ[0]}` for the first item, `${mySoertQ[1]}` for the second, and so-on.
+
+#### Piping on Matrix Rating Questions
+
+Things are again different on matrix rating questions. Since it's only marginally useful to pipe on the rating of each item, we use bracket notation to pipe on the rank of each item. So, `${myMatrixQ[0]}` would return the text of the top rated item out of the list, `${myMatrix[1]}` would return the 2nd most highly rated item, and so-on.

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
+import Piper from '../../../components/piper';
 
 /**
 * Represents a question
@@ -12,6 +13,7 @@ class RatingQuestion extends React.Component {
  */
   constructor(props) {
     super(props);
+    this.piper = new Piper();
   }
 
   /**
@@ -47,6 +49,10 @@ class RatingQuestion extends React.Component {
     ];
     let ctx = this;
     let answer = this.props.answer || 0;
+
+    let piper = this.piper,
+      panswers = this.props.answers,
+      ppages = this.props.allpages;
     return (
       <div className="question--rating">
         <div className="buttongroup">
