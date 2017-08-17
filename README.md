@@ -23,6 +23,9 @@ Each question shares a set of common attributes, but also may have some of its o
  * `high` - (_String_) The label for the high end of a scale.
  * `showIf` - (_String_ or _Array_ or _Object_) The show logic for this question. See below for details.
  * `modifier` - (_String_) Selects a sub-question type from the `type`. Eg: for `text` questions you can add the modifier `multiline` to make the textbox a multi-line text input. For `rating` types there are several modifiers (see the question types explained fully, below).
+ * `displayNumber` - (_Boolean_) Whether or not we should display the number next to the question. Default is `false`. If `false`, then the number does not increment for the next question.
+ * `subtitle` - (_String_) An optional block of text below the text title. This appears in a less-prominent font than the title.
+ * `image` - (_Object_) An image to display
 
 ### Question Types
 
@@ -35,6 +38,7 @@ A variety of question types are supported, including:
  * `text` - Single line or multiline open-ended text input.
  * `checkbox` - Multiple choice question with a possible "other" text input.
  * `radio` - Single choice question with a possible "other" text input.
+ * `none` - No inputs. Used to display only text and/or images.
 
 ### Question Names
 
