@@ -50,12 +50,12 @@ class DropdownQuestion extends React.Component {
           .bind(this)}
           className="dropdown-select"
           defaultValue={(answer && answer.response) || -1}>
-          <option disabled={true} value={-1}>{this.props.placeholder || "Choose one..."}</option>
+          <option disabled={true} value={-1}>{piper.pipe(this.props.placeholder || "Choose one...", panswers, ppages)}</option>
           {this
             .props
             .choices
             .map((rt, idx) => {
-              return <option key={idx} value={idx}>{rt}</option>
+              return <option key={idx} value={idx}>{piper.pipe(rt, panswers, ppages)}</option>
             })}
         </select>
       </div>

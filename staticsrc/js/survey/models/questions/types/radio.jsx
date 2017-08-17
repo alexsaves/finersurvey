@@ -91,7 +91,7 @@ class RadioQuestion extends React.Component {
               key={idx}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
               ? "selected"
-              : "")}>{rt}<input
+              : "")}>{piper.pipe(rt, panswers, ppages)}<input
               type="radio"
               name={qname}
               value={idx}
@@ -102,7 +102,7 @@ class RadioQuestion extends React.Component {
         {this.props.other === true && <input
           type="text"
           className="other--textfield"
-          placeholder={this.props.otherplaceholder || ''}
+          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
           onKeyUp={ctx
           .handleIptThrottleChange
           .bind(ctx)}/>}

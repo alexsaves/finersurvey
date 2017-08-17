@@ -164,7 +164,7 @@ class MatrixRatingQuestion extends React.Component {
                 : "") + ((selectedItem == (idx + 1) && animatingBackward)
                 ? " afPrevSelected"
                 : "")}>
-                <div className="choiceinner">{rt}</div>
+                <div className="choiceinner">{piper.pipe(rt, panswers, ppages)}</div>
               </div>
             })}
           <a

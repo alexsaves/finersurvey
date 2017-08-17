@@ -418,7 +418,7 @@ class SortQuestion extends React.Component {
           .handleIptThrottleChange
           .bind(ctx)}
           className="otherinputfield otherOverlayInput"
-          placeholder={this.props.otherplaceholder || ''}
+          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
           defaultValue={otherValue}
           style={{
           left: this.state.otherInputX,
@@ -453,7 +453,7 @@ class SortQuestion extends React.Component {
               .preventDrag
               .bind(this)}
                   className="other--textfield floatingother"
-                  placeholder={this.props.otherplaceholder || ''}
+                  placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
                   readOnly={true}
                   value={otherValue}/><input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
             </label>;
@@ -472,7 +472,7 @@ class SortQuestion extends React.Component {
               className={"sortable standalonebutton" + ((!st.isDragging && st.didDrop)
               ? " dropAnim drop" + idx
               : "")}>
-              <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/> {idx + 1}. {rt}<input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
+              <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/> {idx + 1}. {piper.pipe(rt, panswers, ppages)}<input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
             </label>;
           }
         })}
