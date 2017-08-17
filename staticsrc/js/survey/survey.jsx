@@ -25,11 +25,6 @@ class SurveyComponent extends React.Component {
    */
   componentDidMount() {
     this.updateOverflowStatus();
-    setInterval(() => {
-      this.setState({
-        progress: Math.random()
-      })
-    }, 1000)
   }
 
   /**
@@ -67,7 +62,7 @@ class SurveyComponent extends React.Component {
         onTransitionEnd={this
         .handleTransitionEnd
         .bind(this)}>
-        <ProgressComponent uid={uid} progress={this.state.progress}/>
+        <ProgressComponent uid={uid} progress={desiredPage / this.props.pages.length}/>
         <PageController uid={uid} desiredPage={desiredPage}/>
         <a
           href="https://www.finer.ink"
@@ -85,7 +80,7 @@ class SurveyComponent extends React.Component {
 const mapStateToProps = (state/*, props*/) => {
   return {
     metadata: state.metadata,
-    pages: state.pages,
+    pages: state.validatedPages,
     currentPage: state.currentPage,
     loadingComplete: !!state.loadingComplete
   }

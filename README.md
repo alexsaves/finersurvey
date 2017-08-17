@@ -6,6 +6,22 @@ Some general information on survey models:
 
 The schema generally follows the schema of SurveyJS but deviates in several ways.
 
+### Question Definitions
+
+Each question shares a set of common attributes, but also may have some of its own custom ones. Here are the common shared attributes:
+
+ * `name` - (_String_) The unique ID of the question. There are some rules to naming questions (see below) and they must be unique.
+ * `type` - (_String_) The kind of question (ie: checkbox, radio, etc). The choices appear below.
+ * `required` - (_Boolean_) Whether the question must be answered or not.
+ * `title` - (_String_) The question text.
+ * `instructions` - (_String_) Instructions for the user. Ie: how to interact with the question. This can contain information like any special criteria (like minimum responses or maximum responses).
+ * `other` - (_Boolean_) Whether the question supports an "other" field. Not all question types support this.
+ * `otherplaceholder` - (_String_) The helpful text that appears in any "other" textboxes (if applicable).
+ * `choices` - (_Array_) The possible answers (if applicable).
+ * `low` - (_String_) The label for the low end of a scale. This is applicable for scale questions.
+ * `high` - (_String_) The label for the high end of a scale.
+ * `showIf` - (_String_ or _Array_ or _Object_) The show logic for this question. See below for details.
+
 ### Question Types
 
 A variety of question types are supported, including:
@@ -183,3 +199,15 @@ For sorting questions, things are a little different. We need to be able to chec
  * `myRankingQuestion[OTHER]=2` - The other is in position 3.
  * `myRankingQuestion*=` - The question was answered.
  * `myRankingQuestion!*=` - The question was not answered.
+
+### Piping
+
+The process of injecting previous responses into questions that appear later is called *piping*. Here is a simple example:
+
+```json
+{
+  "title": "Hey ${firstNameQuestion}, Please rank the following attributes in order of importance",
+}
+```
+
+This basically means, for the question with the name `firstNameQuestion`, insert the response into this place in the title of this question.

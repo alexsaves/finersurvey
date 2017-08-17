@@ -94,23 +94,25 @@ class PaginationController extends React.Component {
       validator = new Validator(),
       faledQList = [];
 
-    pageObj
-      .elements
-      .forEach((elm) => {
-        if (elm.required) {
-          // Required question
-          let theanswer = answers[elm.name];
-          if (typeof theanswer == 'undefined') {
-            didPass = false;
-            faledQList.push(elm.name);
-          } else {
-            if (!validator.validate(elm, theanswer)) {
+    if (pageObj) {
+      pageObj
+        .elements
+        .forEach((elm) => {
+          if (elm.required) {
+            // Required question
+            let theanswer = answers[elm.name];
+            if (typeof theanswer == 'undefined') {
               didPass = false;
               faledQList.push(elm.name);
+            } else {
+              if (!validator.validate(elm, theanswer)) {
+                didPass = false;
+                faledQList.push(elm.name);
+              }
             }
           }
-        }
-      });
+        });
+    }
 
     return faledQList;
   }
@@ -261,7 +263,7 @@ class PaginationController extends React.Component {
 // This is our select function that will extract from the state the data slice
 // we want to expose through props to our component.
 const mapStateToProps = (state/*, props*/) => {
-  return {metadata: state.metadata, pages: state.pages, currentPage: state.currentPage, answers: state.answers}
+  return {metadata: state.metadata, pages: state.validatedPages, currentPage: state.currentPage, answers: state.answers}
 }
 
 // Connect the survey component
