@@ -31,7 +31,7 @@ class CheckboxQuestion extends React.Component {
     for (let i = 0; i < ipts.length; i++) {
       let ipt = ipts[i];
       if (ipt.type == "checkbox" && ipt.checked) {
-        responses.push(ipt.name);
+        responses.push(parseInt(ipt.name));
         howManySelected++;
       } else if (ipt.type == "text") {
         otherval = ipt.value;
@@ -80,12 +80,11 @@ class CheckboxQuestion extends React.Component {
       if (answers) {
         let result = answers
           .responses
-          .indexOf(val.toString());
+          .indexOf(parseInt(val));
         return (result > -1);
       }
       return false;
     };
-
     return (
       <div className="question--checkbox">
         {this

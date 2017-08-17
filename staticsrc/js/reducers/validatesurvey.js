@@ -15,9 +15,19 @@ function surveyValidatorReducer(state = [], action) {
         pg.isValid = checker.checkAllLogic(pg.showIf, answers, pages);
         if (els) {
           for (let j = 0; j < els.length; j++) {
-            let q = els[j];
-            q.isValid = checker.checkAllLogic(q.showIf, answers, pages);
+            let q = els[j];            
+            if (q.showIf) {
+              q.isValid = checker.checkAllLogic(q.showIf, answers, pages);
+              if (!q.isValid) {
+                els.splice(j--, 1);
+              }
+            } else {
+              q.isValid = true;
+            }
           }
+        }
+        if (!els || els.length == 0) {
+          pages.splice(i--, 1);
         }
       }
       return pages;

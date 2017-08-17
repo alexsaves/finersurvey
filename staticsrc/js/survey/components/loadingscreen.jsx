@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
-import {removeTheLoadingScreen} from '../../actions';
+import {removeTheLoadingScreen, validateSurvey} from '../../actions';
 
 /**
 * Represents the entire survey
@@ -50,6 +50,9 @@ class LoadingScreenComponent extends React.Component {
         done();
       }
     }, minDelay);
+
+    // Now validate the survey
+    this.props.dispatch(validateSurvey());
   }
 
   /**

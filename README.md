@@ -10,9 +10,9 @@ The schema generally follows the schema of SurveyJS but deviates in several ways
 
 A variety of question types are supported, including:
 
- * `rating` - Scale questions with values between `0.0` and `99.9`.
+ * `rating` - Scale questions with values between `0.0` and `100.0`. Can be of type `buttons` (1-7), `stars`, or `slider`.
  * `dropdown` - Drop down (select boxes) with one possible answer.
- * `sort` - Drop down (select boxes) with one possible answer.
+ * `sort` - Drag and drop sorting question with optional other text input.
  * `matrixrating` - Multiple rating questions combined into one with a left-right carousel interface.
  * `text` - Single line or multiline open-ended text input.
  * `checkbox` - Multiple choice question with a possible "other" text input.
@@ -42,7 +42,7 @@ Rules may generally only apply to questions on pages that appeared earlier in th
 
  * `myQuestionName=2` - The question named `myQuestionName` is equal to item 2 or a rating of 2.
  * `myQuestionName*=` - The question has any answer.
- * `myQuestionName!=` - The question was not answered.
+ * `myQuestionName!*=` - The question has no answer.
  * `myQuestionName!=3` - The question was not answered with the 4th item.
  * `myQuestionName~=cool` - The question was *like* "cool". In other words, it contained the text "cool", capitalization not important.
  * `myQuestionName!~=cool` - The question was *not like* "cool". In other words, it did not contain the text "cool" (irrespective of capitalization).
@@ -53,7 +53,8 @@ Rules may generally only apply to questions on pages that appeared earlier in th
  * `myQuestionName[OTHER]~=apple` - The other answer was *like* "apple". In other words, it contained the text "cool", capitalization not important.
  * `myQuestionName[OTHER]!~=apple` - The other answer was *not like* "apple". In other words, it did not contain the text "cool" (irrespective of capitalization).
  * `myQuestionName[OTHER]<3` - The other answer value was less than 3. For ranking questions this means it was ranked higher.
- * `myQuestionName=HIGH` - The answer was in the high range
+ * `myRankingQuestion[2]>3` - (Ranking questions only) The 3rd item is further down than the 4th position.
+ * `myRankingQuestion[0]=2` - (Ranking questions only) The first item is in position 3.
 
 #### Zero Based
 
@@ -131,7 +132,7 @@ Rules can be recursive (nested) and offer complex logical statements. For exampl
 ```
 #### Scale Comparisons
 
-For scale questions like `rating` (type: `stars`), it's possible to do simple comparisons like:
+For scale questions like `rating` (type: `stars` or `buttons`), it's possible to do simple comparisons like:
 
  * `myQuestionName=2` - The question named `myQuestionName` is equal to item 2 or a rating of 2.
  * `myQuestionName!=` - The question was not answered.
@@ -141,23 +142,15 @@ For scale questions like `rating` (type: `stars`), it's possible to do simple co
  * `myQuestionName>=3` - The answer was greater than or equal to 3.
  * `myQuestionName[OTHER]<3` - The other answer value was less than 3. For ranking questions this means it was ranked higher.
 
-However, for `rating` (type: `slider`) which provide floating-point values, it's impractical to use strict equality. In these cases, we provide a plain-language range system.
+This is true because there are discrete values that the answers can take on. Eg: `1`, `2`, `3`, etc. For `slider` question types, the answer lies on a continuum between `0` - `100` and all the numbers in between. You need to stick to greater-than, less-than comparisons for these. Eg:
 
-Number range | Label to use
---- | ---
-0% < 20% | `VERYLOW`
-20% < 40% | `LOW`
-40% < 60% | `MEDIUM`
-60% < 80% | `HIGH`
-80% < 100% | `VERYHIGH`
+```json
+{
+  "showIf": ["myQuestionName>40", "myQuestionName<60"]
+}
+```
 
-#### Rating Conditions
-
-Rating questions can be of various types: `slider`, `stars`, `buttons`. For `stars`, and `buttons`, doing straight equality operations is easy, Eg: `myButtonQuestion=3` is simple enough. The `slider` type, however will have a floating point (decimal) number between `0.0` and `99.9`. It's not very useful to compare against specific numbers because if you are looking for `10` but the user entered `10.1` you will not find a match. In this case, you can use the plain-language range system mentioned earlier:
-
- * `myRatingQ=LOW` - Show if the answer was between 20%-40%.
- * `myRatingQ>MEDIUM` - Show if the answer was either `HIGH` or `VERYHIGH`.
- * `myRatingQ!=VERYLOW` - Show if the question was *not* between 0% and 20%.
+This would only show the resulting question if the answer was *between* 40 and 60.
 
 #### Dropdown Conditions
 
@@ -180,3 +173,13 @@ questionMyDropDown!=2
 ```
 
 This would check if the user did NOT choose the 3rd choice in the dropdown.
+
+#### Sort and Matrix Rating Conditions
+
+For sorting questions, things are a little different. We need to be able to check to see if individual rank items are in different positions. For this we use bracket notations. Here are some examples
+
+ * `myRankingQuestion[2]>3` - The 3rd item is further down than the 4th position.
+ * `myRankingQuestion[0]=2` - The first item is in position 3.
+ * `myRankingQuestion[OTHER]=2` - The other is in position 3.
+ * `myRankingQuestion*=` - The question was answered.
+ * `myRankingQuestion!*=` - The question was not answered.

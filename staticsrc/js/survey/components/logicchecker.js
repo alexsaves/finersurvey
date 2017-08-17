@@ -2,9 +2,10 @@
  * The types of equality
  */
 var EQUALITIES = {
+  NOTCONTAINSANY: '!*=',
   NOTLIKE: '!~=',
   GREATERTHANOREQUAL: '>=',
-  LESSTHANOREQUAL: '<=',  
+  LESSTHANOREQUAL: '<=',
   EQUAL: '=',
   NOTEQUAL: '!=',
   CONTAINSANY: '*=',
@@ -14,10 +15,28 @@ var EQUALITIES = {
 };
 
 /**
+ * Ranges
+ */
+var RANGES = {
+  "VERYLOW": [
+    0, 20
+  ],
+  "LOW": [
+    20, 40
+  ],
+  "MEDIUM": [
+    40, 60
+  ],
+  "HIGH": [60 - 80],
+  "VERYHIGH": [80 - 100.0001]
+};
+
+/**
  * Logic error messages
  */
 var LOGICERRORMESSAGES = {
-  UNSUPPTYPE: "Unsupported logic type for question"
+  UNSUPPTYPE: "Unsupported logic type for question",
+  NOOTHER: "Other skip logic was chosen but question doesn't support an other"
 };
 
 /**
@@ -37,10 +56,10 @@ export default class {
   checkAllLogic(showIfBlock, answers, surveyDef) {
     if (showIfBlock) {
       if (typeof showIfBlock == "string") {
-        return this._checkIndividualLogicRule(showIfBlock, answers, surveyDef);
+        return !!this._checkIndividualLogicRule(showIfBlock, answers, surveyDef);
       } else if (showIfBlock instanceof Array) {
         for (let i = 0; i < showIfBlock.length; i++) {
-          let res = this.checkAllLogic(showIfBlock, answers, surveyDef);
+          let res = this.checkAllLogic(showIfBlock[i], answers, surveyDef);
           if (!res) {
             return false;
           }
@@ -96,6 +115,29 @@ export default class {
   }
 
   /**
+   * Get a range from a value
+   * @param {String} val
+   */
+  _getRange(val) {
+    var rangeval = RANGES[
+      val
+        .toUpperCase()
+        .trim()
+    ];
+    if (rangeval) {
+      return {low: rangeval[0], high: rangeval[1]};
+    }
+  }
+
+  /**
+   * Is the value a range?
+   * @param {String} val
+   */
+  _isRange(val) {
+    return !!this._getRange(val);
+  }
+
+  /**
    * Evaluate a specific rule
    * @param {*} logicRule
    * @param {*} answers
@@ -106,7 +148,7 @@ export default class {
     if (!logicRule) {
       throw new Error("Missing logic rule.");
     }
-    if (logicRule.trim().length < 3 || logicRule.indexOf('=') == -1) {
+    if (logicRule.trim().length < 3) {
       throw new Error("Invalid logic rule: " + logicRule);
     }
     if (!answers) {
@@ -137,19 +179,20 @@ export default class {
         .substr(0, splitterPos)
         .trim(),
       ruleStr = logicRule.substr(dependentQuestionName.length + splitterSymbol.length),
-      isOther = false;
+      isOther = false,
+      subQuestion = -1;
 
     if (dependentQuestionName.toLowerCase().indexOf('[other]') > -1) {
       isOther = true;
+      subQuestion = 9999;
       dependentQuestionName = dependentQuestionName.substr(0, dependentQuestionName.toLowerCase().indexOf('[other]'));
+    } else if (dependentQuestionName.indexOf('[') > -1) {
+      subQuestion = parseInt(dependentQuestionName.substr(dependentQuestionName.indexOf('[')).replace(/[\[\]]/g, ''));
+      dependentQuestionName = dependentQuestionName.substr(0, dependentQuestionName.toLowerCase().indexOf('['));
     }
 
     if (!dependentQuestionName || dependentQuestionName.length < 1) {
       throw new Error("Invalid question name: " + dependentQuestionName);
-    }
-
-    if (ruleStr.length < 1) {
-      throw new Error("Invalid logic rule: " + ruleStr);
     }
 
     let dependentQuestion = this._locateQuestionObjectForName(dependentQuestionName, surveyDef);
@@ -158,7 +201,7 @@ export default class {
       throw new Error("Could not find question for logic rule. Question name was: " + dependentQuestionName);
     } else {
       let answerObject = this._locateAnswerObjectForName(dependentQuestionName, answers);
-      console.log("About to evaluate:", ruleStr, "for question", dependentQuestion, "with answer", answerObject);
+      //console.log("About to evaluate:", ruleStr, "for question", dependentQuestion, "with answer", answerObject);
       switch (dependentQuestion.type) {
         case "rating":
           return this._evaluateRatingLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
@@ -171,12 +214,80 @@ export default class {
         case "dropdown":
           return this._evaluateDropdownLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
         case "matrixrating":
-          return this._evaluateMatrixRatingLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
+          return this._evaluateMatrixRatingLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther, subQuestion);
         case "sort":
-          return this._evaluateSortLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
+          return this._evaluateSortLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther, subQuestion);
         default:
           return false;
       }
+    }
+  }
+
+  /**
+   * Do a standard numeric range check
+   * @param {*} value
+   * @param {*} condition
+   * @param {*} equality
+   */
+  _evaluateStandardNumeric(answer, condition, equalityExp) {
+    let numAns = parseFloat(answer),
+      numCond = parseFloat(condition);
+    switch (equalityExp) {
+      case EQUALITIES.CONTAINSANY:
+        return !isNaN(numCond);
+      case EQUALITIES.NOTCONTAINSANY:
+        return isNaN(numCond) || answer == null || !answer;
+      case EQUALITIES.GREATERTHAN:
+        return !isNaN(numCond) && numAns > numCond;
+      case EQUALITIES.GREATERTHANOREQUAL:
+        return !isNaN(numCond) && numAns >= numCond;
+      case EQUALITIES.LESSTHAN:
+        return !isNaN(numCond) && numAns < numCond;
+      case EQUALITIES.LESSTHANOREQUAL:
+        return !isNaN(numCond) && numAns <= numCond;
+      case EQUALITIES.NOTEQUAL:
+        return !isNaN(numCond) && numAns != numCond;
+      case EQUALITIES.EQUAL:
+        return !isNaN(numCond) && numAns == numCond;
+      default:
+        throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
+        break;
+    }
+  }
+
+  /**
+   * Do a standard text check
+   * @param {*} value
+   * @param {*} condition
+   * @param {*} equality
+   */
+  _evaluateStandardText(answer, condition, equalityExp) {
+    condition = (condition || "")
+      .trim()
+      .toLowerCase();
+    answer = ((answer || "") + "")
+      .trim()
+      .toLowerCase();
+    switch (equalityExp) {
+      case EQUALITIES.CONTAINSANY:
+        return answer && answer
+          .trim()
+          .length > 0;
+      case EQUALITIES.NOTCONTAINSANY:
+        return !answer || answer
+          .trim()
+          .length === 0;
+      case EQUALITIES.EQUAL:
+        return condition == answer;
+      case EQUALITIES.NOTEQUAL:
+        return condition != answer;
+      case EQUALITIES.LIKE:
+        return answer.indexOf(condition) > -1;
+      case EQUALITIES.NOTLIKE:
+        return answer.indexOf(condition) == -1;
+      default:
+        throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
+        break;
     }
   }
 
@@ -188,7 +299,12 @@ export default class {
    */
   _evaluateRatingLogic(questionDef, answerObj, condition, equalityExp, isOther)
   {
-    debugger;
+    if (isOther) {
+      throw new Error("Invalid condition for rating. Other not supported.");
+    } else {
+      let conditionChoice = parseInt(condition);
+      return this._evaluateStandardNumeric(answerObj, condition, equalityExp);
+    }
   }
 
   /**
@@ -198,7 +314,33 @@ export default class {
    * @param {*} condition
    */
   _evaluateCheckboxLogic(questionDef, answerObj, condition, equalityExp, isOther)
-  {}
+  {
+    if (isOther && !questionDef.other) {
+      throw new Error(LOGICERRORMESSAGES.NOOTHER);
+    } else {
+      if (isOther) {
+        return this._evaluateStandardText(answerObj.other, condition, equalityExp);
+      } else {
+        let conditionChoice = parseInt(condition),
+          hasResp = !!answerObj;
+        switch (equalityExp) {
+          case EQUALITIES.CONTAINSANY:
+            return hasResp;
+          case EQUALITIES.NOTCONTAINSANY:
+            return !hasResp;
+          case EQUALITIES.EQUAL:
+            return hasResp && answerObj.responses && answerObj
+              .responses
+              .indexOf(conditionChoice) > -1;
+          case EQUALITIES.NOTEQUAL:
+            return !hasResp || (answerObj && answerObj.responses && answerObj.responses.indexOf(conditionChoice) == -1);
+          default:
+            throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
+            break;
+        }
+      }
+    }
+  }
 
   /**
    * Evaluate the show logic for a radio question
@@ -207,7 +349,21 @@ export default class {
    * @param {*} condition
    */
   _evaluateRadioLogic(questionDef, answerObj, condition, equalityExp, isOther)
-  {}
+  {
+    if (isOther && !questionDef.other) {
+      throw new Error(LOGICERRORMESSAGES.NOOTHER);
+    } else {
+      if (isOther) {
+        return this._evaluateStandardText(answerObj.other, condition, equalityExp);
+      } else {
+        let conditionChoice = parseInt(condition),
+          answerNum = (answerObj && answerObj.response)
+            ? parseFloat(answerObj.response)
+            : null;
+        return this._evaluateStandardNumeric(answerNum, condition, equalityExp);
+      }
+    }
+  }
 
   /**
    * Evaluate the show logic for a text question
@@ -216,7 +372,13 @@ export default class {
    * @param {*} condition
    */
   _evaluateTextLogic(questionDef, answerObj, condition, equalityExp, isOther)
-  {}
+  {
+    if (isOther) {
+      throw new Error("Invalid condition for text. Other not supported.");
+    } else {
+      return this._evaluateStandardText(answerObj, condition, equalityExp);
+    }
+  }
 
   /**
    * Evaluate the show logic for a dropdown question
@@ -230,27 +392,8 @@ export default class {
       throw new Error("Invalid condition for dropdown. Other not supported.");
     } else {
       let conditionChoice = parseInt(condition);
-      switch (equalityExp) {
-        case EQUALITIES.CONTAINSANY:
-          return !!answerObj;
-        case EQUALITIES.EQUAL:
-          return !isNaN(conditionChoice) && answerObj == conditionChoice;
-        case EQUALITIES.GREATERTHAN:
-          return !isNaN(conditionChoice) && answerObj > conditionChoice;
-        case EQUALITIES.GREATERTHANOREQUAL:
-          return !isNaN(conditionChoice) && answerObj >= conditionChoice;
-        case EQUALITIES.LESSTHAN:
-          return !isNaN(conditionChoice) && answerObj < conditionChoice;
-        case EQUALITIES.LESSTHANOREQUAL:
-          return !isNaN(conditionChoice) && answerObj <= conditionChoice;
-        case EQUALITIES.NOTEQUAL:
-          return !isNaN(conditionChoice) && answerObj != conditionChoice;
-        default:
-          throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
-          break;
-      }
+      return this._evaluateStandardNumeric(answerObj, condition, equalityExp);
     }
-
   }
 
   /**
@@ -259,8 +402,34 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateMatrixRatingLogic(questionDef, answerObj, condition, equalityExp, isOther)
-  {}
+  _evaluateMatrixRatingLogic(questionDef, answerObj, condition, equalityExp, isOther, subQuestion)
+  {
+    if (isOther) {
+      throw new Error("Invalid condition for sort. Other not supported.");
+    } else {
+      let numCond = parseInt(condition);
+      switch (equalityExp) {
+        case(EQUALITIES.CONTAINSANY):
+          return answerObj || answerObj[subQuestion] > -1;
+        case(EQUALITIES.NOTCONTAINSANY):
+          return !answerObj || answerObj[subQuestion] == -1 || answerObj[subQuestion] == null;
+        case(EQUALITIES.EQUAL):
+          return answerObj && answerObj[subQuestion] == numCond;
+        case(EQUALITIES.NOTEQUAL):
+          return answerObj && answerObj[subQuestion] != numCond;
+        case(EQUALITIES.GREATERTHAN):
+          return answerObj && answerObj[subQuestion] > numCond;
+        case(EQUALITIES.GREATERTHANOREQUAL):
+          return answerObj && answerObj[subQuestion] >= numCond;
+        case(EQUALITIES.LESSTHAN):
+          return answerObj && answerObj[subQuestion] < numCond;
+        case(EQUALITIES.LESSTHANOREQUAL):
+          return answerObj && answerObj[subQuestion] <= numCond;
+        default:
+          throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
+      }
+    }
+  }
 
   /**
    * Evaluate the show logic for a sort question
@@ -268,6 +437,79 @@ export default class {
    * @param {*} answerObj
    * @param {*} condition
    */
-  _evaluateSortLogic(questionDef, answerObj, condition, equalityExp, isOther)
-  {}
+  _evaluateSortLogic(questionDef, answerObj, condition, equalityExp, isOther, subQuestion)
+  {
+    if (isOther) {
+      if (!questionDef.other) {
+        throw new Error("Invalid condition for sort. Other not supported.");
+      }
+      let order = (answerObj && answerObj.order)
+        ? answerObj.order
+        : [];
+      if (equalityExp == EQUALITIES.CONTAINSANY) {
+        return !!answerObj;
+      } else if (equalityExp == EQUALITIES.NOTCONTAINSANY) {
+        return !!!answerObj;
+      }
+      if (equalityExp == EQUALITIES.LIKE || equalityExp == EQUALITIES.NOTLIKE) {
+        return this._evaluateStandardText(answerObj.other, condition, equalityExp);
+      } else {
+        subQuestion = 9999;
+        let numCond = parseInt(condition);
+        switch (equalityExp) {
+          case(EQUALITIES.EQUAL):
+            if (isNaN(numCond)) {
+              return this._evaluateStandardText(answerObj.other, condition, equalityExp);
+            }
+            return order.indexOf(subQuestion) == numCond;
+          case(EQUALITIES.NOTEQUAL):
+            if (isNaN(numCond)) {
+              return this._evaluateStandardText(answerObj.other, condition, equalityExp);
+            }
+            return order.indexOf(subQuestion) != numCond;
+          case(EQUALITIES.GREATERTHAN):
+            return order.indexOf(subQuestion) > numCond;
+          case(EQUALITIES.GREATERTHANOREQUAL):
+            return order.indexOf(subQuestion) >= numCond;
+          case(EQUALITIES.LESSTHAN):
+            return order.indexOf(subQuestion) < numCond;
+          case(EQUALITIES.LESSTHANOREQUAL):
+            return order.indexOf(subQuestion) <= numCond;
+          default:
+            throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
+        }
+      }
+    } else {
+      if (subQuestion == -1 || isNaN(subQuestion)) {
+        if (equalityExp == EQUALITIES.CONTAINSANY) {
+          return !!answerObj;
+        } else if (equalityExp == EQUALITIES.NOTCONTAINSANY) {
+          return !!!answerObj;
+        } else {
+          throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
+        }
+      } else {
+        let order = (answerObj && answerObj.order)
+            ? answerObj.order
+            : [],
+          numCond = parseInt(condition);
+        switch (equalityExp) {
+          case(EQUALITIES.EQUAL):
+            return !(order.length < (subQuestion - 1)) && order[numCond] == subQuestion;
+          case(EQUALITIES.NOTEQUAL):
+            return (order.length < (subQuestion - 1)) || order[numCond] != subQuestion;
+          case(EQUALITIES.GREATERTHAN):
+            return order.indexOf(subQuestion) > numCond;
+          case(EQUALITIES.GREATERTHANOREQUAL):
+            return order.indexOf(subQuestion) >= numCond;
+          case(EQUALITIES.LESSTHAN):
+            return order.indexOf(subQuestion) < numCond;
+          case(EQUALITIES.LESSTHANOREQUAL):
+            return order.indexOf(subQuestion) <= numCond;
+          default:
+            throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
+        }
+      }
+    }
+  }
 };

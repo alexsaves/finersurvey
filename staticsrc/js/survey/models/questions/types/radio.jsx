@@ -19,7 +19,7 @@ class RadioQuestion extends React.Component {
    * Handle input from the user
    * @param {*} e
    */
-  handleAnswerChange(e) {
+  handleAnswerChange(e, e2, skipAutoAdvance) {
     let targ = e && e.target,
       root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByTagName("input"),
@@ -30,7 +30,7 @@ class RadioQuestion extends React.Component {
     for (let i = 0; i < ipts.length; i++) {
       let ipt = ipts[i];
       if (ipt.type == "radio" && ipt.checked) {
-        value = ipt.value;
+        value = parseInt(ipt.value);
       } else if (ipt.type == "text") {
         otherval = ipt.value;
       }
@@ -42,7 +42,7 @@ class RadioQuestion extends React.Component {
     this
       .props
       .dispatch(changeAnswer(this.props.name, finalResponse));
-    if (this.props.onFullyAnswerQuestion) {
+    if (this.props.onFullyAnswerQuestion && !skipAutoAdvance) {
       this
         .props
         .onFullyAnswerQuestion();
@@ -55,7 +55,7 @@ class RadioQuestion extends React.Component {
   handleIptThrottleChange() {
     clearTimeout(this.iptThrottle);
     this.iptThrottle = setTimeout(() => {
-      this.handleAnswerChange();
+      this.handleAnswerChange(null, null, true);
     }, 200);
   }
 
