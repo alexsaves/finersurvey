@@ -10,6 +10,7 @@ import TextQuestion from './types/text.jsx';
 import DropdownQuestion from './types/dropdown.jsx';
 import MatrixRatingQuestion from './types/matrixrating.jsx';
 import SortQuestion from './types/sort.jsx';
+import Piper from '../../components/piper';
 
 /**
 * Represents a question
@@ -20,6 +21,7 @@ class QuestionComponent extends React.Component {
  */
   constructor(props) {
     super(props);
+    this.piper = new Piper();
     this.state = {
       alarmInstructions: false
     };
@@ -55,13 +57,17 @@ class QuestionComponent extends React.Component {
  * Render the view
  */
   render() {
+    let piper = this.piper,
+      answers = this.props.answers,
+      pages = this.props.allpages;
+    
     return (
       <div
         className="question"
         onAnimationEnd={this
         .handleAnimationEnd
         .bind(this)}>
-        {(this.props.title || this.props.name) && <h2>{this.props.title || this.props.name}</h2>}
+        {(this.props.title || this.props.name) && <h2>{piper.pipe(this.props.title || this.props.name, answers, pages)}</h2>}
         {this.props.instructions && <p
           className={"instructions " + ((this.state.alarmInstructions || this.props.remindInstructions)
           ? "alarm"

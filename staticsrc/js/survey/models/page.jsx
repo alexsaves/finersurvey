@@ -59,6 +59,8 @@ class PageComponent extends React.Component {
                 key={idx}
                 {...q}
                 answer={ctx.getAnswerForQuestion(q)}
+                answers={this.props.answers}
+                allpages={this.props.allpages}
                 onFullyAnswerQuestion={this
                 .handleQuestionFullyAnswered
                 .bind(this)}
