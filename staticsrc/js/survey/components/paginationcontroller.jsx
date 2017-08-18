@@ -127,6 +127,10 @@ class PaginationController extends React.Component {
       answers = this.props.answers,
       faledQList = [];
 
+    if (pageNumber == this.props.pages.length - 1) {
+      return false;
+    }
+
     if (pageObj.elements.length == 1) {
       let qt = pageObj.elements[0].type
       return (qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio" || qt == "text");
@@ -209,23 +213,22 @@ class PaginationController extends React.Component {
           <div className="validationcontainer">
             <div className="rightarrow"></div>This question is required.</div>
         </div>}
-        {pages
-          .map((pg, idx) => {
-            return <PageComponent
-              key={idx}
-              questions={pg.elements}
-              isSelected={idx === currentPage}
-              remindInstructionsFor={remindInstructionsFor}
-              answers={answers}
-              allpages={allpages}
-              onFullyAnswerQuestion={this
-              .handleFullyAnswerQuestion
-              .bind(this)}
-              animatingOutBackward={idx === currentPage && isAnimatingBackward}
-              animatingOutForward={idx === currentPage && isAnimatingForward}
-              animatingInBackward={idx === (currentPage - 1) && isAnimatingBackward}
-              animatingInForward={idx === (currentPage + 1) && isAnimatingForward}/>;
-          })}
+        {pages.map((pg, idx) => {
+          return <PageComponent
+            key={idx}
+            questions={pg.elements}
+            isSelected={idx === currentPage}
+            remindInstructionsFor={remindInstructionsFor}
+            answers={answers}
+            allpages={allpages}
+            onFullyAnswerQuestion={this
+            .handleFullyAnswerQuestion
+            .bind(this)}
+            animatingOutBackward={idx === currentPage && isAnimatingBackward}
+            animatingOutForward={idx === currentPage && isAnimatingForward}
+            animatingInBackward={idx === (currentPage - 1) && isAnimatingBackward}
+            animatingInForward={idx === (currentPage + 1) && isAnimatingForward}/>;
+        })}
         <div className={"paginator--backdropmobile"}></div>
         <div
           className={"paginator--buttonholder left " + (currentPage === 0
