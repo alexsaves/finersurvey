@@ -13,12 +13,11 @@ export default class {
    * @param {*} answer
    */
   validate(question, answer) {
-    //console.log(question, answer);
-    // Switch based on question type
+    //console.log(question, answer); Switch based on question type
     switch (question.type) {
       case "rating":
         // Simple rating
-        return (answer && !isNaN(answer));        
+        return (answer && !isNaN(answer));
       case "checkbox":
         if (answer) {
           let totalAnswers = answer.responses.length;
@@ -27,9 +26,9 @@ export default class {
           }
           if (totalAnswers > 0) {
             let didPass = true;
-            if (question.maxanswers && totalAnswers > question.maxanswers) {
+            if (question.limits && typeof question.limits.max != 'undefined' && totalAnswers > question.limits.max) {
               didPass = false;
-            } else if (question.minanswers && totalAnswers < question.minanswers) {
+            } else if (question.limits && typeof question.limits.min != 'undefined' && totalAnswers < question.limits.min) {
               didPass = false;
             }
             return didPass;
@@ -41,13 +40,34 @@ export default class {
         }
       case "radio":
         return answer && (answer.other || typeof answer.response != "undefined");
-      case "text":        
+      case "text":
+        if (question.limits) {
+          let lim = question.limits;
+          if (lim.character) {
+            if (lim.character.max && answer.length > lim.character.max) {
+              return false;
+            } else if (lim.character.min && answer.length < lim.character.min) {
+              return false;
+            }
+          }
+          if (lim.word) {
+            let wordcount = (answer || "")
+              .trim()
+              .split(' ')
+              .length;
+            if (lim.word.max && wordcount > lim.word.max) {
+              return false;
+            } else if (lim.word.min && wordcount < lim.word.min) {
+              return false;
+            }
+          }
+        }
         return answer && (answer.length > 0);
       case "dropdown":
         return (typeof answer != undefined) && (answer > -1);
-      case "matrixrating":        
+      case "matrixrating":
         return answer.indexOf(-1) == -1;
-      case "sort":        
+      case "sort":
         return answer && (answer.order && answer.order.length > 0);
       default:
         return false;

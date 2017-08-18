@@ -28,7 +28,8 @@ class CheckboxQuestion extends React.Component {
       responses = [],
       otherval = "",
       finalResponse = {},
-      howManySelected = 0;
+      howManySelected = 0,
+      limits = this.props.limits;
 
     for (let i = 0; i < ipts.length; i++) {
       let ipt = ipts[i];
@@ -43,7 +44,7 @@ class CheckboxQuestion extends React.Component {
     if (this.props.other) {
       finalResponse.other = otherval;
     }
-    if (!this.props.maxanswers || this.props.maxanswers >= howManySelected) {
+    if ((!limits || typeof limits.max == 'undefined') || (limits.max >= howManySelected)) {
       this
         .props
         .dispatch(changeAnswer(this.props.name, finalResponse));

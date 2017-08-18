@@ -25,7 +25,8 @@ Each question shares a set of common attributes, but also may have some of its o
  * `modifier` - (_String_) Selects a sub-question type from the `type`. Eg: for `text` questions you can add the modifier `multiline` to make the textbox a multi-line text input. For `rating` types there are several modifiers (see the question types explained fully, below).
  * `displayNumber` - (_Boolean_) Whether or not we should display the number next to the question. Default is `false`. If `false`, then the number does not increment for the next question.
  * `subtitle` - (_String_) An optional block of text below the text title. This appears in a less-prominent font than the title.
- * `image` - (_Object_) An image to display
+ * `image` - (_Object_) An image to display (see below for details)
+ * `limits` - (_Object_) Any input limitations like maximum choices or characters or words. See question details for specifics.
 
 ### Question Types
 
@@ -55,6 +56,86 @@ Invalid question name examples:
  * `myAwesomeQuestion!`
  * `@somequestion`
  * `mc.favColor`
+
+### Images
+
+Using the optional `image` object, you can add an image to a question.
+
+```json
+{
+    "type": "none",
+    "title": "Welcome to our survey",
+    "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent et leo ligula. Quisque porttitor ullamcorper molestie. Nulla tellus lorem, mollis varius massa eu, vulputate maximus libero.",
+    "image": {
+        "url": "https://someurl_to_an_image",
+        "size": "BIG"
+    }
+}
+```
+
+You should specify size for the image. Choices are:
+
+ * `BIG`
+ * `MEDIUM`
+ * `SMALL`
+ * `ICON`
+
+### Limits
+
+Different question types support a different `limits` specification. These work in concert with `required` to cause the user to answer the question fully.
+
+#### Checkbox Limits
+
+For checkbox questions, which accept multiple responses, you can enforce a *minimum* number of choices, a *maximum* number of responses, or both. Example:
+
+```json
+{
+  "limits": {
+    "min": 2,
+    "max": 4
+  }
+}
+```
+
+You don't have to specify both `min` and `max`. You can specify one or the other, or both.
+
+#### Text Limits
+
+Inputs on `text` questions let you specify limits on both word count and character count. Here is an elaborate example:
+
+```json
+{
+  "limits": {
+      "character": {
+          "min": 3,
+          "max": 20
+      },
+      "word": {
+          "min": 2,
+          "max": 4
+      }
+  }
+}
+```
+
+All of these are optional. To avoid confusion, we suggest you explain these limits in the `instructions` that accompany the question.
+
+If you specify character limits, you will see a character counter next to the text input. Also, if you specify `min` limits, the question automatically becomes required.
+
+You can customize the label for word counts by specifying the `wordcountlabel` and `wordcountmaxlabel` attributes of the question definition. By default it is "Words" and "Words left" respectively.
+
+*Note: these rules only work on `text` questions, and not on "other" text inputs.*
+
+### Question Types
+
+Each question type has some unique requirements for attributes, as well as some capabilities that do not apply to other questions. Here is an overview of these specifics:
+
+#### Text Question Definitions
+
+Text input questions are of type `text` but can have a `modifier` with `normal` or `multiline`. Two unique attributes exist for labels to do with word and character counts also:
+
+ * `wordcountmaxlabel` - (_String_) How many words are left. Default: "Words left".
+ * `wordcountlabel` - (_String_) How many words in the text. Default: "Words".
 
 ### Show Logic
 
@@ -174,9 +255,9 @@ This is true because there are discrete values that the answers can take on. Eg:
 
 This would only show the resulting question if the answer was *between* 40 and 60.
 
-#### Dropdown Conditions
+#### Dropdown, Radio, Checkbox Conditions
 
-For the `dropdown` question type you can only check one of three conditions: user did answer, answer *was* n or answer *was not* n. Choices are numeric.
+For `dropdown`, `radio`, and `checkbox` question types you can check things like: user did answer, user did not answer, answer *was* n or answer *was not* n. You can also check to see if user answered *less than* a certain value, and so-on. Choices are numeric.
 
 ```
 questionMyDropDown*=

@@ -14,6 +14,21 @@
   display: inline-block;
   width: $desktop_question_width;
   text-align: center;
+  .question--image {
+    display: inline-block;
+    &.big {
+      width: 100%;
+    }
+    &.medium {
+      width: 80%;
+    }
+    &.small {
+      width: 10em;
+    }
+    &.icon {
+      width: 5em;
+    }
+  }
   .question--number {
     font-family: $heavierfont;
     margin-right: ($general_padding / 5);

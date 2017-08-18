@@ -27,7 +27,9 @@ class PageComponent extends React.Component {
    */
   handleQuestionFullyAnswered() {
     if (this.props.onFullyAnswerQuestion) {
-      this.props.onFullyAnswerQuestion();
+      this
+        .props
+        .onFullyAnswerQuestion();
     }
   }
 
@@ -51,23 +53,25 @@ class PageComponent extends React.Component {
           ? " animatinginbackward"
           : ""))}>
         <div className="questions">
-          {this
-            .props
-            .questions
-            .map((q, idx) => {
-              return <QuestionComponent
-                key={idx}
-                {...q}
-                answer={ctx.getAnswerForQuestion(q)}
-                answers={this.props.answers}
-                allpages={this.props.allpages}
-                onFullyAnswerQuestion={this
-                .handleQuestionFullyAnswered
-                .bind(this)}
-                isSelected={this.props.isSelected}
-                isAnimating={this.props.animatingOutForward || this.props.animatingOutBackward || this.props.animatingInForward || this.props.animatingInBackward}
-                remindInstructions={(remindInstructionsFor.indexOf(q.name) > -1)}/>
-            })}
+          <div className="questions--listholder">
+            {this
+              .props
+              .questions
+              .map((q, idx) => {
+                return <QuestionComponent
+                  key={idx}
+                  {...q}
+                  answer={ctx.getAnswerForQuestion(q)}
+                  answers={this.props.answers}
+                  allpages={this.props.allpages}
+                  onFullyAnswerQuestion={this
+                  .handleQuestionFullyAnswered
+                  .bind(this)}
+                  isSelected={this.props.isSelected}
+                  isAnimating={this.props.animatingOutForward || this.props.animatingOutBackward || this.props.animatingInForward || this.props.animatingInBackward}
+                  remindInstructions={(remindInstructionsFor.indexOf(q.name) > -1)}/>
+              })}
+          </div>
         </div>
       </div>
     );

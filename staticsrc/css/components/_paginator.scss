@@ -20,9 +20,15 @@
     transition: opacity $slow_anim_timing;
     &.right {
       right: ($general_padding / 2);
+      @media (max-width: $screen-sm-min) {
+        padding-left: 3em;
+      }
     }
     &.left {
       left: ($general_padding / 2);
+      @media (max-width: $screen-sm-min) {
+        padding-right: 3em;
+      }
     }
     &.hidden {
       display: block !important;

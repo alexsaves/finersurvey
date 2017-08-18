@@ -59,8 +59,9 @@ class QuestionComponent extends React.Component {
   render() {
     let piper = this.piper,
       answers = this.props.answers,
-      pages = this.props.allpages;
-    
+      pages = this.props.allpages,
+      image = this.props.image;
+    console.log(image);
     return (
       <div
         className="question"
@@ -69,6 +70,7 @@ class QuestionComponent extends React.Component {
         .bind(this)}>
         {(this.props.title || this.props.name) && <h2>{this.props.displayNumber && <span className="question--number">{this.props.questionNumber}. </span>}{piper.pipe(this.props.title || this.props.name, answers, pages)}</h2>}
         {this.props.subtitle && <p className="subtitle">{piper.pipe(this.props.subtitle, answers, pages)}</p>}
+        {image && <p><img src={image.url} className={"question--image " + ((image.size || "").toLowerCase())} /></p>}
         {this.props.instructions && <p
           className={"instructions " + ((this.state.alarmInstructions || this.props.remindInstructions)
           ? "alarm"

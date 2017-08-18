@@ -80,5 +80,13 @@
     @media (max-width: $screen-sm-min) {
       min-height: 95%;
     }
+    .questions--listholder {
+      padding-top: ($general_padding * 4);
+      padding-bottom: ($general_padding * 4);
+      @media (max-width: $screen-sm-min) {
+        padding-top: ($general_padding * 1.5);
+        padding-bottom: ($general_padding * 4);
+      }
+    }
   }
 }

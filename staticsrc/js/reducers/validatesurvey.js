@@ -33,7 +33,7 @@ function surveyValidatorReducer(state = [], action) {
         }
       }
 
-      // Count the questions
+      // Do another pass on question numbering and special cases for required
       for (let i = 0; i < pages.length; i++) {
         let pg = pages[i],
           els = pg.elements;
@@ -42,6 +42,19 @@ function surveyValidatorReducer(state = [], action) {
             let q = els[j];
             if (q.displayNumber) {
               q.questionNumber = ++questionCount;
+            }
+            if (q.type == "text") {
+              if (typeof q.wordcountlabel == 'undefined') {
+                q.wordcountlabel = "Words";
+              }
+              if (typeof q.wordcountmaxlabel == 'undefined') {
+                q.wordcountmaxlabel = "Words left";
+              }
+              if (q.limits) {
+                if ((q.limits.word && q.limits.word.min) || (q.limits.character && q.limits.character.min)) {
+                  q.required = true;
+                }
+              }
             }
           }
         }
