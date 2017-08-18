@@ -39,6 +39,7 @@ A variety of question types are supported, including:
  * `text` - Single line or multiline open-ended text input.
  * `checkbox` - Multiple choice question with a possible "other" text input.
  * `radio` - Single choice question with a possible "other" text input.
+ * `buttons` - Just a list of buttons that take you to different locations.
  * `none` - No inputs. Used to display only text and/or images.
 
 ### Question Names
@@ -136,6 +137,10 @@ Text input questions are of type `text` but can have a `modifier` with `normal` 
 
  * `wordcountmaxlabel` - (_String_) How many words are left. Default: "Words left".
  * `wordcountlabel` - (_String_) How many words in the text. Default: "Words".
+
+ #### Button Question Definitions
+
+ 
 
 ### Show Logic
 
