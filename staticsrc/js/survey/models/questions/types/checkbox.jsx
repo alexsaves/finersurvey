@@ -30,6 +30,10 @@ class CheckboxQuestion extends React.Component {
       finalResponse = {},
       howManySelected = 0,
       limits = this.props.limits;
+      
+    if (window.testdd) {
+      debugger;
+    }
 
     for (let i = 0; i < ipts.length; i++) {
       let ipt = ipts[i];
@@ -45,6 +49,7 @@ class CheckboxQuestion extends React.Component {
       finalResponse.other = otherval;
     }
     if ((!limits || typeof limits.max == 'undefined') || (limits.max >= howManySelected)) {
+      console.log(finalResponse);
       this
         .props
         .dispatch(changeAnswer(this.props.name, finalResponse));
@@ -106,6 +111,7 @@ class CheckboxQuestion extends React.Component {
               type="checkbox"
               name={idx}
               value={idx}
+              defaultChecked={shouldOptionBeSelected(idx)}
               onChange={ctx
               .handleAnswerChange
               .bind(ctx)}/></label>
@@ -116,7 +122,9 @@ class CheckboxQuestion extends React.Component {
           placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
           onKeyUp={ctx
           .handleIptThrottleChange
-          .bind(ctx)}/>}
+          .bind(ctx)}
+          defaultValue={((this.props.answer && this.props.answer.other) ? this.props.answer.other : "")}
+          />}
       </div>
     );
   }

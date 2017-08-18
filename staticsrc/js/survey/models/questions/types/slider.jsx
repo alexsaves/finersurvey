@@ -14,7 +14,7 @@ class SliderRatingQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sliderValue: 50,
+      sliderValue: this.props.answer || 50,
       startScreenX: 0,
       startScreenY: 0,
       isDragging: false,
@@ -113,13 +113,13 @@ class SliderRatingQuestion extends React.Component {
       bpos = backdrop.getBoundingClientRect();
 
     let perc = (screenX - bpos.left) / bpos.width;
-
+    let newslidervalue = Math.min(100, Math.max(0, perc * 100));
     this.setState({
-      sliderValue: Math.min(100, Math.max(0, perc * 100))
+      sliderValue: newslidervalue
     });
     this
       .props
-      .dispatch(changeAnswer(this.props.name, this.state.sliderValue));
+      .dispatch(changeAnswer(this.props.name, newslidervalue));
     if (this.props.onFullyAnswerQuestion) {
       this
         .props
@@ -145,6 +145,7 @@ class SliderRatingQuestion extends React.Component {
     let piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
+
     return (
       <div className="question--rating slider">
         <div className="slider--container">

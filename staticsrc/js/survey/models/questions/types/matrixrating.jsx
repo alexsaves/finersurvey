@@ -129,11 +129,12 @@ class MatrixRatingQuestion extends React.Component {
       selectedItem = this.state.selectedItem,
       animatingBackward = this.state.animatingBackward,
       animatingForward = this.state.animatingForward,
-      answer = this.state.answers[this.state.selectedItem];
+      answer = (this.props.answer && this.props.answer[this.state.selectedItem]) || null;
 
     let piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
+      
     return (
       <div
         className="question--matrixrating"

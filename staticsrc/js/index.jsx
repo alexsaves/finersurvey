@@ -14,13 +14,21 @@ const initialState = {};
 // Create a Redux store holding the state of your app. Its API is { subscribe,
 // dispatch, getState }.
 let stateElm = document.querySelector('[type=\'finer/state\']'),
-  startupState = {};
+  startupState = {},
+  persistentKey = "survey_answers";
 if (stateElm) {
   let stateRaw = document
     .querySelector('[type=\'finer/state\']')
     .innerText;
   if (stateRaw && stateRaw.length > 10) {
     startupState = JSON.parse(atob(document.querySelector('[type=\'finer/state\']').innerText));
+    if (startupState.metadata) {
+      persistentKey += "_" + startupState.metadata.guid;
+    }
+    let oldAnswers = localStorage.getItem(persistentKey);
+    if (oldAnswers) {
+      startupState.answers = JSON.parse(oldAnswers);
+    }
   }
 }
 
@@ -29,7 +37,11 @@ const history = createHistory();
 
 // Build the middleware for intercepting and dispatching navigation actions
 let appStore = createStore(reducers, startupState, applyMiddleware(thunk), applyMiddleware(routerMiddleware(history)));
-let unsubscribe = appStore.subscribe(() => console.log("STATE CHANGED", appStore.getState()));
+let unsubscribe = appStore.subscribe(() => {
+  let st = appStore.getState();
+  localStorage.setItem(persistentKey, JSON.stringify(st.answers || {}));
+  console.log("STATE CHANGED", appStore.getState())
+});
 // appStore.dispatch(modifyUser({displayName: 'Jason Smith'}));
 // console.log(appStore.getState()) appStore.subscribe(() =>
 // console.log(store.getState())) The only way to mutate the internal state is

@@ -38,10 +38,11 @@ class DropdownQuestion extends React.Component {
  * Render the view
  */
   render() {
-    let answer = this.props.answer;
-    let piper = this.piper,
+    let answer = this.props.answer,
+      piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
+
     return (
       <div className="question--dropdown">
         <select
@@ -49,7 +50,7 @@ class DropdownQuestion extends React.Component {
           .handleAnswerChange
           .bind(this)}
           className="dropdown-select"
-          defaultValue={(answer && answer.response) || -1}>
+          defaultValue={(typeof(answer) != 'undefined' && answer !== null) ? answer : -1}>
           <option disabled={true} value={-1}>{piper.pipe(this.props.placeholder || "Choose one...", panswers, ppages)}</option>
           {this
             .props

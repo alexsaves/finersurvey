@@ -113,7 +113,7 @@ class TextQuestion extends React.Component {
         }
       }
     }
-
+    
     // Spit out the node
     return (
       <div className="question--text">
@@ -123,14 +123,15 @@ class TextQuestion extends React.Component {
           placeholder={this.props.placeholder || ''}
           onKeyUp={this
           .handleIptThrottleChange
-          .bind(this)}></textarea>{limittext != null && <span className={"textquestion--charcount" + (limitalarm ? " bad" : "")}>{limittext}</span>}</div>{!!wordlimittext && <span className={"textquestion--wordcount" + (wordlimitalarm ? " bad" : "")}>{wordlimittext}</span>}</div>}
+          .bind(this)} defaultValue={this.props.answer}></textarea>{limittext != null && <span className={"textquestion--charcount" + (limitalarm ? " bad" : "")}>{limittext}</span>}</div>{!!wordlimittext && <span className={"textquestion--wordcount" + (wordlimitalarm ? " bad" : "")}>{wordlimittext}</span>}</div>}
         {!isMultiline && <div className="text--outercontainer"><div className="text--inputcontainer"><input
           type="text"
           className="main--textfield"
           placeholder={this.props.placeholder || ''}
           onKeyUp={this
           .handleIptThrottleChange
-          .bind(this)}/>{limittext != null && <span className={"textquestion--charcount" + (limitalarm ? " bad" : "")}>{limittext}</span>}</div>{!!wordlimittext && <span className={"textquestion--wordcount" + (wordlimitalarm ? " bad" : "")}>{wordlimittext}</span>}</div>}
+          .bind(this)}  
+          defaultValue={this.props.answer} />{limittext != null && <span className={"textquestion--charcount" + (limitalarm ? " bad" : "")}>{limittext}</span>}</div>{!!wordlimittext && <span className={"textquestion--wordcount" + (wordlimitalarm ? " bad" : "")}>{wordlimittext}</span>}</div>}
       </div>
     );
   }

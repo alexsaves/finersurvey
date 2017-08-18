@@ -44,6 +44,9 @@ class SortQuestion extends React.Component {
         .currentOrder
         .push(9999);
     }
+    if (this.props.answer) {
+      this.state.currentOrder = this.props.answer.order.splice(0);
+    }
   }
 
   /**
@@ -236,12 +239,18 @@ class SortQuestion extends React.Component {
     let root = ReactDOM.findDOMNode(this),
       otheript = root.getElementsByClassName('otherOverlayInput')[0];
 
+    let othervalue = (this.props.other && otheript)
+          ? otheript.value
+          : null;
+
+    if (othervalue === null) {
+      otheript = root.getElementsByClassName('floatingother')[0];
+      othervalue = otheript.value;
+    }
     this
       .props
       .dispatch(changeAnswer(this.props.name, {
-        other: (this.props.other && otheript)
-          ? otheript.value
-          : null,
+        other: othervalue,
         order: this.state.currentOrder
       }));
 
@@ -374,7 +383,7 @@ class SortQuestion extends React.Component {
       count = 1,
       st = this.state,
       dragPlaceholderCSS = {},
-      initialOther = this.initialOther;
+      initialOther = this.props.answer.other || this.initialOther;
 
     let piper = this.piper,
       panswers = this.props.answers,

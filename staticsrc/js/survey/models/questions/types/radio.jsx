@@ -103,6 +103,7 @@ class RadioQuestion extends React.Component {
           type="text"
           className="other--textfield"
           placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
+          defaultValue={(this.props.answer && this.props.answer.other) ? this.props.answer.other : ''}
           onKeyUp={ctx
           .handleIptThrottleChange
           .bind(ctx)}/>}
