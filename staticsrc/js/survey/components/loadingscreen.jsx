@@ -25,7 +25,8 @@ class LoadingScreenComponent extends React.Component {
       initialItemSize = loaderNode.getBoundingClientRect(),
       currentTime = new Date(),
       currentDiff = currentTime - this.startTime,
-      minDelay = Math.max(100, this.minTime - currentDiff);
+      minDelay = Math.max(100, this.minTime - currentDiff),
+      failsafeTImer = null;
 
     // Compare rectangles
     var rectsAreTheSame = function (rect1, rect2) {
@@ -42,10 +43,15 @@ class LoadingScreenComponent extends React.Component {
         this.repeatInterval = setInterval(() => {
           let tryThree = loaderNode.getBoundingClientRect();
           if (!rectsAreTheSame(initialItemSize, tryThree)) {
+            clearTimeout(failsafeTImer);
             clearInterval(this.repeatInterval);
             done();
           }
         }, 25);
+        failsafeTImer = setTimeout(() => {
+          clearInterval(this.repeatInterval);
+            done();
+        }, 1500);
       } else {
         done();
       }

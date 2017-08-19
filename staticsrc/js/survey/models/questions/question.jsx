@@ -10,6 +10,7 @@ import TextQuestion from './types/text.jsx';
 import DropdownQuestion from './types/dropdown.jsx';
 import MatrixRatingQuestion from './types/matrixrating.jsx';
 import SortQuestion from './types/sort.jsx';
+import ButtonsQuestion from './types/buttons.jsx';
 import Piper from '../../components/piper';
 
 /**
@@ -61,7 +62,7 @@ class QuestionComponent extends React.Component {
       answers = this.props.answers,
       pages = this.props.allpages,
       image = this.props.image;
-      
+
     return (
       <div
         className="question"
@@ -77,6 +78,12 @@ class QuestionComponent extends React.Component {
           : "")}>
           <span className="fa fa-info-circle"></span>
           &nbsp;{this.props.instructions}</p>}
+        {this.props.type == "buttons" && <ButtonsQuestion
+          {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
         {this.props.type == "matrixrating" && <MatrixRatingQuestion
           {...this.props}
           onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}

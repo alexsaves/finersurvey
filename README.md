@@ -138,9 +138,37 @@ Text input questions are of type `text` but can have a `modifier` with `normal` 
  * `wordcountmaxlabel` - (_String_) How many words are left. Default: "Words left".
  * `wordcountlabel` - (_String_) How many words in the text. Default: "Words".
 
- #### Button Question Definitions
+#### Button Question Definitions
 
- 
+Useful on thank-you pages, displaying a list of simple buttons is possible with the `buttons` question type. Use the `choices` attribute to describe your buttons like this:
+
+```json
+{
+    "type": "buttons",
+    "choices": [
+        {
+            "title": "Go here",
+            "color": "red",
+            "href": "http://www.cnn.com"
+        },
+        {
+            "title": "Somewhere else",
+            "color": "green",
+            "href": "http://www.cbc.ca"
+        }
+    ],                    
+    "name": "bq101",
+    "title": "Where would you like to go?",
+    "required": true
+}
+```
+
+The users choice will be stored as an answer with the index of the choice as the answer. By default the buttons will be grey but you can color the buttons using `color` presets:
+
+ * `red`
+ * `green`
+ * `blue`
+ * `orange`
 
 ### Show Logic
 

@@ -1,0 +1,41 @@
+$buttoncolors_red: #ee7777;
+$buttoncolors_green: lighten(#3e885b, 15%);
+$buttoncolors_blue: lighten(#1111ff, 15%);
+$buttoncolors_orange: #ff9999;
+
+.question--buttons {
+  button {
+    @include standalone_button_style;
+    margin-right: ($general_padding / 2);
+    display: inline-block;
+    font-size: 115%;
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.red {
+      background-color: $buttoncolors_red;
+      &:hover {
+        background-color: lighten($buttoncolors_red, 15%);
+      }
+    }
+    &.green {
+      background-color: $buttoncolors_green;
+      &:hover {
+        background-color: lighten($buttoncolors_green, 15%);
+      }
+    }
+    &.blue {
+      background-color: $buttoncolors_blue;
+      &:hover {
+        background-color: lighten($buttoncolors_blue, 15%);
+      }
+    }
+    &.orange {
+      background-color: $buttoncolors_orange;
+      &:hover {
+        background-color: lighten($buttoncolors_orange, 15%);
+      }
+    }
+  }
+}
