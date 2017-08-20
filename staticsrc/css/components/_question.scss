@@ -44,6 +44,9 @@
   h2 {
     font-size: 1.25em;
     margin-top: 0;
+    @media (max-width: $screen-sm-min) {
+      font-weight: 600;
+    }    
   }
   .subtitle {
     line-height: 1.4em;

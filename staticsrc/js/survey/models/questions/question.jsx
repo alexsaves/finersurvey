@@ -78,7 +78,7 @@ class QuestionComponent extends React.Component {
           : "")}>
           <span className="fa fa-info-circle"></span>
           &nbsp;{this.props.instructions}</p>}
-        {this.props.type == "buttons" && <ButtonsQuestion
+        {(this.props.type == "buttons" || this.props.type == "button") && <ButtonsQuestion
           {...this.props}
           onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onRemindAboutRules={this

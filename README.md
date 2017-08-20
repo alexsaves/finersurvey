@@ -6,6 +6,14 @@ Some general information on survey models:
 
 The schema generally follows the schema of SurveyJS but deviates in several ways.
 
+### Page Definitions
+
+Pages have the following properties:
+
+ * `elements` - (_Array_) The list of questions. *Required*
+ * `name` - (_String_) The ID of the page.
+ * `hideLogo` - (_Boolean_) Temporarily hide the logo on the page. Default: `false`. Optional.
+
 ### Question Definitions
 
 Each question shares a set of common attributes, but also may have some of its own custom ones. Here are the common shared attributes:
@@ -169,6 +177,8 @@ The users choice will be stored as an answer with the index of the choice as the
  * `green`
  * `blue`
  * `orange`
+
+You can leave the `href` blank, which will cause the question to advance to the next page.
 
 ### Show Logic
 

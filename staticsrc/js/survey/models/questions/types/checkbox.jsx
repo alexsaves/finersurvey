@@ -49,7 +49,6 @@ class CheckboxQuestion extends React.Component {
       finalResponse.other = otherval;
     }
     if ((!limits || typeof limits.max == 'undefined') || (limits.max >= howManySelected)) {
-      console.log(finalResponse);
       this
         .props
         .dispatch(changeAnswer(this.props.name, finalResponse));

@@ -208,4 +208,18 @@ textarea {
   }
 }
 
+// A different button
+@mixin button_list_style {
+  @include standalone_button_style;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: normal;
+  padding: $general_padding;
+  padding-left: ($general_padding * 2);
+  padding-right: ($general_padding * 2);
+  &:last-child {
+    margin-bottom: ($general_padding / 2);
+  }
+}
+
 @import "survey";

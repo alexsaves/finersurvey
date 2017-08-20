@@ -4,7 +4,7 @@ $faintfont: "latohairline",
 Helvetica,
 Arial,
 sans-serif;
-$desktopfont: "proxima-nova",
+$desktopfont: "latolight",
 "Open Sans",
 "Helvetica Neue",
 Helvetica,
@@ -29,15 +29,13 @@ $heaviestfont: "latobold",
 Helvetica,
 Arial,
 sans-serif;
-$mobile_lightfont: "proxima-nova",
-"latolight",
-"Open Sans",
+$mobile_lightfont: "Open Sans",
 "Helvetica Neue",
 Helvetica,
 Arial,
 sans-serif;
 // images
-$bgimage: "/static/assets/other/bokehlight.jpg";
+$bgimage: "/static/assets/other/bokehdark.jpg";
 // colors
 $fill: #3e885b;
 $greyfill: #999999;
@@ -204,6 +202,20 @@ textarea {
   font-weight: 600;
   &:last-child {
     margin-bottom: 0;
+  }
+  @media (max-width: $screen-sm-min) {
+    font-weight: normal;
+  }
+}
+
+// A different button
+@mixin button_list_style {
+  @include standalone_button_style;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: normal;
+  &:last-child {
+    margin-bottom: ($general_padding / 2);
   }
 }
 

@@ -133,7 +133,7 @@ class PaginationController extends React.Component {
 
     if (pageObj.elements.length == 1) {
       let qt = pageObj.elements[0].type
-      return (qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio" || qt == "text");
+      return (qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio" || qt == "text" || qt == "buttons" || qt == "button");
     }
     return false;
   }

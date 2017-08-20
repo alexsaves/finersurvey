@@ -37,7 +37,12 @@ class ButtonsQuestion extends React.Component {
       this.navTimeout = setTimeout(() => {
         window.location = choiceObj.href;
       }, 250);
+    } else if (this.props.onFullyAnswerQuestion) {
+      this
+        .props
+        .onFullyAnswerQuestion();
     }
+
   }
 
   /**
