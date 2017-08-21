@@ -45,7 +45,7 @@ class SurveyComponent extends React.Component {
     let targ = e.target;
     if (targ.className.indexOf('loading--container') > -1) {
       this.setState({hideLoadingScreen: true});
-    }    
+    }
   }
 
   /**
@@ -53,7 +53,12 @@ class SurveyComponent extends React.Component {
  */
   render() {
     let uid = this.props.match.params.uid,
-      desiredPage = this.props.match.params.pg;
+      desiredPage = this.props.match.params.pg,
+      pages = this.props.pages,
+      hideLogo = false;
+    if (this.props.pages && this.props.pages.length > 0) {
+      hideLogo = !!this.props.pages[this.props.currentPage].hideLogo;
+    }
     return (
       <div
         className={"survey" + (this.state.isOverflowing
@@ -68,7 +73,9 @@ class SurveyComponent extends React.Component {
           href="https://www.finer.ink"
           title="Sales Win/Loss Analysis"
           target="_blank"
-          className="logo--finerink"></a>
+          className={"logo--finerink" + (hideLogo
+          ? " hidden"
+          : "")}></a>
         {!this.state.hideLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete}/>}
       </div>
     );

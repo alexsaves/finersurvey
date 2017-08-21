@@ -47,8 +47,14 @@ html {
           background-repeat: no-repeat;
           background-size: 5em;
           z-index: 999999;
+          opacity: 1;
+          transition: opacity $slow_anim_timing;
           @media (max-width: $screen-sm-min) {
             background-image: url(/static/assets/logos/finerink_w.svg);
+          }
+          &.hidden {
+            display: block;
+            opacity: 0;
           }
         }
       }

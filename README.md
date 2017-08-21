@@ -10,13 +10,13 @@ The schema generally follows the schema of SurveyJS but deviates in several ways
 
 Pages have the following properties:
 
- * `elements` - (_Array_) The list of questions. *Required*
+ * `elements` - (_Array_) The list of question objects. *Required*
  * `name` - (_String_) The ID of the page.
  * `hideLogo` - (_Boolean_) Temporarily hide the logo on the page. Default: `false`. Optional.
 
 ### Question Definitions
 
-Each question shares a set of common attributes, but also may have some of its own custom ones. Here are the common shared attributes:
+Each question in the `elements` collection shares a set of common attributes, but also may have some of its own custom ones. Here are the common shared attributes:
 
  * `name` - (_String_) The unique ID of the question. There are some rules to naming questions (see below) and they must be unique.
  * `type` - (_String_) The kind of question (ie: checkbox, radio, etc). The choices appear below.
@@ -33,7 +33,7 @@ Each question shares a set of common attributes, but also may have some of its o
  * `modifier` - (_String_) Selects a sub-question type from the `type`. Eg: for `text` questions you can add the modifier `multiline` to make the textbox a multi-line text input. For `rating` types there are several modifiers (see the question types explained fully, below).
  * `displayNumber` - (_Boolean_) Whether or not we should display the number next to the question. Default is `false`. If `false`, then the number does not increment for the next question.
  * `subtitle` - (_String_) An optional block of text below the text title. This appears in a less-prominent font than the title.
- * `image` - (_Object_) An image to display (see below for details)
+ * `image` - (_Object_) An image to display (see below for details). Note that this is distinct from the `image` question `type`.
  * `limits` - (_Object_) Any input limitations like maximum choices or characters or words. See question details for specifics.
 
 ### Question Types
@@ -68,7 +68,7 @@ Invalid question name examples:
 
 ### Images
 
-Using the optional `image` object, you can add an image to a question.
+You can use the optional `image` attribute on any question to add an image to a question.
 
 ```json
 {
@@ -77,12 +77,12 @@ Using the optional `image` object, you can add an image to a question.
     "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent et leo ligula. Quisque porttitor ullamcorper molestie. Nulla tellus lorem, mollis varius massa eu, vulputate maximus libero.",
     "image": {
         "url": "https://someurl_to_an_image",
-        "size": "BIG"
+        "modifier": "BIG"
     }
 }
 ```
 
-You should specify size for the image. Choices are:
+You should specify size (`modifier`) for the image. Choices are:
 
  * `BIG`
  * `MEDIUM`
