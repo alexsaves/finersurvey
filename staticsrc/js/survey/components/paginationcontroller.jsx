@@ -125,15 +125,25 @@ class PaginationController extends React.Component {
     let pageObj = this.props.pages[pageNumber],
       didPass = true,
       answers = this.props.answers,
-      faledQList = [];
+      faledQList = [],
+      howmanyrealquestions = 0;
 
     if (pageNumber == this.props.pages.length - 1) {
       return false;
     }
 
-    if (pageObj.elements.length == 1) {
+    pageObj.elements.forEach((pg) => {
+      if (pg.type != "none" && pg.type != "buttons" && pg.type != "button") {
+        howmanyrealquestions++;
+      }
+    });
+
+    if (howmanyrealquestions < 2) {
       let qt = pageObj.elements[0].type
-      return (qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio" || qt == "text" || qt == "buttons" || qt == "button");
+      return pageObj.elements.find((elm) => {
+        let qt = elm.type;
+        return (qt == "none" || qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio" || qt == "text" || qt == "buttons" || qt == "button")
+      });
     }
     return false;
   }

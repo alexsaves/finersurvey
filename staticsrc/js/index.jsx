@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import {Provider} from 'react-redux';
 import Application from './application.jsx';
+import md5 from './survey/components/md5.js';
 import {ConnectedRouter, routerMiddleware, push} from 'react-router-redux';
 import reducers from './reducers';
 import createHistory from 'history/createBrowserHistory';
@@ -21,9 +22,11 @@ if (stateElm) {
     .querySelector('[type=\'finer/state\']')
     .innerText;
   if (stateRaw && stateRaw.length > 10) {
-    startupState = JSON.parse(atob(document.querySelector('[type=\'finer/state\']').innerText));
+    let rawStateDataStr = document.querySelector('[type=\'finer/state\']').innerText;
+    startupState = JSON.parse(atob(rawStateDataStr));
     if (startupState.metadata) {
-      persistentKey += "_" + startupState.metadata.guid;
+      let stateMD5 = md5(rawStateDataStr);
+      persistentKey += "_" + startupState.metadata.guid + "_" + stateMD5;
     }
     let oldAnswers = localStorage.getItem(persistentKey);
     if (oldAnswers) {

@@ -19,7 +19,7 @@ export default class {
         // Simple rating
         return (answer && !isNaN(answer));
       case "checkbox":
-        if (answer) {
+        if (answer && answer.responses) {
           let totalAnswers = answer.responses.length;
           if (answer.other) {
             totalAnswers++;

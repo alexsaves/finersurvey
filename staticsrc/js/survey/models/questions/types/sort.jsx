@@ -383,7 +383,11 @@ class SortQuestion extends React.Component {
       count = 1,
       st = this.state,
       dragPlaceholderCSS = {},
-      initialOther = this.props.answer.other || this.initialOther;
+      initialOther = this.initialOther;
+    
+    if (this.props.answer && this.props.answer.other) {
+      initialOther = this.props.answer.other;
+    }
 
     let piper = this.piper,
       panswers = this.props.answers,

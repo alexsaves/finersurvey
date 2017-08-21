@@ -180,6 +180,14 @@ The users choice will be stored as an answer with the index of the choice as the
 
 You can leave the `href` blank, which will cause the question to advance to the next page.
 
+#### Rating Question Definitions
+
+There are three types of `rating` questions:
+
+ * `stars` - A Star rating widget
+ * `buttons`
+ * `slider`
+
 ### Show Logic
 
 Show logic applies to questions or pages and can be singular (just one rule) additive (all statements must be true) or inclusive (any statement must be true). Rules are specified with the optional `showIf` attribute which can be a string (for singular rules), an array (for additive rules), or an object (for inclusive rules).

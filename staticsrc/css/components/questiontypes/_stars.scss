@@ -1,4 +1,7 @@
 .question--rating.stars {
+  .buttongroup {
+    white-space: nowrap;
+  }
   .star--button {
     font-size: $icon_button_size;
     cursor: pointer;
