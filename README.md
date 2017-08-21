@@ -21,6 +21,7 @@ Each question in the `elements` collection shares a set of common attributes, bu
  * `name` - (_String_) The unique ID of the question. There are some rules to naming questions (see below) and they must be unique.
  * `type` - (_String_) The kind of question (ie: checkbox, radio, etc). The choices appear below.
  * `required` - (_Boolean_) Whether the question must be answered or not.
+ * `random` - (_Boolean_) Whether the order of the choices should be randomized.
  * `title` - (_String_) The question text.
  * `instructions` - (_String_) Instructions for the user. Ie: how to interact with the question. This can contain information like any special criteria (like minimum responses or maximum responses).
  * `placeholder` - (_String_) Additional instructions used in some cases (eg: in `dropdown` questions).

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
+import Randomizer from '../../../components/randomizer';
 
 /**
 * Represents a question
@@ -15,6 +16,10 @@ class CheckboxQuestion extends React.Component {
     super(props);
     this.iptThrottle = null;
     this.piper = new Piper();
+    this.Randomizer = new Randomizer();
+    this.state = {
+      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
+    };
   }
 
   /**
@@ -30,10 +35,6 @@ class CheckboxQuestion extends React.Component {
       finalResponse = {},
       howManySelected = 0,
       limits = this.props.limits;
-      
-    if (window.testdd) {
-      debugger;
-    }
 
     for (let i = 0; i < ipts.length; i++) {
       let ipt = ipts[i];
@@ -80,9 +81,8 @@ class CheckboxQuestion extends React.Component {
   render() {
     let qname = this.props.name,
       ctx = this,
-      answers = this.props.answer;
-
-    let piper = this.piper,
+      answers = this.props.answer,
+      piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
@@ -96,6 +96,8 @@ class CheckboxQuestion extends React.Component {
       }
       return false;
     };
+
+    // Spit out the main question node
     return (
       <div className="question--checkbox">
         {this

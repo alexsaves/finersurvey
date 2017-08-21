@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
+import Randomizer from '../../../components/randomizer';
 
 /**
 * Represents a question
@@ -14,6 +15,7 @@ class SortQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.piper = new Piper();
+    this.Randomizer = new Randomizer();
     this.iptThrottle = null;
     this.stopRepositioning = false;
     this.state = {
@@ -28,8 +30,9 @@ class SortQuestion extends React.Component {
       otherInputY: 0,
       otherInputWidth: 100,
       otherInputHeight: 50,
-      didDrop: false
-    };
+      didDrop: false,
+      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
+    };    
     this.isAnimating = false;
     this.initialOther = null;
     for (let j = 0; j < this.props.choices.length; j++) {

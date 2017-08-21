@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
+import Randomizer from '../../../components/randomizer';
 
 /**
 * Represents a question
@@ -13,6 +14,7 @@ class MatrixRatingQuestion extends React.Component {
  */
   constructor(props) {
     super(props);
+    this.Randomizer = new Randomizer();
     this.state = {
       selectedItem: 0,
       animatingForward: false,
@@ -23,6 +25,9 @@ class MatrixRatingQuestion extends React.Component {
       this.state.answers[i] = -1;
     }
     this.piper = new Piper();
+    this.state = {
+      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
+    };
   }
 
   /**
@@ -134,7 +139,7 @@ class MatrixRatingQuestion extends React.Component {
     let piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
-      
+
     return (
       <div
         className="question--matrixrating"

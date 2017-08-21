@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
+import Randomizer from '../../../components/randomizer';
 
 /**
 * Represents a question
@@ -15,6 +16,10 @@ class RadioQuestion extends React.Component {
     super(props);
     this.iptThrottle = null;
     this.piper = new Piper();
+    this.Randomizer = new Randomizer();
+    this.state = {
+      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
+    };
   }
 
   /**

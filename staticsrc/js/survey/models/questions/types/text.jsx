@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
+import Randomizer from '../../../components/randomizer';
 
 /**
 * Represents a question
@@ -14,9 +15,11 @@ class TextQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.piper = new Piper();
+    this.Randomizer = new Randomizer();
     this.state = {
       charcount: 0,
-      wordcount: 0
+      wordcount: 0,
+      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
     };
   }
 
