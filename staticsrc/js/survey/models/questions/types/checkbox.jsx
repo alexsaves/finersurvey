@@ -101,9 +101,11 @@ class CheckboxQuestion extends React.Component {
     return (
       <div className="question--checkbox">
         {this
-          .props
-          .choices
-          .map((rt, idx) => {
+          .state
+          .srcOrder
+          .map((rto, idxo) => {
+            let rt = rto.choice,
+              idx = rto.originalPosition;
             return <label
               key={idx}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)

@@ -14,6 +14,7 @@ class SortQuestion extends React.Component {
  */
   constructor(props) {
     super(props);
+    var answer = JSON.parse(JSON.stringify(this.props.answer || {}));
     this.piper = new Piper();
     this.Randomizer = new Randomizer();
     this.iptThrottle = null;
@@ -31,15 +32,18 @@ class SortQuestion extends React.Component {
       otherInputWidth: 100,
       otherInputHeight: 50,
       didDrop: false,
-      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
-    };    
+      srcOrder: this
+        .Randomizer
+        .randomizeChoices(this.props.choices, this.props.random)
+    };
     this.isAnimating = false;
     this.initialOther = null;
     for (let j = 0; j < this.props.choices.length; j++) {
       this
         .state
         .currentOrder
-        .push(j);
+        .push(this.state.srcOrder[j].originalPosition);
+
     }
     if (this.props.other === true) {
       this
@@ -47,8 +51,10 @@ class SortQuestion extends React.Component {
         .currentOrder
         .push(9999);
     }
-    if (this.props.answer) {
-      this.state.currentOrder = this.props.answer.order.splice(0);
+    if (answer && answer.order.length == this.state.currentOrder.length) {
+      this.state.currentOrder = answer
+        .order
+        .slice();
     }
   }
 
@@ -243,19 +249,24 @@ class SortQuestion extends React.Component {
       otheript = root.getElementsByClassName('otherOverlayInput')[0];
 
     let othervalue = (this.props.other && otheript)
-          ? otheript.value
-          : null;
+      ? otheript.value
+      : null;
 
     if (othervalue === null) {
       otheript = root.getElementsByClassName('floatingother')[0];
       othervalue = otheript.value;
     }
+
+    var dpAnswer = {
+      other: othervalue,
+      order: this
+        .state
+        .currentOrder
+        .slice()
+    };
     this
       .props
-      .dispatch(changeAnswer(this.props.name, {
-        other: othervalue,
-        order: this.state.currentOrder
-      }));
+      .dispatch(changeAnswer(this.props.name, dpAnswer));
 
     if (!this.props.other) {
       if (this.props.onFullyAnswerQuestion) {
@@ -387,7 +398,7 @@ class SortQuestion extends React.Component {
       st = this.state,
       dragPlaceholderCSS = {},
       initialOther = this.initialOther;
-    
+
     if (this.props.answer && this.props.answer.other) {
       initialOther = this.props.answer.other;
     }
@@ -420,6 +431,7 @@ class SortQuestion extends React.Component {
       }, 200);
     }
     this.isAnimating = this.props.isAnimating;
+    console.log(realOrder);
     return (
       <div className="question--sort">
         {(this.state.positionOtherInput && !this.state.isDragging && !hideOtherOverlay && this.props.isSelected && !this.props.isAnimating) && <input

@@ -16,21 +16,28 @@ const initialState = {};
 // dispatch, getState }.
 let stateElm = document.querySelector('[type=\'finer/state\']'),
   startupState = {},
-  persistentKey = "survey_answers";
+  persistentKey = "survey_answers",
+  surveyHash = '';
 if (stateElm) {
   let stateRaw = document
     .querySelector('[type=\'finer/state\']')
     .innerText;
   if (stateRaw && stateRaw.length > 10) {
-    let rawStateDataStr = document.querySelector('[type=\'finer/state\']').innerText;
+    let rawStateDataStr = document
+      .querySelector('[type=\'finer/state\']')
+      .innerText;
     startupState = JSON.parse(atob(rawStateDataStr));
     if (startupState.metadata) {
-      let stateMD5 = md5(rawStateDataStr);
-      persistentKey += "_" + startupState.metadata.guid + "_" + stateMD5;
+      surveyHash = md5(rawStateDataStr);
+      persistentKey += "_" + startupState.metadata.guid;
     }
     let oldAnswers = localStorage.getItem(persistentKey);
     if (oldAnswers) {
-      startupState.answers = JSON.parse(oldAnswers);
+      var ansObj = JSON.parse(oldAnswers);
+      if (ansObj.key == persistentKey && ansObj.hash == surveyHash) {
+        startupState.answers = ansObj.answers;
+      }
+      localStorage.removeItem(persistentKey);
     }
   }
 }
@@ -42,7 +49,11 @@ const history = createHistory();
 let appStore = createStore(reducers, startupState, applyMiddleware(thunk), applyMiddleware(routerMiddleware(history)));
 let unsubscribe = appStore.subscribe(() => {
   let st = appStore.getState();
-  localStorage.setItem(persistentKey, JSON.stringify(st.answers || {}));
+  localStorage.setItem(persistentKey, JSON.stringify({
+    key: persistentKey,
+    hash: surveyHash,
+    answers: st.answers || {}
+  }));
   console.log("STATE CHANGED", appStore.getState())
 });
 // appStore.dispatch(modifyUser({displayName: 'Jason Smith'}));

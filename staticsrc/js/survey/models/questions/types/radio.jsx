@@ -18,7 +18,9 @@ class RadioQuestion extends React.Component {
     this.piper = new Piper();
     this.Randomizer = new Randomizer();
     this.state = {
-      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
+      srcOrder: this
+        .Randomizer
+        .randomizeChoices(this.props.choices, this.props.random)
     };
   }
 
@@ -89,9 +91,11 @@ class RadioQuestion extends React.Component {
     return (
       <div className="question--radio">
         {this
-          .props
-          .choices
-          .map((rt, idx) => {
+          .state
+          .srcOrder
+          .map((rto, idxo) => {
+            let rt = rto.choice,
+              idx = rto.originalPosition;
             return <label
               key={idx}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
@@ -108,7 +112,9 @@ class RadioQuestion extends React.Component {
           type="text"
           className="other--textfield"
           placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
-          defaultValue={(this.props.answer && this.props.answer.other) ? this.props.answer.other : ''}
+          defaultValue={(this.props.answer && this.props.answer.other)
+          ? this.props.answer.other
+          : ''}
           onKeyUp={ctx
           .handleIptThrottleChange
           .bind(ctx)}/>}

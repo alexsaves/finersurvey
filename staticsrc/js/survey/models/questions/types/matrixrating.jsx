@@ -19,15 +19,15 @@ class MatrixRatingQuestion extends React.Component {
       selectedItem: 0,
       animatingForward: false,
       animatingBackward: false,
-      answers: []
+      answers: [],
+      srcOrder: this
+        .Randomizer
+        .randomizeChoices(this.props.choices, this.props.random)
     };
     for (let i = 0; i < this.props.choices.length; i++) {
       this.state.answers[i] = -1;
     }
     this.piper = new Piper();
-    this.state = {
-      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
-    };
   }
 
   /**
@@ -84,7 +84,7 @@ class MatrixRatingQuestion extends React.Component {
     if (this.state.selectedItem < (this.props.choices.length - 1) && !this.state.animatingBackward && !this.state.animatingForward) {
       // do it
       this.setState({animatingBackward: false, animatingForward: true});
-    }    
+    }
   }
 
   /**
@@ -139,7 +139,8 @@ class MatrixRatingQuestion extends React.Component {
     let piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
-
+    
+    // Spit out the question node
     return (
       <div
         className="question--matrixrating"
@@ -148,26 +149,28 @@ class MatrixRatingQuestion extends React.Component {
         .bind(this)}>
         <div className="matrix--carousel">
           {this
-            .props
-            .choices
-            .map((rt, idx) => {
+            .state
+            .srcOrder
+            .map((rto, idxo) => {
+              let rt = rto.choice,
+                idx = rto.originalPosition;
               return <div
                 key={idx}
-                className={"choiceitem" + (selectedItem == idx
+                className={"choiceitem" + (selectedItem == idxo
                 ? " selected"
-                : "") + (selectedItem == (idx + 1)
+                : "") + (selectedItem == (idxo + 1)
                 ? " prevselected"
-                : "") + (selectedItem == (idx - 1)
+                : "") + (selectedItem == (idxo - 1)
                 ? " nextselected"
-                : "") + ((selectedItem == (idx + 1) && animatingBackward)
+                : "") + ((selectedItem == (idxo + 1) && animatingBackward)
                 ? " abPrevSelected"
-                : "") + ((selectedItem == idx && animatingForward)
+                : "") + ((selectedItem == idxo && animatingForward)
                 ? " afSelected"
-                : "") + ((selectedItem == idx && animatingBackward)
+                : "") + ((selectedItem == idxo && animatingBackward)
                 ? " abSelected"
-                : "") + ((selectedItem == (idx - 1) && animatingForward)
+                : "") + ((selectedItem == (idxo - 1) && animatingForward)
                 ? " afNextSelected"
-                : "") + ((selectedItem == (idx + 1) && animatingBackward)
+                : "") + ((selectedItem == (idxo + 1) && animatingBackward)
                 ? " afPrevSelected"
                 : "")}>
                 <div className="choiceinner">{piper.pipe(rt, panswers, ppages)}</div>

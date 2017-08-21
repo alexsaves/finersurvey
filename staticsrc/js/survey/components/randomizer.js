@@ -23,9 +23,9 @@ export default class {
 
     if (doRandom) {
       // random
-      for (var i = 0; i < (choices.length * 2); i++) {
+      for (var i = 0; i < (choices.length * 4); i++) {
         which = Math.min(result.length - 1, Math.round(Math.random() * (result.length - 1)));
-        var item = result.splice(which, 1);
+        var item = result.splice(which, 1)[0];
         result.push(item);
       }
     }

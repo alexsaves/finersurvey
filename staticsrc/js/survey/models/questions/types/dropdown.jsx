@@ -17,7 +17,9 @@ class DropdownQuestion extends React.Component {
     this.piper = new Piper();
     this.Randomizer = new Randomizer();
     this.state = {
-      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
+      srcOrder: this
+        .Randomizer
+        .randomizeChoices(this.props.choices, this.props.random)
     };
   }
 
@@ -55,12 +57,16 @@ class DropdownQuestion extends React.Component {
           .handleAnswerChange
           .bind(this)}
           className="dropdown-select"
-          defaultValue={(typeof(answer) != 'undefined' && answer !== null) ? answer : -1}>
+          defaultValue={(typeof(answer) != 'undefined' && answer !== null)
+          ? answer
+          : -1}>
           <option disabled={true} value={-1}>{piper.pipe(this.props.placeholder || "Choose one...", panswers, ppages)}</option>
           {this
-            .props
-            .choices
-            .map((rt, idx) => {
+            .state
+            .srcOrder
+            .map((rto, idxo) => {
+              let rt = rto.choice,
+                idx = rto.originalPosition;
               return <option key={idx} value={idx}>{piper.pipe(rt, panswers, ppages)}</option>
             })}
         </select>
