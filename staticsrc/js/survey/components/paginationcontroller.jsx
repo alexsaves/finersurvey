@@ -132,18 +132,22 @@ class PaginationController extends React.Component {
       return false;
     }
 
-    pageObj.elements.forEach((pg) => {
-      if (pg.type != "none" && pg.type != "buttons" && pg.type != "button") {
-        howmanyrealquestions++;
-      }
-    });
+    pageObj
+      .elements
+      .forEach((pg) => {
+        if (pg.type != "none" && pg.type != "buttons" && pg.type != "button") {
+          howmanyrealquestions++;
+        }
+      });
 
     if (howmanyrealquestions < 2) {
       let qt = pageObj.elements[0].type
-      return pageObj.elements.find((elm) => {
-        let qt = elm.type;
-        return (qt == "none" || qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio" || qt == "text" || qt == "buttons" || qt == "button")
-      });
+      return pageObj
+        .elements
+        .find((elm) => {
+          let qt = elm.type;
+          return (qt == "none" || qt == "multitext" || qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio" || qt == "text" || qt == "buttons" || qt == "button")
+        });
     }
     return false;
   }
@@ -173,15 +177,26 @@ class PaginationController extends React.Component {
    * Handle when a question is fully answered
    */
   handleFullyAnswerQuestion() {
-    if (this.pageCanAutoAdvance(this.props.currentPage)) {
-      setTimeout(() => {
-        let root = ReactDOM.findDOMNode(this),
-          advanceButton = root.getElementsByClassName('advance--button')[0];
-        var evObj = document.createEvent('MouseEvents');
-        evObj.initMouseEvent('click', true, true, window, 1, 12, 345, 7, 220, false, false, false, false, 0, null);
-        advanceButton.dispatchEvent(evObj);
-      }, 250);
-    }
+    clearTimeout(this._autoAdvance);
+    this._autoAdvance = setTimeout(() => {
+      if (this.pageCanAutoAdvance(this.props.currentPage)) {
+        setTimeout(() => {
+          let root = ReactDOM.findDOMNode(this),
+            advanceButton = root.getElementsByClassName('advance--button')[0];
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent('click', true, true, window, 1, 12, 345, 7, 220, false, false, false, false, 0, null);
+          advanceButton.dispatchEvent(evObj);
+        }, 200);
+      }
+    }, 25);
+  }
+
+  /**
+   * Handle when a question is interacted with
+   * @param {*} idx 
+   */
+  questionBeingInteractedWith(idx) {
+
   }
 
   /**
@@ -231,6 +246,8 @@ class PaginationController extends React.Component {
             remindInstructionsFor={remindInstructionsFor}
             answers={answers}
             allpages={allpages}
+            pageNumber={idx}
+            onQuestionBeingInteractedWith={this.questionBeingInteractedWith.bind(this)}
             onFullyAnswerQuestion={this
             .handleFullyAnswerQuestion
             .bind(this)}

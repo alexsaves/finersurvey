@@ -3,6 +3,22 @@
   .rating-zone {
     margin-top: $general_padding;
   }
+  .pagination--controls {
+    a {
+      display: inline-block;
+      width: 0.5em;
+      height: 0.5em;
+      border: 1px solid $border_color;
+      border-radius: 1em;
+      margin-right: 0.5em;
+      &:last-child {
+        margin-right: 0;
+      }
+      &.selected {
+        background-color: $border_color;
+      }
+    }
+  }
   .matrix--carousel {
     width: 100%;
     position: relative;

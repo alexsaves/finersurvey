@@ -76,11 +76,14 @@ export default class {
     for (let i = 0; i < surveyDef.length; i++) {
       let pg = surveyDef[i];
       if (pg.elements) {
-        return pg
+        var result = pg
           .elements
           .find((el) => {
             return el.name == name;
           });
+        if (result) {
+          return result;
+        }
       }
     }
   }
@@ -170,6 +173,8 @@ export default class {
           return this._evaluateRadioLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
         case "text":
           return this._evaluateTextLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
+        case "multitext":
+          return this._evaluateMultiTextLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther, subQuestion);
         case "dropdown":
           return this._evaluateDropdownLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther);
         case "matrixrating":
@@ -177,6 +182,7 @@ export default class {
         case "sort":
           return this._evaluateSortLogic(dependentQuestion, answerObject, ruleStr, splitterSymbol, isOther, subQuestion);
         default:
+          throw new Error("Show logic applied to non-compatible question type: " + dependentQuestion.type);
           return false;
       }
     }
@@ -293,6 +299,84 @@ export default class {
               .indexOf(conditionChoice) > -1;
           case EQUALITIES.NOTEQUAL:
             return !hasResp || (answerObj && answerObj.responses && answerObj.responses.indexOf(conditionChoice) == -1);
+          default:
+            throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
+            break;
+        }
+      }
+    }
+  }
+
+  /**
+   * Evaluate the show logic for a multi-text question
+   * @param {*} questionDef
+   * @param {*} answerObj
+   * @param {*} condition
+   */
+  _evaluateMultiTextLogic(questionDef, answerObj, condition, equalityExp, isOther, subQuestion)
+  {
+    if (isOther && !questionDef.other) {
+      throw new Error(LOGICERRORMESSAGES.NOOTHER);
+    } else {
+      if (isOther) {
+        return this._evaluateStandardText(answerObj.other, condition, equalityExp);
+      } else {
+        condition = condition
+          .toLowerCase()
+          .trim();
+        let overallAnswer = ((answerObj && answerObj.length > 0)
+          ? answerObj.join(' ')
+          : '')
+          .trim()
+          .toLowerCase();
+        switch (equalityExp) {
+          case EQUALITIES.CONTAINSANY:
+            if (subQuestion == -1) {
+              return overallAnswer && overallAnswer.length > 0;
+            } else if (answerObj && answerObj.length > 0) {
+              return answerObj[subQuestion]
+                .trim()
+                .length > 0;
+            } else {
+              return false;
+            }
+          case EQUALITIES.NOTCONTAINSANY:
+            if (subQuestion == -1) {
+              return overallAnswer.length === 0;
+            } else if (answerObj && answerObj.length === 0) {
+              return answerObj[subQuestion]
+                .trim()
+                .length > 0;
+            } else {
+              return false;
+            }
+          case EQUALITIES.EQUAL:
+            if (subQuestion == -1) {
+              return condition == overallAnswer;
+            } else if (answerObj && answerObj.length === 0) {
+              return answerObj[subQuestion].trim().toLowerCase() == condition.toLowerCase();
+            } else {
+              return false;
+            }
+          case EQUALITIES.NOTEQUAL:
+            if (subQuestion == -1) {
+              return condition != overallAnswer;
+            } else if (answerObj && answerObj.length === 0) {
+              return answerObj[subQuestion].trim().toLowerCase() != condition.toLowerCase();
+            } else {
+              return false;
+            }
+          case EQUALITIES.LIKE:
+          if (subQuestion == -1) {
+              return overallAnswer.indexOf(condition) > -1;
+            } else if (answerObj && answerObj.length === 0) {
+              return answerObj[subQuestion].trim().toLowerCase().indexOf(condition.toLowerCase());
+            } else {
+              return false;
+            }
+            
+          case EQUALITIES.NOTLIKE:
+            return overallAnswer.indexOf(condition) == -1;
           default:
             throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
             break;

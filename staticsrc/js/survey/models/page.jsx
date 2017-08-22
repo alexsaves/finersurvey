@@ -12,6 +12,17 @@ class PageComponent extends React.Component {
  */
   constructor(props) {
     super(props);
+    let firstQuestionWithInput = 0;
+    for (let i = 0; i < props.questions.length; i++) {
+      firstQuestionWithInput = i;
+      let q = props.questions[i];
+      if (!(q.type == 'none' || q.type == 'image')) {
+        break;
+      }
+    }
+    this.state = {
+      focusItem: firstQuestionWithInput
+    };
   }
 
   /**
@@ -34,11 +45,19 @@ class PageComponent extends React.Component {
   }
 
   /**
+   * A question is being interacted with
+   */
+  handleQuestionBeingInteractedWith(idx) {
+    console.log("question being interacted with", idx);
+  }
+
+  /**
  * Render the view
  */
   render() {
     let ctx = this,
-      remindInstructionsFor = this.props.remindInstructionsFor;
+      remindInstructionsFor = this.props.remindInstructionsFor,
+      pageNumber = this.props.pageNumber;
     return (
       <div
         className={"page " + (this.props.isSelected
@@ -58,12 +77,21 @@ class PageComponent extends React.Component {
               .props
               .questions
               .map((q, idx) => {
+                let interactionBinding = function (indx) {
+                  return function () {
+                    ctx.handleQuestionBeingInteractedWith(indx);
+                  };
+                }(idx);
                 return <QuestionComponent
                   key={idx}
                   {...q}
+                  pageNumber={pageNumber}
+                  questionNumber={idx}
                   answer={ctx.getAnswerForQuestion(q)}
                   answers={this.props.answers}
+                  isFocused={ctx.props.isSelected && ctx.state.focusItem == idx}
                   allpages={this.props.allpages}
+                  onQuestionBeingInteractedWith={interactionBinding}
                   onFullyAnswerQuestion={this
                   .handleQuestionFullyAnswered
                   .bind(this)}

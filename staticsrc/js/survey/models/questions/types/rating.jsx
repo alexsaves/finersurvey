@@ -13,6 +13,7 @@ class RatingQuestion extends React.Component {
  */
   constructor(props) {
     super(props);
+    this.wasFocused = false;
     this.piper = new Piper();
   }
 
@@ -31,28 +32,45 @@ class RatingQuestion extends React.Component {
         .props
         .onFullyAnswerQuestion();
     }
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
   }
 
   /**
  * Render the view
  */
   render() {
-    let qname = this.props.name;
-    let ratingScale = [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7
-    ];
-    let ctx = this;
-    let answer = this.props.answer || 0;
-
-    let piper = this.piper,
+    let qname = this.props.name,
+      ratingScale = [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      ctx = this,
+      answer = this.props.answer || 0,
+      piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
+
+    if (this.props.isFocused && !this.wasFocused) {
+      setTimeout(() => {
+        this.wasFocused = true;
+        let root = ReactDOM.findDOMNode(this),
+          btns = root.getElementsByTagName('label');
+        if (btns.length > 0) {
+          btns[0].focus();
+        }
+      }, 25);
+    }
+
     return (
       <div className="question--rating">
         <div className="buttongroup">
@@ -65,6 +83,7 @@ class RatingQuestion extends React.Component {
               type="checkbox"
               checked={!!(rt <= answer)}
               name={qname}
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
               value={rt}
               onChange={ctx
               .handleAnswerChange

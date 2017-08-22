@@ -16,8 +16,11 @@ class ButtonsQuestion extends React.Component {
     super(props);
     this.piper = new Piper();
     this.Randomizer = new Randomizer();
+    this.wasFocused = false;
     this.state = {
-      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
+      srcOrder: this
+        .Randomizer
+        .randomizeChoices(this.props.choices, this.props.random)
     };
   }
 
@@ -48,13 +51,34 @@ class ButtonsQuestion extends React.Component {
         .onFullyAnswerQuestion();
     }
 
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
   }
+
+  /**
+   * The component mounted
+   */
+  componentDidMount() {}
 
   /**
  * Render the view
  */
   render() {
-
+    let ctx = this;
+    if (this.props.isFocused && !this.wasFocused) {
+      setTimeout(() => {
+        this.wasFocused = true;
+        let root = ReactDOM.findDOMNode(this);
+        let btns = root.getElementsByTagName('button');
+        if (btns.length > 0) {
+          btns[0].focus();
+        }
+      }, 25);
+    }
     // Spit out the node
     return (
       <div className="question--buttons">
@@ -64,7 +88,8 @@ class ButtonsQuestion extends React.Component {
           .map((val, idx) => {
             return <button
               key={"_" + idx}
-              className={val.color || "default"}
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
+              className={"btn " + (val.color || "default")}
               data-choice={idx}
               onClick={this
               .handleClick

@@ -15,11 +15,27 @@ class CheckboxQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.iptThrottle = null;
+    this.wasFocused = false;
     this.piper = new Piper();
     this.Randomizer = new Randomizer();
     this.state = {
-      srcOrder: this.Randomizer.randomizeChoices(this.props.choices, this.props.random)
+      srcOrder: this
+        .Randomizer
+        .randomizeChoices(this.props.choices, this.props.random)
     };
+  }
+
+  /**
+   * Handle focus on the input
+   * @param {*} e
+   */
+  handleFocus(e) {
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
   }
 
   /**
@@ -35,6 +51,13 @@ class CheckboxQuestion extends React.Component {
       finalResponse = {},
       howManySelected = 0,
       limits = this.props.limits;
+
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
 
     for (let i = 0; i < ipts.length; i++) {
       let ipt = ipts[i];
@@ -53,14 +76,16 @@ class CheckboxQuestion extends React.Component {
       this
         .props
         .dispatch(changeAnswer(this.props.name, finalResponse));
-    } else if (e) {      
+    } else if (e) {
       if (targ.checked) {
         targ.checked = false;
       }
       e.stopPropagation();
       e.preventDefault();
       if (this.props.onRemindAboutRules) {
-        this.props.onRemindAboutRules();
+        this
+          .props
+          .onRemindAboutRules();
       }
     }
   }
@@ -86,6 +111,17 @@ class CheckboxQuestion extends React.Component {
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
+    if (this.props.isFocused && !this.wasFocused) {
+      setTimeout(() => {
+        this.wasFocused = true;
+        let root = ReactDOM.findDOMNode(this),
+        btns = root.getElementsByTagName('label');
+        if (btns.length > 0) {
+          btns[0].focus();
+        }
+      }, 25);
+    }
+
     // Check each value
     let shouldOptionBeSelected = function (val) {
       if (answers) {
@@ -108,6 +144,7 @@ class CheckboxQuestion extends React.Component {
               idx = rto.originalPosition;
             return <label
               key={idx}
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
               ? "selected"
               : "")}>{piper.pipe(rt, panswers, ppages)}<input
@@ -122,12 +159,16 @@ class CheckboxQuestion extends React.Component {
         {this.props.other === true && <input
           type="text"
           className="other--textfield"
+          onFocus={this
+          .handleFocus
+          .bind(this)}
           placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
           onKeyUp={ctx
           .handleIptThrottleChange
           .bind(ctx)}
-          defaultValue={((this.props.answer && this.props.answer.other) ? this.props.answer.other : "")}
-          />}
+          defaultValue={((this.props.answer && this.props.answer.other)
+          ? this.props.answer.other
+          : "")}/>}
       </div>
     );
   }

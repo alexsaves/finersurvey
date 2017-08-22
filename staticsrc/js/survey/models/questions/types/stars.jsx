@@ -14,6 +14,7 @@ class StarsRatingQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.piper = new Piper();
+    this.wasFocused = false;
     this.state = {
       hoverNumber: -1
     };
@@ -33,6 +34,12 @@ class StarsRatingQuestion extends React.Component {
       this
         .props
         .onFullyAnswerQuestion();
+    }
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
     }
   }
 
@@ -55,6 +62,23 @@ class StarsRatingQuestion extends React.Component {
   }
 
   /**
+   * Handle Keypress
+   * @param {*} e
+   */
+  handleKeyPress(e) {
+    if (e) {
+      if (e.key == "Enter" || e.key == " ") {
+        let targ = e.currentTarget,
+          cb = targ.getElementsByTagName("input")[0];
+
+        cb.checked = !!!cb.checked;
+        e.currentTarget = cb;
+        this.handleAnswerChange(e);
+      }
+    }
+  }
+
+  /**
  * Render the view
  */
   render() {
@@ -68,13 +92,24 @@ class StarsRatingQuestion extends React.Component {
         6,
         7
       ],
-      hoverNumber = this.state.hoverNumber;
-    let ctx = this;
-    let answer = this.props.answer || 0;
-
-    let piper = this.piper,
+      hoverNumber = this.state.hoverNumber,
+      ctx = this,
+      answer = this.props.answer || 0,
+      piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
+
+    if (this.props.isFocused && !this.wasFocused) {
+      setTimeout(() => {
+        this.wasFocused = true;
+        let root = ReactDOM.findDOMNode(this),
+          btns = root.getElementsByTagName('label');
+        if (btns.length > 0) {
+          btns[0].focus();
+        }
+      }, 25);
+    }
+
     return (
       <div className="question--rating stars">
         <div
@@ -85,9 +120,16 @@ class StarsRatingQuestion extends React.Component {
           {ratingScale.map((rt, idx) => {
             return <label
               key={idx}
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
               data-which={idx}
+              onFocus={this
+              .handleStarHover
+              .bind(this)}
               onMouseEnter={this
               .handleStarHover
+              .bind(this)}
+              onKeyPress={this
+              .handleKeyPress
               .bind(this)}
               className={"star--button fa fa-star" + (!!(rt <= answer)
               ? " selected"

@@ -46,6 +46,7 @@ A variety of question types are supported, including:
  * `sort` - Drag and drop sorting question with optional other text input.
  * `matrixrating` - Multiple rating questions combined into one with a left-right carousel interface.
  * `text` - Single line or multiline open-ended text input.
+ * `multitext` - Multiple text inputs.
  * `checkbox` - Multiple choice question with a possible "other" text input.
  * `radio` - Single choice question with a possible "other" text input.
  * `buttons` - Just a list of buttons that take you to different locations.
@@ -147,6 +148,10 @@ Text input questions are of type `text` but can have a `modifier` with `normal` 
  * `wordcountmaxlabel` - (_String_) How many words are left. Default: "Words left".
  * `wordcountlabel` - (_String_) How many words in the text. Default: "Words".
 
+#### Multi-Text Question Definitions
+
+If you want multiple text inputs you can use the `multitext` question type. Use the `choices` collection to define the count, and the labels for each. Multi-text support `required` but not `limits`.
+
 #### Button Question Definitions
 
 Useful on thank-you pages, displaying a list of simple buttons is possible with the `buttons` question type. Use the `choices` attribute to describe your buttons like this:
@@ -183,11 +188,34 @@ You can leave the `href` blank, which will cause the question to advance to the 
 
 #### Rating Question Definitions
 
-There are three types of `rating` questions:
+There are three types of `rating` questions. The default is `buttons` but you can use the `modifier` attribute to select from:
 
  * `stars` - A Star rating widget
- * `buttons`
- * `slider`
+ * `buttons` - A set of regular buttons
+ * `slider` - A drag and drop slider
+
+#### Matrix Rating Definition
+
+This question type lets you rank a set of statements. Use `type` = `matrixrating`. Here is an example:
+
+```json
+{
+    "type": "matrixrating",
+    "choices": [
+        "I like red apples",
+        "I'm a strong swimmer",
+        "I'm afraid of heights"
+    ],
+    "name": "myRatingQuestion",
+    "title": "How strongly do you agree with the following statements?",
+    "instructions": "Indicate how strongly you agree.",
+    "required": true,
+    "low": "Not at all",
+    "high": "Very strongly"
+}
+```
+
+This question comes with a pagination control that you can optionally disable with `paginationControl` = `false`.
 
 ### Show Logic
 
@@ -339,6 +367,18 @@ For sorting questions, things are a little different. We need to be able to chec
  * `myRankingQuestion*=` - The question was answered.
  * `myRankingQuestion!*=` - The question was not answered.
 
+#### Text Conditions
+
+Text and multi-text questions support the following types of logic:
+
+ * Equals (`=`)
+ * Contains any (`*=`)
+ * Does not contain any (`!*=`)
+ * Like (`~=`)
+ * Not like (`!~=`)
+
+For regular text questions, this is straightward. For multi-text questions, you can reference *all* of the text boxes with conditions like this: `myMultiTextQuestion~=Microsoft` which basically said "show if any of the responses contained the word "Microsoft" (caps not important). If you want to target a specific text box, use bracket notation. For example: `myMultiTextQuestion[0]~=Microsoft` would show the result if the first text box had the word "Microsoft".
+
 ### Piping
 
 The process of injecting previous responses into questions that appear later is called *piping*. Here is a simple example:
@@ -392,3 +432,7 @@ Things are a little different for sort questions. You can pipe from "other" with
 #### Piping on Matrix Rating Questions
 
 Things are again different on matrix rating questions. Since it's only marginally useful to pipe on the rating of each item, we use bracket notation to pipe on the rank of each item. So, `${myMatrixQ[0]}` would return the text of the top rated item out of the list, `${myMatrix[1]}` would return the 2nd most highly rated item, and so-on.
+
+#### Piping on Text and Multi-Text Questions
+
+For regular text questions, you can pipe by referencing the question directly, eq: `${myTextQuestion}`. For Multi-text questions, you need to select which text box you want to target. Eg: `${myMultiTextQuestion[1]}` would target the 2nd box.

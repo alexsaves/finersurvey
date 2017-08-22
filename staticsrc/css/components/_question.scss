@@ -8,6 +8,7 @@
 @import "questiontypes/matrixrating";
 @import "questiontypes/sort";
 @import "questiontypes/buttons";
+@import "questiontypes/multitext";
 
 .question {
   font-family: $desktopfont;
@@ -35,8 +36,7 @@
     margin-right: ($general_padding / 5);
   }
   @media (max-width: $screen-md-min) {
-    width: 85%;
-    min-width: 24em;
+    width: 30em;
   }
   @media (max-width: $screen-sm-min) {
     width: 85%;

@@ -16,12 +16,26 @@ class RadioQuestion extends React.Component {
     super(props);
     this.iptThrottle = null;
     this.piper = new Piper();
+    this.wasFocused = false;
     this.Randomizer = new Randomizer();
     this.state = {
       srcOrder: this
         .Randomizer
         .randomizeChoices(this.props.choices, this.props.random)
     };
+  }
+
+  /**
+   * Handle focus on the input
+   * @param {*} e
+   */
+  handleFocus(e) {
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
   }
 
   /**
@@ -56,6 +70,12 @@ class RadioQuestion extends React.Component {
         .props
         .onFullyAnswerQuestion();
     }
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
   }
 
   /**
@@ -88,6 +108,17 @@ class RadioQuestion extends React.Component {
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
+    if (this.props.isFocused && !this.wasFocused) {
+      setTimeout(() => {
+        this.wasFocused = true;
+        let root = ReactDOM.findDOMNode(this),
+          btns = root.getElementsByTagName('label');
+        if (btns.length > 0) {
+          btns[0].focus();
+        }
+      }, 25);
+    }
+
     return (
       <div className="question--radio">
         {this
@@ -102,6 +133,7 @@ class RadioQuestion extends React.Component {
               ? "selected"
               : "")}>{piper.pipe(rt, panswers, ppages)}<input
               type="radio"
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
               name={qname}
               value={idx}
               onClick={ctx
@@ -115,6 +147,9 @@ class RadioQuestion extends React.Component {
           defaultValue={(this.props.answer && this.props.answer.other)
           ? this.props.answer.other
           : ''}
+          onFocus={ctx
+          .handleFocus
+          .bind(ctx)}
           onKeyUp={ctx
           .handleIptThrottleChange
           .bind(ctx)}/>}

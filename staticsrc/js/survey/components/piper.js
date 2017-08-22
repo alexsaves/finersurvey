@@ -54,6 +54,15 @@ export default class {
           throw new Error("Other is not supported in piping for text questions.");
         }
         return answer.trim();
+      case "multitext":
+        if (isOther) {
+          throw new Error("Other is not supported in piping for text questions.");
+        } else {
+          if (!answer || answer.length <= subQuestion) {
+            return "";
+          }
+          return answer[subQuestion].trim();
+        }
       case "rating":
         if (isOther) {
           throw new Error("Other is not supported in piping for rating questions.");

@@ -15,6 +15,7 @@ class DropdownQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.piper = new Piper();
+    this.wasFocused = false;
     this.Randomizer = new Randomizer();
     this.state = {
       srcOrder: this
@@ -39,20 +40,39 @@ class DropdownQuestion extends React.Component {
         .props
         .onFullyAnswerQuestion();
     }
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
   }
 
   /**
  * Render the view
  */
   render() {
-    let answer = this.props.answer,
+    let ctx = this,
+      answer = this.props.answer,
       piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
+    if (this.props.isFocused && !this.wasFocused) {
+      setTimeout(() => {
+        this.wasFocused = true;
+        let root = ReactDOM.findDOMNode(this),
+          btns = root.getElementsByTagName('select');
+        if (btns.length > 0) {
+          btns[0].focus();
+        }
+      }, 25);
+    }
+
     return (
       <div className="question--dropdown">
         <select
+          tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
           onChange={this
           .handleAnswerChange
           .bind(this)}

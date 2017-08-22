@@ -13,6 +13,7 @@ class SliderRatingQuestion extends React.Component {
  */
   constructor(props) {
     super(props);
+    this.wasFocused = false;
     this.state = {
       sliderValue: this.props.answer || 50,
       startScreenX: 0,
@@ -110,13 +111,11 @@ class SliderRatingQuestion extends React.Component {
       targ = e.target,
       screenX = e.pageX,
       backdrop = root.getElementsByClassName('slider--backdrop')[0],
-      bpos = backdrop.getBoundingClientRect();
+      bpos = backdrop.getBoundingClientRect(),
+      perc = (screenX - bpos.left) / bpos.width,
+      newslidervalue = Math.min(100, Math.max(0, perc * 100));
 
-    let perc = (screenX - bpos.left) / bpos.width;
-    let newslidervalue = Math.min(100, Math.max(0, perc * 100));
-    this.setState({
-      sliderValue: newslidervalue
-    });
+    this.setState({sliderValue: newslidervalue});
     this
       .props
       .dispatch(changeAnswer(this.props.name, newslidervalue));
@@ -124,6 +123,12 @@ class SliderRatingQuestion extends React.Component {
       this
         .props
         .onFullyAnswerQuestion();
+    }
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
     }
   }
 
@@ -146,6 +151,17 @@ class SliderRatingQuestion extends React.Component {
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
+    if (this.props.isFocused && !this.wasFocused) {
+      setTimeout(() => {
+        this.wasFocused = true;
+        let root = ReactDOM.findDOMNode(this),
+          btns = root.getElementsByTagName('a');
+        if (btns.length > 0) {
+          btns[0].focus();
+        }
+      }, 25);
+    }
+
     return (
       <div className="question--rating slider">
         <div className="slider--container">
@@ -154,10 +170,11 @@ class SliderRatingQuestion extends React.Component {
             onMouseDownCapture={this
             .handleLineTap
             .bind(this)}></div>
-          <div
+          <a
             className={"slider--ball" + (this.state.isDragging
             ? " dragging"
             : "")}
+            tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
             style={{
             left: sliderValue + '%'
           }}
@@ -166,7 +183,7 @@ class SliderRatingQuestion extends React.Component {
             .bind(this)}
             onMouseDownCapture={this
             .handleMouseDragStart
-            .bind(this)}></div>
+            .bind(this)}></a>
         </div>
         <div className="labelcontainer">
           {this.props.low && <span className="smalllabel lowlabel">{this.props.low}</span>}

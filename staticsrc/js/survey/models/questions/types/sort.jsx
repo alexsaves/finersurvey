@@ -16,6 +16,7 @@ class SortQuestion extends React.Component {
     super(props);
     var answer = JSON.parse(JSON.stringify(this.props.answer || {}));
     this.piper = new Piper();
+    this.wasFocused = false;
     this.Randomizer = new Randomizer();
     this.iptThrottle = null;
     this.stopRepositioning = false;
@@ -51,7 +52,7 @@ class SortQuestion extends React.Component {
         .currentOrder
         .push(9999);
     }
-    if (answer && answer.order.length == this.state.currentOrder.length) {
+    if (answer && answer.order && answer.order.length == this.state.currentOrder.length) {
       this.state.currentOrder = answer
         .order
         .slice();
@@ -162,6 +163,13 @@ class SortQuestion extends React.Component {
       targ = e.currentTarget,
       targWhich = parseInt(targ.getAttribute("data-which")),
       hoverIndex = parseInt(targ.getAttribute("data-index"));
+
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
 
     if (this.state.isDragging || e.target.tagName == "INPUT") {
       return;
@@ -275,6 +283,12 @@ class SortQuestion extends React.Component {
           .onFullyAnswerQuestion();
       }
     }
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
   }
 
   /**
@@ -330,6 +344,12 @@ class SortQuestion extends React.Component {
    */
   startEditingOther() {
     this.stopRepositioning = true;
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
   }
 
   /**
@@ -431,7 +451,7 @@ class SortQuestion extends React.Component {
       }, 200);
     }
     this.isAnimating = this.props.isAnimating;
-    console.log(realOrder);
+
     return (
       <div className="question--sort">
         {(this.state.positionOtherInput && !this.state.isDragging && !hideOtherOverlay && this.props.isSelected && !this.props.isAnimating) && <input
@@ -463,6 +483,7 @@ class SortQuestion extends React.Component {
               onMouseDown={this
               .handleDragStart
               .bind(this)}
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + 998}
               onTouchStartCapture={this
               .handleDragStart
               .bind(this)}
@@ -474,6 +495,7 @@ class SortQuestion extends React.Component {
               <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/>
                 <span className="numholder">{idx + 1}.</span><input
                   type="text"
+                  tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + 999}
                   onMouseDownCapture={this
               .preventDrag
               .bind(this)}
@@ -492,6 +514,7 @@ class SortQuestion extends React.Component {
               onMouseDown={this
               .handleDragStart
               .bind(this)}
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
               onTouchStartCapture={this
               .handleDragStart
               .bind(this)}

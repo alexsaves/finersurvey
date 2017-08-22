@@ -38,6 +38,17 @@ export default class {
         } else {
           return false;
         }
+      case "multitext":
+        if (answer && answer.length > 0) {
+          for (let i = 0; i < answer.length; i++) {
+            let ans = answer[i];
+            if (!ans || ans.trim().length == 0) {
+              return false;
+            }
+          }
+          return true;
+        }
+        return false;
       case "radio":
         return answer && (answer.other || typeof answer.response != "undefined");
       case "text":

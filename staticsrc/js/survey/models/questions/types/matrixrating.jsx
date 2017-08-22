@@ -15,6 +15,7 @@ class MatrixRatingQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.Randomizer = new Randomizer();
+    this.wasFocused = false;
     this.state = {
       selectedItem: 0,
       animatingForward: false,
@@ -54,6 +55,12 @@ class MatrixRatingQuestion extends React.Component {
           .props
           .onFullyAnswerQuestion();
       }
+    }
+    // Signal that the user is interacting with the question
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
     }
   }
 
@@ -117,6 +124,21 @@ class MatrixRatingQuestion extends React.Component {
   }
 
   /**
+   * User clicked on a specific page
+   * @param {*} e
+   */
+  handlePaginationClick(e) {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    let targ = e.currentTarget,
+      which = parseInt(targ.getAttribute("data-which"));
+
+    this.setState({selectedItem: which});
+  }
+
+  /**
  * Render the view
  */
   render() {
@@ -134,12 +156,22 @@ class MatrixRatingQuestion extends React.Component {
       selectedItem = this.state.selectedItem,
       animatingBackward = this.state.animatingBackward,
       animatingForward = this.state.animatingForward,
-      answer = (this.props.answer && this.props.answer[this.state.selectedItem]) || null;
-
-    let piper = this.piper,
+      answer = (this.props.answer && this.props.answer[this.state.selectedItem]) || null,
+      piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
-    
+
+    if (this.props.isFocused && !this.wasFocused) {
+      setTimeout(() => {
+        this.wasFocused = true;
+        let root = ReactDOM.findDOMNode(this),
+          btns = root.getElementsByTagName('label');
+        if (btns.length > 0) {
+          btns[0].focus();
+        }
+      }, 25);
+    }
+
     // Spit out the question node
     return (
       <div
@@ -195,12 +227,30 @@ class MatrixRatingQuestion extends React.Component {
             .advanceCarousel
             .bind(this)}></a>
         </div>
+        {this.state.srcOrder.length > 1 && this.props.paginationControl !== false && <div className="pagination--controls">
+          {this
+            .state
+            .srcOrder
+            .map((rto, idxo) => {
+              return <a
+                href="#"
+                data-which={idxo}
+                key={"_" + idxo}
+                className={(selectedItem == idxo
+                ? "selected"
+                : "")}
+                onClick={this
+                .handlePaginationClick
+                .bind(this)}></a>;
+            })}
+        </div>}
         <div className="rating-zone">
           <div className="question--rating">
             <div className="buttongroup">
               {ratingScale.map((rt, idx) => {
                 return <label
                   key={idx}
+                  tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
                   className={"selectbutton question--ratingitem" + (!!(rt <= answer)
                   ? " selected"
                   : "")}>{rt}<input
