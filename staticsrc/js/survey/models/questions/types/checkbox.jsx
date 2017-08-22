@@ -112,6 +112,7 @@ class CheckboxQuestion extends React.Component {
       ppages = this.props.allpages;
 
     if (this.props.isFocused && !this.wasFocused) {
+      console.log("focus cb", this.props.name);
       setTimeout(() => {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
