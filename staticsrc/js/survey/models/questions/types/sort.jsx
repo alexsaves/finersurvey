@@ -58,6 +58,7 @@ class SortQuestion extends React.Component {
         .order
         .slice();
     }
+    console.log(this.state);
   }
 
   /**
@@ -151,7 +152,7 @@ class SortQuestion extends React.Component {
         this.positionOtherInput();
         this.setState({hideOtherOverlay: false});
       }, 500);
-    });    
+    });
   }
 
   /**
@@ -237,16 +238,16 @@ class SortQuestion extends React.Component {
     document
       .body
       .appendChild(this.draggy);
-    var dragOrder = this.calcDragOrderForSelected(hoverIndex, targWhich);
-    var newState = {
-      dragOrder: dragOrder,
-      hoverPosition: targWhich,
-      dragItem: targWhich,
-      isDragging: true,
-      startClientX: e.clientX,
-      startClientY: e.clientY,
-      hideOtherOverlay: true
-    };
+    var dragOrder = this.calcDragOrderForSelected(hoverIndex, targWhich),
+      newState = {
+        dragOrder: dragOrder,
+        hoverPosition: targWhich,
+        dragItem: targWhich,
+        isDragging: true,
+        startClientX: e.clientX,
+        startClientY: e.clientY,
+        hideOtherOverlay: true
+      };
     this.setState(newState);
     return false;
   }
@@ -256,9 +257,8 @@ class SortQuestion extends React.Component {
    */
   applyCurrentDataState() {
     let root = ReactDOM.findDOMNode(this),
-      otheript = root.getElementsByClassName('otherOverlayInput')[0];
-
-    let othervalue = (this.props.other && otheript)
+      otheript = root.getElementsByClassName('otherOverlayInput')[0],
+      othervalue = (this.props.other && otheript)
       ? otheript.value
       : null;
 
@@ -321,12 +321,12 @@ class SortQuestion extends React.Component {
       e = e.touches[0];
     }
     let diffX = e.clientX - this.state.startClientX,
-      diffY = e.clientY - this.state.startClientY;
+      diffY = e.clientY - this.state.startClientY,
+      hoverPosition = 0;
 
     this.draggy.style.top = (this.targetCoords.y + diffY) + "px";
     this.draggy.style.left = (this.targetCoords.x + diffX) + "px";
 
-    let hoverPosition = 0;
     // Determine hover position
     for (let u = 0; u < this.regions.length; u++) {
       if (e.clientY >= this.regions[u].y) {
@@ -511,6 +511,11 @@ class SortQuestion extends React.Component {
             </label>;
           } else {
             let rt = choices[num];
+            for (var b = 0; b < ctx.state.srcOrder.length; b++) {
+              if (ctx.state.srcOrder[b].originalPosition == num) {
+                rt = ctx.state.srcOrder[b].choice;
+              }
+            }
             return <label
               key={idx}
               onMouseDown={this

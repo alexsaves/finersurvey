@@ -37,6 +37,7 @@ if (stateElm) {
       if (ansObj.key == persistentKey && ansObj.hash == surveyHash) {
         startupState.answers = ansObj.answers;
       } else {
+        console.log("Hash in memory was", ansObj.hash, "is now", surveyHash);
         debugger;
       } 
     }

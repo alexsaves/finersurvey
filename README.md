@@ -93,6 +93,30 @@ You should specify size (`modifier`) for the image. Choices are:
  * `SMALL`
  * `ICON`
 
+### Randomization
+
+Most question types support the `random` boolean switch to switch up the sequence that you see the choices. This supports a methodological strategy of minimizing *sequence bias*. Simply set the `"random": true` switch in the question definition. If you want to randomize BUT also pin one of the choices to the top or bottom, you can prefix with `_` for bottom, and `^` for top. Example:
+
+```json
+{
+    "type": "sort",
+    "choices": [
+        "^Preloaded Competitor A",
+        "Preloaded Competitor B",
+        "Preloaded Competitor C",
+        "_No Vendor Chosen"
+    ],
+    "name": "vendorRankings",
+    "title": "Please list the vendors in order from best to worst starting with the winning vendor as #1",
+    "instructions": "Click and drag to rank from high to low",
+    "required": true,
+    "other": true,
+    "random": true,
+    "otherplaceholder": "Other vendor"
+}
+```
+In this example, only the middle two choices (*Preloaded Competitor B* and *Preloaded Competitor C*) will be random. *Preloaded Competitor A* will always be at the top because of the prefixed hat (`^`), and *_No Vendor Chosen* will always go to the bottom due to the prefixed underscore (`_`).
+
 ### Limits
 
 Different question types support a different `limits` specification. These work in concert with `required` to cause the user to answer the question fully.
