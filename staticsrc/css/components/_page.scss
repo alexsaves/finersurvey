@@ -1,0 +1,92 @@
+@keyframes pageAnimateInForwardAnimation {
+  0% {
+    opacity: 0;
+    left: 15%;
+  }
+  25% {
+    opacity: 0;
+    left: 15%;
+  }
+  100% {
+    opacity: 1;
+    left: 0;
+  }
+}
+
+@keyframes pageAnimateInBackwardAnimation {
+  0% {
+    opacity: 0;
+    left: -15%;
+  }
+  25% {
+    opacity: 0;
+    left: -15%;
+  }
+  100% {
+    opacity: 1;
+    left: 0;
+  }
+}
+
+.page {
+  width: 100%;
+  height: 100%;
+  display: none;
+  text-align: center;
+  position: relative;
+  left: 0;
+  opacity: 1;
+  transition-timing-function: ease-out;
+  transition: left ($slow_anim_timing * 0.6666), opacity ($slow_anim_timing * 0.6666);
+  &.animatingoutforward {
+    left: -15%;
+    opacity: 0;
+  }
+  &.animatingoutbackward {
+    left: 15%;
+    opacity: 0;
+  }
+  &.animatinginforward {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    opacity: 1;
+    animation-name: pageAnimateInForwardAnimation;
+    animation-duration: ($slow_anim_timing);
+  }
+  &.animatinginbackward {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    opacity: 1;
+    animation-name: pageAnimateInBackwardAnimation;
+    animation-duration: ($slow_anim_timing);
+  }
+  &.selected {
+    display: block;
+  }
+  .questions {
+    display: inline-block;
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-box-flex: 0;
+    -webkit-flex: none;
+    -ms-flex: none;
+    flex: none;
+    @media (max-width: $screen-sm-min) {
+      min-height: 95%;
+    }
+    .questions--listholder {
+      padding-top: ($general_padding * 4);
+      padding-bottom: ($general_padding * 4);
+      @media (max-width: $screen-sm-min) {
+        padding-top: ($general_padding * 1.5);
+        padding-bottom: ($general_padding * 4);
+      }
+    }
+  }
+}

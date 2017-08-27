@@ -1,0 +1,63 @@
+@import "reset";
+@import "vars";
+@import "components/all";
+
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url($bgimage);
+  overflow: hidden !important;
+  body {
+    font-family: $lightfont;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    -webkit-text-size-adjust: 100% !important;
+    @media (max-width: $screen-sm-min) {
+      font-family: $mobile_lightfont;
+    }
+    .app {
+      height: 100%;
+      overflow: hidden;
+      .survey {
+        height: 100%;
+        //overflow-y: hidden;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;        
+        .hidden {
+          display: none;
+        }
+        &.overflowing {
+          .logo--finerink {
+            background-image: url(/static/assets/logos/finerink_w.svg);
+          }
+        }
+        .logo--finerink {
+          position: fixed;
+          bottom: 0.65em;
+          background-image: url(/static/assets/logos/finerink.svg);
+          height: 2em;
+          width: 100%;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: 5em;
+          z-index: 999999;
+          opacity: 1;
+          transition: opacity $slow_anim_timing;
+          @media (max-width: $screen-sm-min) {
+            background-image: url(/static/assets/logos/finerink_w.svg);
+          }
+          &.hidden {
+            display: block;
+            opacity: 0;
+          }
+        }
+      }
+    }
+  }
+}

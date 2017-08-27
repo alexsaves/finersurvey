@@ -24,14 +24,14 @@ process.env.TZ = pjson.config.aws.timeZone;
 // SET THE REGION
 AWS.config.region = pjson.config.aws.region;
 
-// SET ACCESS KEYS
-//AWS.config.accessKeyId = pjson.config.aws.accessKeyId;
-//AWS.config.secretAccessKey = pjson.config.aws.secretAccessKey;
-
-// Code to run if we're in the master process
+// SET ACCESS KEYS AWS.config.accessKeyId = pjson.config.aws.accessKeyId;
+// AWS.config.secretAccessKey = pjson.config.aws.secretAccessKey; Code to run if
+// we're in the master process
 if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     // Count the machine's CPUs
-    var cpuCount = require('os').cpus().length;
+    var cpuCount = require('os')
+        .cpus()
+        .length;
 
     // Tell the world
     console.log((new Date).toString(), "Starting " + pjson.name + " " + pjson.version + " on " + cpuCount + " CPUs @ " + (new Date()).toString() + "..");
@@ -55,7 +55,9 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         },
         basicHeaders = {
             "Access-Control-Allow-Origin": "*",
-            "App-Server-Version": pjson.version.toString(),
+            "App-Server-Version": pjson
+                .version
+                .toString(),
             "Content-Type": "text/html; charset=UTF-8"
         },
         app = express(),
@@ -91,7 +93,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
 
     // Production SSL enforcer **************************
     if (process.env.NODE_ENV == 'production') {
-        app.use(enforce.HTTPS({ trustProtoHeader: true }));
+        app.use(enforce.HTTPS({trustProtoHeader: true}));
     }
 
     /**
@@ -102,7 +104,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     app.set('trust proxy', 1);
 
     // Add body parser url parser
-    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.urlencoded({extended: true}));
 
     // Set up the session handler
     /*pjson.config.session.store = new RedisStore({
@@ -124,7 +126,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     /**
      * Output a proper response
      */
-    var _outputResponse = function(res, respObj) {
+    var _outputResponse = function (res, respObj) {
         var headers = extend({}, basicHeaders, respObj.headers || {});
 
         for (var hd in headers) {
@@ -153,41 +155,81 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     /**
      * Survey Display
      */
-    app.get('/s/:surveyGuid', (req, res, next) => {
+    app.get([
+        '/s/:surveyGuid/:pg', '/s/:surveyGuid'
+    ], (req, res, next) => {
         var guid = req.params.surveyGuid,
+            pg = parseInt(req.params.pg),
             sv = new SurveyController(pjson.config),
             usSrc = req.headers['user-agent'],
             ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
+        if (isNaN(pg) || pg < 0) {
+            pg = 0;
+        } else {
+            pg--;
+        }
+
         var requestEmitter = new events.EventEmitter();
         requestEmitter.setMaxListeners(1);
 
-        requestEmitter.on('error', function() {
+        requestEmitter.on('error', function () {
             requestEmitter.removeAllListeners();
-            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', { title: "Oops, there's a problem.", details: "We're having difficulties right now, please try again a little later!", session: req.session }, 500));
+            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', {
+                title: "Oops, there's a problem.",
+                details: "We're having difficulties right now, please try again a little later!",
+                session: req.session
+            }, 500));
         });
 
-        requestEmitter.on('timeout', function() {
+        requestEmitter.on('timeout', function () {
             requestEmitter.removeAllListeners();
-            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', { title: "Oops, there's a problem.", details: "We're having difficulties right now, please try again a little later!", session: req.session }, 500));
+            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', {
+                title: "Oops, there's a problem.",
+                details: "We're having difficulties right now, please try again a little later!",
+                session: req.session
+            }, 500));
         });
 
         // Handle the done value
-        requestEmitter.on('done', function(srvObj) {
+        requestEmitter.on('done', function (srvObj) {
             // Get the respondent object
-            sv.getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function(resp) {
-                req.session.rid = resp;
-                req.session.save(function() {
-                    //var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
-                    //srvObj.survey_model = defaultModel;
-                    _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', { title: srvObj.name, respondent: resp, session: req.session, model: srvObj.survey_model, surveyID: guid, modelstr: btoa(JSON.stringify(srvObj.survey_model)) }));
+            sv
+                .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function (resp) {
+                    req.session.rid = resp;
+                    req
+                        .session
+                        .save(function () {
+                            // var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
+                            // srvObj.survey_model = defaultModel;
+                            _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
+                                title: srvObj.name,
+                                respondent: resp,
+                                session: req.session,
+                                model: srvObj.survey_model,
+                                surveyID: guid,
+                                theme: srvObj.theme,
+                                modelstr: btoa(JSON.stringify({
+                                    metadata: {
+                                        title: srvObj.name,
+                                        guid: srvObj.survey_model.guid,
+                                        theme: srvObj.theme,
+                                        updated_at: srvObj.updated_at                                 
+                                    },
+                                    currentPage: Math.min(pg, srvObj.survey_model.pages.length),
+                                    pages: srvObj.survey_model.pages,
+                                    answers: {}
+                                }))
+                            }));
+                        });
                 });
-            });
         });
 
         sv.loadSurveyByGuid(guid, requestEmitter);
-        //var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
-        //_outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', { title: "test", respondent: respondent, surveyID: guid, session: req.session, model: defaultModel, modelstr: btoa(JSON.stringify(defaultModel)) }));
+        // var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
+        // _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
+        // title: "test", respondent: respondent, surveyID: guid, session: req.session,
+        // model: defaultModel, modelstr: btoa(JSON.stringify(defaultModel)) }));
     });
 
     /**
@@ -196,9 +238,14 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     app.get('/s/:surveyGuid/complete', (req, res, next) => {
         var guid = req.params.surveyGuid;
 
-        req.session.destroy(function() {
-            _outputResponse(res, templs.renderWithBase('surveybase', 'surveycomplete', { surveyID: guid, title: "Thanks! Discover Win/Loss Analysis with Finer Ink." }));
-        });
+        req
+            .session
+            .destroy(function () {
+                _outputResponse(res, templs.renderWithBase('surveybase', 'surveycomplete', {
+                    surveyID: guid,
+                    title: "Thanks! Discover Win/Loss Analysis with Finer Ink."
+                }));
+            });
     });
 
     /**
@@ -212,24 +259,24 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         var requestEmitter = new events.EventEmitter();
         requestEmitter.setMaxListeners(1);
 
-        requestEmitter.on('done', function(srvObj) {
+        requestEmitter.on('done', function (srvObj) {
             _outputResponse(res, {
-                body: JSON.stringify({
-                    success: true
-                }),
+                body: JSON.stringify({success: true}),
                 status: 200,
-                headers: { "Content-Type": "application/json" }
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
         });
 
-        requestEmitter.on('error', function() {
+        requestEmitter.on('error', function () {
             requestEmitter.removeAllListeners();
             _outputResponse(res, {
-                body: JSON.stringify({
-                    error: "There was an error saving the data."
-                }),
+                body: JSON.stringify({error: "There was an error saving the data."}),
                 status: 500,
-                headers: { "Content-Type": "application/json" }
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
         });
 
@@ -239,12 +286,14 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     /**
      * Cross domain xml for flash
      */
-    app.get('/crossdomain.xml', function(req, res) {
+    app.get('/crossdomain.xml', function (req, res) {
         _outputResponse(res, {
             headers: {
                 "Content-Type": "text/x-cross-domain-policy"
             },
-            body: "<?xml version=\"1.0\"?>\n<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n<cross-domain-policy>\n<allow-access-from domain=\"*\" secure=\"false\"/>\n</cross-domain-policy>"
+            body: "<?xml version=\"1.0\"?>\n<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macro" +
+                    "media.com/xml/dtds/cross-domain-policy.dtd\">\n<cross-domain-policy>\n<allow-acc" +
+                    "ess-from domain=\"*\" secure=\"false\"/>\n</cross-domain-policy>"
         });
     });
 

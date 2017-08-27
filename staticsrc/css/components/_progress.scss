@@ -1,0 +1,15 @@
+.progress {
+  &--container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999999;
+    background-color: rgba(255, 255, 255, 0.2);
+    div {
+      height: $progress_height;
+      background-color: $fill;
+      transition: width $slow_anim_timing;
+      transition-timing-function: easeInOutSine;
+    }
+  }
+}
