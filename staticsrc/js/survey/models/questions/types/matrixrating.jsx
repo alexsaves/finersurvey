@@ -28,6 +28,10 @@ class MatrixRatingQuestion extends React.Component {
     for (let i = 0; i < this.props.choices.length; i++) {
       this.state.answers[i] = -1;
     }
+    let answers = this.props.answers;
+    if (answers && answers[props.name]) {
+      this.state.answers = answers[props.name].slice(0);
+    }
     this.piper = new Piper();
   }
 
@@ -36,12 +40,12 @@ class MatrixRatingQuestion extends React.Component {
    * @param {*} e
    */
   handleAnswerChange(e) {
-    let targ = e && e.target,
+    let targ = e && e.currentTarget,
       newAnswers = this
         .state
         .answers
-        .splice(0);
-    newAnswers[this.state.selectedItem] = parseInt(targ.value);
+        .slice(0);
+    newAnswers[this.state.srcOrder[this.state.selectedItem].originalPosition] = parseInt(targ.value);
     this.setState({answers: newAnswers});
     this
       .props
@@ -139,6 +143,23 @@ class MatrixRatingQuestion extends React.Component {
   }
 
   /**
+   * Handle Keypress
+   * @param {*} e
+   */
+  handleKeyPress(e) {
+    if (e) {
+      if (e.key == "Enter" || e.key == " ") {
+        let targ = e.currentTarget,
+          cb = targ.getElementsByTagName("input")[0];
+
+        cb.checked = !!!cb.checked;
+        e.currentTarget = cb;
+        this.handleAnswerChange(e);
+      }
+    }
+  }
+
+  /**
  * Render the view
  */
   render() {
@@ -156,7 +177,7 @@ class MatrixRatingQuestion extends React.Component {
       selectedItem = this.state.selectedItem,
       animatingBackward = this.state.animatingBackward,
       animatingForward = this.state.animatingForward,
-      answer = (this.props.answer && this.props.answer[this.state.selectedItem]) || null,
+      answer = (this.props.answer && this.props.answer[this.state.srcOrder[this.state.selectedItem].originalPosition]) || null,
       piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
@@ -165,14 +186,13 @@ class MatrixRatingQuestion extends React.Component {
       setTimeout(() => {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
-          btns = root.getElementsByTagName('label');
+          btns = root.getElementsByClassName('selectbutton');
+        console.log("Focusing on ", btns[0])
         if (btns.length > 0) {
           btns[0].focus();
         }
-      }, 25);
+      }, 100);
     }
-
-    console.log("MATRAT", panswers);
 
     // Spit out the question node
     return (
@@ -252,6 +272,9 @@ class MatrixRatingQuestion extends React.Component {
               {ratingScale.map((rt, idx) => {
                 return <label
                   key={idx}
+                  onKeyPress={this
+                  .handleKeyPress
+                  .bind(this)}
                   tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
                   className={"selectbutton question--ratingitem" + (!!(rt <= answer)
                   ? " selected"

@@ -1,7 +1,13 @@
-.question--matrixrating, .question--matrixradio {
+.question--matrixrating,
+.question--matrixradio {
   text-align: center;
   .rating-zone {
     margin-top: $general_padding;
+    label {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
   }
   .pagination--controls {
     a {

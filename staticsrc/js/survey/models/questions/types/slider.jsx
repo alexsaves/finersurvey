@@ -133,6 +133,16 @@ class SliderRatingQuestion extends React.Component {
   }
 
   /**
+   * Handle Keypress
+   * @param {*} e
+   */
+  handleKeyPress(e) {
+    if (e) {
+      //console.log("key", e.keyCode);
+    }
+  }
+
+  /**
  * Render the view
  */
   render() {
@@ -151,7 +161,7 @@ class SliderRatingQuestion extends React.Component {
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
-    if (this.props.isFocused && !this.wasFocused) {
+    /*if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
@@ -160,7 +170,7 @@ class SliderRatingQuestion extends React.Component {
           btns[0].focus();
         }
       }, 25);
-    }
+    }*/
 
     return (
       <div className="question--rating slider">
@@ -174,7 +184,8 @@ class SliderRatingQuestion extends React.Component {
             className={"slider--ball" + (this.state.isDragging
             ? " dragging"
             : "")}
-            tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
+            /*tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}*/
+            onKeyPress={this.handleKeyPress.bind(this)}
             style={{
             left: sliderValue + '%'
           }}

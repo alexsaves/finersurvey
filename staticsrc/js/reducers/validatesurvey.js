@@ -2,6 +2,17 @@ import {VALIDATE_SURVEY} from '../actions';
 import clone from '../survey/components/clone';
 import LogicChecker from '../survey/components/logicchecker';
 
+/**
+ * Validate a question name
+ * @param {String} name 
+ */
+function questionNameIsValid(name) {
+  if (name && name.trim().length > 0 && name.trim().length == name.length) {
+    return name.match(/[a-zA-Z_][a-zA-Z_0-9]*/gi) && !name.match(/[^a-zA-Z0-9]/);
+  }
+  return false;
+}
+
 // Does validation
 function surveyValidatorReducer(state = [], action) {
   switch (action.type) {
@@ -40,6 +51,9 @@ function surveyValidatorReducer(state = [], action) {
         if (els) {
           for (let j = 0; j < els.length; j++) {
             let q = els[j];
+            if (!questionNameIsValid(q.name)) {
+              throw new Error("Question name is invalid: " + q.name + " for " + JSON.stringify(q));
+            }
             if (q.displayNumber) {
               q.questionNumber = ++questionCount;
             }

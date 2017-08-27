@@ -146,7 +146,7 @@ class PaginationController extends React.Component {
         .elements
         .find((elm) => {
           let qt = elm.type;
-          return (qt == "none" || qt == "multitext" || qt == "rating" || qt == "matrixrating" || qt == "dropdown" || qt == "radio" || qt == "text" || qt == "buttons" || qt == "button")
+          return (qt == "none" || qt == "multitext" || qt == "rating" || qt == "matrixrating" || qt == "matrixradio" || qt == "dropdown" || qt == "radio" || qt == "text" || qt == "buttons" || qt == "button")
         });
     }
     return false;

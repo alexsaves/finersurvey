@@ -28,6 +28,10 @@ class MatrixRadioQuestion extends React.Component {
     for (let i = 0; i < this.props.choices.length; i++) {
       this.state.answers[i] = -1;
     }
+    let answers = this.props.answers;
+    if (answers && answers[props.name]) {
+      this.state.answers = answers[props.name].slice(0);
+    }
     this.piper = new Piper();
   }
 
@@ -36,12 +40,12 @@ class MatrixRadioQuestion extends React.Component {
    * @param {*} e
    */
   handleAnswerChange(e) {
-    let targ = e && e.target,
+    let targ = e && e.currentTarget,
       newAnswers = this
         .state
         .answers
-        .splice(0);
-    newAnswers[this.state.selectedItem] = parseInt(targ.value);
+        .slice(0);
+    newAnswers[this.state.srcOrder[this.state.selectedItem].originalPosition] = parseInt(targ.value);
     this.setState({answers: newAnswers});
     this
       .props
@@ -178,14 +182,13 @@ class MatrixRadioQuestion extends React.Component {
         if (btns.length > 0) {
           btns[0].focus();
         }
-      }, 25);
+      }, 100);
     }
 
     // Check each value
-    let shouldOptionBeSelected = function (val) {
-      if (panswers && panswers.length > 0) {
-        debugger;
-        return panswers[selectedItem] === val;
+    let shouldOptionBeSelected = (val) => {
+      if (panswers && panswers[ctx.props.name]) {
+        return panswers[ctx.props.name][ctx.state.srcOrder[selectedItem].originalPosition] === val;
       }
       return false;
     };
@@ -265,23 +268,23 @@ class MatrixRadioQuestion extends React.Component {
         <div className="rating-zone">
           <div className="question--checkbox">
             {columns.map((rt, idx) => {
-                return <label
-                  key={idx}
-                  onKeyPress={this
-                  .handleKeyPress
-                  .bind(this)}
-                  tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idx}
-                  className={"standalonebutton " + (shouldOptionBeSelected(idx)
-                  ? "selected"
-                  : "")}>{piper.pipe(rt, panswers, ppages)}<input
-                  type="checkbox"
-                  name={idx}
-                  value={idx}
-                  defaultChecked={shouldOptionBeSelected(idx)}
-                  onChange={ctx
-                  .handleAnswerChange
-                  .bind(ctx)}/></label>
-              })}
+              return <label
+                key={idx}
+                onKeyPress={this
+                .handleKeyPress
+                .bind(this)}
+                tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idx + 1}
+                className={"standalonebutton " + (shouldOptionBeSelected(idx)
+                ? "selected"
+                : "")}>{piper.pipe(rt, panswers, ppages)}<input
+                type="checkbox"
+                name={idx}
+                value={idx}
+                defaultChecked={shouldOptionBeSelected(idx)}
+                onChangeCapture={ctx
+                .handleAnswerChange
+                .bind(ctx)}/></label>
+            })}
           </div>
         </div>
       </div>
