@@ -143,7 +143,7 @@ Each question type has some unique requirements for attributes, as well as some 
 
 #### Text Question Definitions
 
-Text input questions are of type `text` but can have a `modifier` with `normal` or `multiline`. Two unique attributes exist for labels to do with word and character counts also:
+Text input questions are of type `text` but can have a `modifier` with `normal` or `multiline` or some input types (see below). Two unique attributes exist for labels to do with word and character counts also:
 
  * `wordcountmaxlabel` - (_String_) How many words are left. Default: "Words left".
  * `wordcountlabel` - (_String_) How many words in the text. Default: "Words".
