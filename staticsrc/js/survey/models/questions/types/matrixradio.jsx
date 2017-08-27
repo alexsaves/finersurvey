@@ -8,7 +8,7 @@ import Randomizer from '../../../components/randomizer';
 /**
 * Represents a question
 */
-class MatrixRatingQuestion extends React.Component {
+class MatrixRadioQuestion extends React.Component {
   /**
  * Constructor for the survey
  */
@@ -139,19 +139,27 @@ class MatrixRatingQuestion extends React.Component {
   }
 
   /**
+   * Handle Keypress
+   * @param {*} e
+   */
+  handleKeyPress(e) {
+    if (e) {
+      if (e.key == "Enter" || e.key == " ") {
+        let targ = e.currentTarget,
+          cb = targ.getElementsByTagName("input")[0];
+
+        cb.checked = !!!cb.checked;
+        e.currentTarget = cb;
+        this.handleAnswerChange(e);
+      }
+    }
+  }
+
+  /**
  * Render the view
  */
   render() {
     let qname = this.props.name;
-    let ratingScale = [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7
-    ];
     let ctx = this,
       selectedItem = this.state.selectedItem,
       animatingBackward = this.state.animatingBackward,
@@ -159,7 +167,8 @@ class MatrixRatingQuestion extends React.Component {
       answer = (this.props.answer && this.props.answer[this.state.selectedItem]) || null,
       piper = this.piper,
       panswers = this.props.answers,
-      ppages = this.props.allpages;
+      ppages = this.props.allpages,
+      columns = this.props.columns;
 
     if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
@@ -172,12 +181,19 @@ class MatrixRatingQuestion extends React.Component {
       }, 25);
     }
 
-    console.log("MATRAT", panswers);
+    // Check each value
+    let shouldOptionBeSelected = function (val) {
+      if (panswers && panswers.length > 0) {
+        debugger;
+        return panswers[selectedItem] === val;
+      }
+      return false;
+    };
 
     // Spit out the question node
     return (
       <div
-        className="question--matrixrating"
+        className="question--matrixradio"
         onTransitionEnd={this
         .handleAnimationEnd
         .bind(this)}>
@@ -247,28 +263,25 @@ class MatrixRatingQuestion extends React.Component {
             })}
         </div>}
         <div className="rating-zone">
-          <div className="question--rating">
-            <div className="buttongroup">
-              {ratingScale.map((rt, idx) => {
+          <div className="question--checkbox">
+            {columns.map((rt, idx) => {
                 return <label
                   key={idx}
-                  tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
-                  className={"selectbutton question--ratingitem" + (!!(rt <= answer)
-                  ? " selected"
-                  : "")}>{rt}<input
+                  onKeyPress={this
+                  .handleKeyPress
+                  .bind(this)}
+                  tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idx}
+                  className={"standalonebutton " + (shouldOptionBeSelected(idx)
+                  ? "selected"
+                  : "")}>{piper.pipe(rt, panswers, ppages)}<input
                   type="checkbox"
-                  checked={!!(rt <= answer)}
-                  name={qname}
-                  value={rt}
+                  name={idx}
+                  value={idx}
+                  defaultChecked={shouldOptionBeSelected(idx)}
                   onChange={ctx
                   .handleAnswerChange
                   .bind(ctx)}/></label>
               })}
-            </div>
-            <div className="labelcontainer">
-              {this.props.low && <span className="smalllabel lowlabel">{this.props.low}</span>}
-              {this.props.high && <span className="smalllabel highlabel">{this.props.high}</span>}
-            </div>
           </div>
         </div>
       </div>
@@ -277,7 +290,7 @@ class MatrixRatingQuestion extends React.Component {
 }
 
 // Connect the component
-const ConnectedMatrixRatingQuestion = connect()(MatrixRatingQuestion)
+const ConnectedMatrixRadioQuestion = connect()(MatrixRadioQuestion)
 
 // Expose the question
-export default ConnectedMatrixRatingQuestion;
+export default ConnectedMatrixRadioQuestion;

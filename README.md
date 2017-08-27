@@ -28,6 +28,7 @@ Each question in the `elements` collection shares a set of common attributes, bu
  * `other` - (_Boolean_) Whether the question supports an "other" field. Not all question types support this.
  * `otherplaceholder` - (_String_) The helpful text that appears in any "other" textboxes (if applicable).
  * `choices` - (_Array_) The possible answers (if applicable).
+ * `columns` - (_Array_) When applicable, an additional dimension of choices. This applies (for example) in `matrixradio` questions.
  * `low` - (_String_) The label for the low end of a scale. This is applicable for scale questions.
  * `high` - (_String_) The label for the high end of a scale.
  * `showIf` - (_String_ or _Array_ or _Object_) The show logic for this question. See below for details.
@@ -45,6 +46,7 @@ A variety of question types are supported, including:
  * `dropdown` - Drop down (select boxes) with one possible answer.
  * `sort` - Drag and drop sorting question with optional other text input.
  * `matrixrating` - Multiple rating questions combined into one with a left-right carousel interface.
+ * `matrixradio` - A coursel interface with a radio question below it.
  * `text` - Single line or multiline open-ended text input.
  * `multitext` - Multiple text inputs.
  * `checkbox` - Multiple choice question with a possible "other" text input.
@@ -222,6 +224,34 @@ This question type lets you rank a set of statements. Use `type` = `matrixrating
 ```
 
 This question comes with a pagination control that you can optionally disable with `paginationControl` = `false`.
+
+#### Matrix Radio Definition
+
+Similar to the `matrixrating` type, the `matrixradio` combines a carousel interface with a radio question. 
+
+```json
+{
+    "type": "matrixradio",
+    "choices": [
+        "You",
+        "Sally Smith (VP of Sales)",
+        "Amy Johnson (Analyst)"
+    ],
+    "columns": [
+        "Don't Know",
+        "High",
+        "Medium",
+        "Low"
+    ],
+    "name": "howMuchInfluence",
+    "title": "How much influence did each person on your team have on buying decision?",
+    "instructions": "Rate each person on their overall influence.",
+    "required": true,
+    "random": true
+}
+```
+
+The `choices` array contains the list of decisions to make, and the `columns` array contains the radio choices below it.
 
 ### Show Logic
 

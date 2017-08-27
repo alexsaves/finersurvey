@@ -73,7 +73,15 @@ export default class {
             }
           }
         }
-        return answer && (answer.length > 0);
+        let _thasanswer = answer && (answer.length > 0);
+        if (_thasanswer && question.modifier == "number") {
+          return !!!answer.match(/[a-zA-Z]/);
+        } else if (_thasanswer && question.modifier == "integer") {
+          return !!!answer.match(/[a-zA-Z\.]/);
+        } else if (_thasanswer && question.modifier == "email") {
+          return !!answer.trim().match(/[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]+/gi);
+        }
+        return _thasanswer;
       case "dropdown":
         return (typeof answer != undefined) && (answer > -1);
       case "matrixrating":

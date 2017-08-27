@@ -43,6 +43,9 @@ function surveyValidatorReducer(state = [], action) {
             if (q.displayNumber) {
               q.questionNumber = ++questionCount;
             }
+            if (q.modifier) {
+              q.modifier = q.modifier.trim().toLowerCase();
+            }
             if (q.type == "text") {
               if (typeof q.wordcountlabel == 'undefined') {
                 q.wordcountlabel = "Words";
@@ -54,7 +57,7 @@ function surveyValidatorReducer(state = [], action) {
                 if ((q.limits.word && q.limits.word.min) || (q.limits.character && q.limits.character.min)) {
                   q.required = true;
                 }
-              }
+              }              
             }
           }
         }

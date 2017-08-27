@@ -9,6 +9,7 @@ import SliderRatingQuestion from './types/slider.jsx';
 import TextQuestion from './types/text.jsx';
 import DropdownQuestion from './types/dropdown.jsx';
 import MatrixRatingQuestion from './types/matrixrating.jsx';
+import MatrixRadioQuestion from './types/matrixradio.jsx';
 import SortQuestion from './types/sort.jsx';
 import ButtonsQuestion from './types/buttons.jsx';
 import MultitextQuestion from './types/multitext.jsx';
@@ -97,6 +98,13 @@ class QuestionComponent extends React.Component {
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "matrixrating" && <MatrixRatingQuestion
+          {...this.props}
+          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
+          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
+        {this.props.type == "matrixradio" && <MatrixRadioQuestion
           {...this.props}
           onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
           onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
