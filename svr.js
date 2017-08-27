@@ -100,8 +100,19 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
      * Run the server on the right port (look for the AWS environment variable)
      */
     app.set('port', port);
+
     // Trust the first proxy
     app.set('trust proxy', 1);
+
+    // Force SSL on prod
+    if (process.env.NODE_ENV == 'production') {
+        app
+            .use(function (req, res, next) {
+                if ((!req.secure) && (req.protocol !== 'https')) {
+                    res.redirect('https://' + req.get('Host') + req.url);
+                }
+            });
+    }
 
     // Add body parser url parser
     app.use(bodyParser.urlencoded({extended: true}));
@@ -214,7 +225,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                         title: srvObj.name,
                                         guid: srvObj.survey_model.guid,
                                         theme: srvObj.theme,
-                                        updated_at: srvObj.updated_at                                 
+                                        updated_at: srvObj.updated_at
                                     },
                                     currentPage: Math.min(pg, srvObj.survey_model.pages.length),
                                     pages: srvObj.survey_model.pages,

@@ -1,14 +1,13 @@
 {
     "name": "survey",
-    "version": "0.1.9",
+    "version": "0.2.0",
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
         "gulpwatch": "gulp",
         "wpwatch": "webpack -d && webpack -d --watch",
-        "prod": "webpack -p",
-        "start": "node index.js",
-        "prestart": "webpack -p && gulp"
+        "prod": "webpack -p && gulp",
+        "start": "node index.js"
     },
     "repository": {
         "type": "git",
@@ -81,6 +80,7 @@
         "email-validator": "^1.0.7",
         "encoding": "^0.1.12",
         "express": "^4.15.2",
+        "express-force-ssl": "^0.3.2",
         "express-session": "^1.15.1",
         "express-sslify": "^1.2.0",
         "express-useragent": "^1.0.7",
