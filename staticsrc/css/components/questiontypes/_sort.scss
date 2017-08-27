@@ -1,0 +1,151 @@
+.sorticon {
+  padding-right: 0.75em;
+  padding-top: 0.3em;
+}
+
+.sortable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  
+  &.dropAnim {
+    animation-name: rankSortDropAnim;
+    animation-duration: $fast_anim_timing;
+    animation-delay: 0s;
+    -webkit-animation-delay: 0s;
+    &.drop1 {
+      animation-delay: 0.025s;
+      -webkit-animation-delay: 0.025s;
+    }
+    &.drop2 {
+      animation-delay: 0.05s;
+      -webkit-animation-delay: 0.05s;
+    }
+    &.drop3 {
+      animation-delay: 0.075s;
+      -webkit-animation-delay: 0.075s;
+    }
+    &.drop4 {
+      animation-delay: 0.1s;
+      -webkit-animation-delay: 0.1s;
+    }
+    &.drop5 {
+      animation-delay: 0.125s;
+      -webkit-animation-delay: 0.125s;
+    }
+    &.drop6 {
+      animation-delay: 0.15s;
+      -webkit-animation-delay: 0.15s;
+    }
+    &.drop7 {
+      animation-delay: 0.175s;
+      -webkit-animation-delay: 0.175s;
+    }
+    &.drop8 {
+      animation-delay: 0.2s;
+      -webkit-animation-delay: 0.2s;
+    }
+    &.drop9 {
+      animation-delay: 0.225s;
+      -webkit-animation-delay: 0.225s;
+    }
+    &.drop10 {
+      animation-delay: 0.25s;
+      -webkit-animation-delay: 0.25s;
+    }
+    &.drop11 {
+      animation-delay: 0.275s;
+      -webkit-animation-delay: 0.275s;
+    }
+    &.drop12 {
+      animation-delay: 0.3s;
+      -webkit-animation-delay: 0.3s;
+    }
+    &.drop13 {
+      animation-delay: 0.325s;
+      -webkit-animation-delay: 0.325s;
+    }
+    &.drop14 {
+      animation-delay: 0.35s;
+      -webkit-animation-delay: 0.35s;
+    }
+    &.drop15 {
+      animation-delay: 0.375s;
+      -webkit-animation-delay: 0.375s;
+    }
+  }
+  &.dragging {
+    @include standalone_button_style;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 999999;
+    box-shadow: 0.1em 0.1em 0.4em rgba(0, 0, 0, 0.15);
+    background-color: $fill;
+    color: $invert_text_color;
+    opacity: 0.75;
+    animation: none !important;
+    &:hover {
+      background-color: $fill;
+      color: $invert_text_color;
+      opacity: 0.75;
+    }
+  }
+}
+
+.question--sort {
+  .groupcontainer {
+    margin-bottom: ($general_padding / 2);
+  }
+  .otherOverlayInput {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100px;
+    height: 70px;
+    box-sizing: border-box;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 0;
+    font-size: 90%;
+  }
+}
+
+.sortable.standalonebutton {
+  cursor: move !important;
+  &.drag--placeholder {
+    @include draggable_placeholder;
+  }
+  &.otherstandalone {
+    padding: 0px;
+    input[type=text] {
+      border-top: 0;
+      border-right: 0;
+      border-bottom: 0;
+      height: 2.6em;
+    }
+    .sorticon {
+      padding-top: 0.8em;
+      padding-left: 0.7em;
+    }
+    .numholder {
+      padding-top: 0.5em;
+      padding-right: 0.7em;
+    }
+  }
+}
+
+.sortitem--container {
+  width: 100%;
+  z-index: 999999;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
+  input[type=text] {
+    flex-grow: 1;
+  }
+}

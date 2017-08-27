@@ -18,12 +18,15 @@ var isDebug = false;
  * CSS
  */
 gulp.task('sass', function () {
-    return gulp
-        .src(src + '/css/*.scss')
-        .pipe(concat('main.css'))
-        .pipe(gulpif(!isDebug, sourcemaps.init()))
+    gulp
+        .src(src + '/css/bokehdark.scss')
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(gulpif(!isDebug, sourcemaps.write('./maps')))
+        .pipe(concat('bokehdark.css'))
+        .pipe(gulp.dest(dist + '/css'));
+    return gulp
+        .src(src + '/css/bokehlight.scss')
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(concat('bokehlight.css'))
         .pipe(gulp.dest(dist + '/css'));
 });
 
@@ -59,21 +62,9 @@ gulp.task('libs', function () {
 });
 
 /**
- * SurveyJS
- */
-gulp.task('surveyjs', function () {
-    gulp
-        .src('./node_modules/surveyjs/packages/survey-jquery/**/*')
-        .pipe(gulp.dest(dist + '/libs/survey-jquery'));
-    return gulp
-        .src('./node_modules/surveyjs/package/survey-jquery/**/*')
-        .pipe(gulp.dest(dist + '/libs/survey-jquery'));
-});
-
-/**
  * Main entry point
  */
-gulp.task('default', ['sass', 'js', 'assets', 'libs', 'surveyjs']);
+gulp.task('default', ['sass', 'js', 'assets', 'libs']);
 
 /**
  * Watch task
@@ -83,7 +74,7 @@ gulp.task('watch', ['default'], function () {
     console.log("Running in DEBUG MODE!".yellow);
     gulp.watch([
         src + '/js/*.js',
-        src + '/css/*.scss',
+        src + '/css/**/*.scss',
         src + '/assets/**/*'
     ], ['default']);
 });

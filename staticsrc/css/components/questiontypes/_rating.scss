@@ -1,0 +1,25 @@
+.question--rating {
+  display: inline-block;
+  text-align: left;
+  @media (max-width: $screen-sm-min) {
+    font-size: 78%;
+  }
+  .buttongroup {
+    margin-bottom: $general_small_padding;
+  }
+  .labelcontainer {
+    position: relative;
+    height: $small_label_size;   
+    span {
+      display: inline-block;
+      position: absolute;
+        top: 0;
+      &.lowlabel {
+        left: 0;
+      }
+      &.highlabel {
+        right: 0;
+      }
+    }
+  }
+}

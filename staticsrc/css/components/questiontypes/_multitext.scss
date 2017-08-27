@@ -1,0 +1,8 @@
+.question--multitext {
+  input {
+    margin-bottom: ($general_padding / 3);
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

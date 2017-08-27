@@ -1,0 +1,49 @@
+$slider_height: 1.5em;
+.question--rating.slider {
+  width: 100%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  .slider--container {
+    width: 100%;
+    height: $slider_height;
+    cursor: default;
+    position: relative;
+    @media (max-width: $screen-sm-min) {
+      font-size: 150%;
+    }
+    .slider--backdrop {
+      background-color: $slider_color;
+      border: 1px solid $border_color;
+      width: 100%;
+      height: ($slider_height / 3);
+      border-radius: $button_radius;
+      margin-top: ($slider_height / 3);
+      cursor: default;
+    }
+    .slider--ball {
+      cursor: default;
+      display: block;
+      border-radius: 10em;
+      background-color: $fill;
+      width: $slider_height;
+      height: $slider_height;
+      position: absolute;
+      top: -33%;
+      left: 50%;
+      opacity: 1;
+      transition: transform $fast_anim_timing, opacity $fast_anim_timing, box-shadow $fast_anim_timing;
+      margin-left: -($slider_height / 2);
+      cursor: move;
+      box-shadow: 0.05em 0.05em 0.5em rgba(0, 0, 0, 0.25);
+      &.dragging {
+        transform: scale(1.5, 1.5);
+        opacity: 0.5;
+        box-shadow: 0.1em 0.1em 0.7em rgba(0, 0, 0, 0.5);
+      }
+      &:hover {
+        background-color: lighten($fill, 15%);
+      }
+    }
+  }
+}

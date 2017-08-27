@@ -1,0 +1,119 @@
+@import "validationmessage";
+// Generic paginator styles
+.paginator {
+  width: 100%;
+  height: 100%;
+  &--backdropmobile {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: $greyfill;
+    height: $bottombar_height;
+    z-index: 9999;
+  }
+  &--buttonholder {
+    position: fixed;
+    bottom: 0.5em;
+    z-index: 9999999;
+    user-select: none;
+    opacity: 1;
+    transition: opacity $slow_anim_timing;
+    &.right {
+      right: ($general_padding / 2);
+      @media (max-width: $screen-sm-min) {
+        padding-left: 3em;
+      }
+    }
+    &.left {
+      left: ($general_padding / 2);
+      @media (max-width: $screen-sm-min) {
+        padding-right: 3em;
+      }
+    }
+    &.hidden {
+      display: block !important;
+      opacity: 0;
+      a {
+        cursor: default;
+      }
+    }
+    a {
+      text-decoration: none;
+      display: block;
+      font-size: 150%;
+      color: $invert_text_color;
+      font-family: Courier New, Courier, monospace;
+      border-radius: 5em;
+      width: 1.25em;
+      line-height: 1.25em;
+      text-align: center;
+      cursor: pointer;
+      &.validated {
+        background-color: $fill;
+        &:hover {
+          background-color: lighten($fill, 7%);
+        }
+      }
+      &:hover {
+        background-color: lighten($greyfill, 7%);
+      }
+    }
+  }
+}
+
+.overflowing {
+  .paginator {
+    padding-bottom: $bottombar_height;
+    &--backdropmobile {
+      display: block;
+    }
+  }
+}
+
+// Medium screens
+@media (max-width: $screen-md-min) and (min-width: $screen-sm-min) {
+  .paginator {
+    &--buttonholder {
+      a {
+        color: $question_clr;
+      }
+    }
+    &--backdropmobile {
+      display: none;
+    }
+  }
+}
+
+// Larger screens
+@media (min-width: $screen-sm-max) {
+  .paginator {
+    &--backdropmobile {
+      display: none;
+    }
+    &--buttonholder {
+      position: fixed;
+      top: 50%;
+      &.right {
+        right: $general_padding;
+      }
+      &.left {
+        left: $general_padding;
+      }
+      a {
+        margin-top: -50%;
+        display: block;
+        background-color: $greyfill;
+        border-radius: 5em;
+        width: 2em;
+        line-height: 2em;
+        text-align: center;
+        font-size: 150%;
+        font-family: Courier New, Courier, monospace;
+        cursor: pointer;
+        &:hover {
+          background-color: lighten($greyfill, 7%);
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,227 @@
+$faintfont: "latohairline",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
+$desktopfont: "latolight",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
+$lightfont: "proxima-nova",
+"latolight",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
+$heavierfont: "latoregular",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
+$heaviestfont: "latobold",
+"Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
+$mobile_lightfont: "Open Sans",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
+// images
+$bgimage: "/static/assets/other/bokehlight.jpg";
+// colors
+$fill: #3e885b;
+$greyfill: #999999;
+$question_clr: #000000;
+$instructions_clr: lighten($question_clr, 35%);
+$border_color: #999999;
+$background-image-match: #EEEEEE;
+$light_border_color: lighten($border_color, 18%);
+$alarm_color: #ee6666;
+$invert_text_color: white;
+$slider_color: white;
+// sizes and spacing
+$general_padding: 1em;
+$general_small_padding: ($general_padding * 0.7);
+$bottombar_height: 3em;
+$button_radius: 0.25em;
+$progress_height: 0.25em;
+$button_lineheight: 1.25em;
+$button_padding: 0.5em;
+$small_label_size: 0.8em;
+$icon_button_size: 2.5em;
+$desktop_question_width: 32em; //34
+$carousel_height: 6em;
+// timings
+$very_slow_anim_timing: 4s;
+$slow_anim_timing: 0.5s;
+$fast_anim_timing: 0.2s;
+// Basic inputs 
+input[type=email],
+input[type=text],
+input[type=number],
+select,
+textarea {
+  display: block;
+  border: 1px solid $light_border_color;
+  border-radius: $button_radius;
+  line-height: ($button_lineheight + $button_padding + $button_padding);
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: $general_small_padding;
+  padding-right: $general_small_padding;
+  &::placeholder {
+    color: $greyfill;
+    font-family: $lightfont;
+  }
+}
+
+// Animation for when the instructions are animated
+@keyframes instructionsAnimation {
+  50% {
+    transform: scale(1.2);
+    color: $alarm_color;
+    font-weight: 900;
+  }
+  85% {
+    transform: scale(1.2);
+    color: $alarm_color;
+    font-weight: 900;
+  }
+  100% {
+    transform: scale(1);
+    color: $instructions_clr;
+    font-weight: normal;
+  }
+}
+
+// Animation for when a star thingy is selected
+@keyframes iconSelectAnimation {
+  0% {
+    color: $question_clr;
+  }
+  50% {
+    color: $fill;
+  }
+}
+
+// Animation for when a button is selected
+@keyframes buttonSelectAnimation {
+  0% {
+    background-color: $fill;
+  }
+  50% {
+    background-color: transparent;
+  }
+}
+
+// Animation for when a rank question is dropped
+@keyframes rankSortDropAnim {
+  0% {
+    transform: scale(1)
+  }
+  50% {
+    transform: scale(1.07)
+  }
+}
+
+// Base styles
+@mixin draggable_placeholder {
+  border: 1px dashed darken($border_color, 25%);
+}
+
+@mixin draggable_otherinput {
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 0;
+  line-height: 2.5em;
+}
+
+@mixin button_style {
+  user-select: none;
+  border-top: 1px solid $border_color;
+  border-bottom: 1px solid $border_color;
+  border-left: 1px solid $border_color;
+  background-color: rgba(255, 255, 255, 0.4);
+  line-height: $button_lineheight;
+  text-align: center;
+  display: inline-block;
+  padding-left: $general_small_padding;
+  padding-right: $general_small_padding;
+  font-size: 1.5em;
+  padding-top: $button_padding;
+  padding-bottom: $button_padding;
+  input[type=checkbox],
+  input[type=radio] {
+    display: none;
+  }
+  &.selected {
+    background-color: $fill;
+    animation-name: buttonSelectAnimation;
+    animation-duration: $fast_anim_timing;
+    color: #ffffff;
+    @media (min-width: $screen-sm-min) {
+      &:hover {
+        background-color: darken($fill, 5%);
+      }
+    }
+  }
+  @media (min-width: $screen-sm-min) {
+    &:hover {
+      background-color: lighten($greyfill, 17%);
+    }
+  }
+  &:first-child {
+    border-top-left-radius: $button_radius;
+    border-bottom-left-radius: $button_radius;
+  }
+  cursor: pointer;
+  &:last-child {
+    border-right: 1px solid $border_color;
+    border-top-right-radius: $button_radius;
+    border-bottom-right-radius: $button_radius;
+  }
+}
+
+// A lighter button
+@mixin standalone_button_style {
+  @include button_style;
+  display: block;
+  text-align: left;
+  font-size: 0.9em;
+  line-height: ($button_lineheight * 1.3);
+  border-radius: $button_radius;
+  border-right: 1px solid;
+  border-color: $light_border_color;
+  margin-bottom: ($general_padding / 2);
+  font-weight: 600;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  @media (max-width: $screen-sm-min) {
+    font-weight: normal;
+  }
+}
+
+// A different button
+@mixin button_list_style {
+  @include standalone_button_style;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: normal;
+  padding: $general_padding;
+  padding-left: ($general_padding * 2);
+  padding-right: ($general_padding * 2);
+  &:last-child {
+    margin-bottom: ($general_padding / 2);
+  }
+}
+
+@import "survey";

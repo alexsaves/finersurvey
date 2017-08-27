@@ -1,0 +1,37 @@
+.question--text {
+  .text--inputcontainer {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    input,
+    textarea {
+      flex-grow: 1;
+    }
+    .textquestion--charcount {
+      padding-left: ($general_padding / 2);
+      line-height: 2.4em;
+      color: $instructions_clr;
+      cursor: default;
+      &.bad {
+        color: $alarm_color;
+      }
+    }
+  }
+  .textquestion--wordcount {
+    line-height: 2.4em;
+    color: $instructions_clr;
+    width: 100%;
+    text-align: left;
+    display: block;
+    cursor: default;
+    &.bad {
+      color: $alarm_color;
+    }
+  }
+  textarea {
+    padding: $button_padding;
+    line-height: $button_lineheight;
+  }
+}
