@@ -64,7 +64,9 @@ $very_slow_anim_timing: 4s;
 $slow_anim_timing: 0.5s;
 $fast_anim_timing: 0.2s;
 // Basic inputs 
+input[type=email],
 input[type=text],
+input[type=number],
 select,
 textarea {
   display: block;

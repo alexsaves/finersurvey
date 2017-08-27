@@ -12,8 +12,7 @@ class PageComponent extends React.Component {
  */
   constructor(props) {
     super(props);
-    let firstQuestionWithInput = this.getNextQuestionWithInput(-1, props);    
-    console.log("Page", firstQuestionWithInput);
+    let firstQuestionWithInput = this.getNextQuestionWithInput(-1, props);
     this.state = {
       focusItem: firstQuestionWithInput
     };

@@ -64,7 +64,9 @@ $very_slow_anim_timing: 4s;
 $slow_anim_timing: 0.5s;
 $fast_anim_timing: 0.2s;
 // Basic inputs 
+input[type=email],
 input[type=text],
+input[type=number],
 select,
 textarea {
   display: block;
@@ -214,6 +216,9 @@ textarea {
   display: inline-block;
   font-size: 1em;
   font-weight: normal;
+  padding: $general_padding;
+  padding-left: ($general_padding * 2);
+  padding-right: ($general_padding * 2);
   &:last-child {
     margin-bottom: ($general_padding / 2);
   }

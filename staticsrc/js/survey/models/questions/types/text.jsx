@@ -77,6 +77,28 @@ class TextQuestion extends React.Component {
   }
 
   /**
+   * Validate a keypress
+   * @param {*} e 
+   */
+  validateKeyDown(e) {
+    if (e) {
+      let validKeys = [91, 13, 37, 39, 8, 46, 27, 9];
+      if (validKeys.indexOf(e.keyCode) == -1 && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {    
+        if ((this.props.modifier == 'number') && !!!e.key.match(/[0-9\.]/)) {
+          e.stopPropagation();
+          e.preventDefault();
+          return false;
+        }
+        if ((this.props.modifier == 'integer') && !!!e.key.match(/[0-9]/)) {
+          e.stopPropagation();
+          e.preventDefault();
+          return false;
+        }
+      }
+    }
+  }
+
+  /**
    * Handle focus on the input
    * @param {*} e
    */
@@ -104,7 +126,14 @@ class TextQuestion extends React.Component {
       limittext = null,
       limitalarm = false,
       wordlimitalarm = false,
-      wordlimittext = null;
+      wordlimittext = null,
+      iptType = "text";
+
+    if (this.props.modifier == 'email') {
+      iptType = 'email';
+    } else if (this.props.modifier == 'number' || this.props.modifier == 'integer') {
+      iptType = 'number';
+    }
 
     // Deal with character limits
     if (limits && charlim) {
@@ -164,6 +193,7 @@ class TextQuestion extends React.Component {
               onFocus={this
               .handleFocus
               .bind(this)}
+              onKeyDownCapture={this.validateKeyDown.bind(this)}
               onKeyUp={this
               .handleIptThrottleChange
               .bind(this)}
@@ -176,8 +206,9 @@ class TextQuestion extends React.Component {
             : "")}>{wordlimittext}</span>}</div>}
         {!isMultiline && <div className="text--outercontainer">
           <div className="text--inputcontainer"><input
-            type="text"
+            type={iptType}
             tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
+            onKeyDownCapture={this.validateKeyDown.bind(this)}
             onFocus={this
           .handleFocus
           .bind(this)}
