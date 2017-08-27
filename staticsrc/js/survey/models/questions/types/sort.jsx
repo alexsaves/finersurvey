@@ -58,7 +58,6 @@ class SortQuestion extends React.Component {
         .order
         .slice();
     }
-    console.log(this.state);
   }
 
   /**
