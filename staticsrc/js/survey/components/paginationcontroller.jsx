@@ -188,7 +188,7 @@ class PaginationController extends React.Component {
           advanceButton.dispatchEvent(evObj);
         }, 200);
       }
-    }, 25);
+    }, 25);    
   }
 
   /**

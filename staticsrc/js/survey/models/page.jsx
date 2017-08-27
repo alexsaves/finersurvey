@@ -12,17 +12,26 @@ class PageComponent extends React.Component {
  */
   constructor(props) {
     super(props);
-    let firstQuestionWithInput = 0;
-    for (let i = 0; i < props.questions.length; i++) {
+    let firstQuestionWithInput = this.getNextQuestionWithInput(-1, props);    
+    console.log("Page", firstQuestionWithInput);
+    this.state = {
+      focusItem: firstQuestionWithInput
+    };
+  }
+
+  /**
+   * Returns the next question with an input
+   */
+  getNextQuestionWithInput(starting, props) {
+    let firstQuestionWithInput = starting;
+    for (let i = starting + 1; i < props.questions.length; i++) {
       firstQuestionWithInput = i;
       let q = props.questions[i];
       if (!(q.type == 'none' || q.type == 'image')) {
         break;
       }
     }
-    this.state = {
-      focusItem: firstQuestionWithInput
-    };
+    return firstQuestionWithInput;
   }
 
   /**
@@ -42,13 +51,26 @@ class PageComponent extends React.Component {
         .props
         .onFullyAnswerQuestion();
     }
+    setTimeout(() => {
+      // Find the next interactable question
+      let nextOne = this.getNextQuestionWithInput(this.state.focusItem, this.props);
+      this.setState({
+        focusItem: nextOne
+      })
+    }, 10);
+
   }
 
   /**
    * A question is being interacted with
    */
   handleQuestionBeingInteractedWith(idx) {
-    console.log("question being interacted with", idx);
+    this.setState({focusItem: idx});
+    if (this.props.onQuestionBeingInteractedWith) {
+      this
+        .props
+        .onQuestionBeingInteractedWith();
+    }
   }
 
   /**
@@ -60,6 +82,8 @@ class PageComponent extends React.Component {
       pageNumber = this.props.pageNumber;
     return (
       <div
+        data-page={pageNumber}
+        data-focus={this.state.focusItem}
         className={"page " + (this.props.isSelected
         ? "selected"
         : "") + (this.props.animatingOutForward

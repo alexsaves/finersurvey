@@ -13,7 +13,7 @@
 .question {
   font-family: $desktopfont;
   color: $question_clr;
-  display: inline-block;
+  display: block;
   width: $desktop_question_width;
   text-align: center;
   .question--image {
@@ -37,6 +37,7 @@
   }
   @media (max-width: $screen-md-min) {
     width: 30em;
+    display: inline-block;
   }
   @media (max-width: $screen-sm-min) {
     width: 85%;

@@ -76,6 +76,7 @@ class QuestionComponent extends React.Component {
     return (
       <div
         className="question"
+        data-is-focused={this.props.isFocused}
         onAnimationEnd={this
         .handleAnimationEnd
         .bind(this)}>

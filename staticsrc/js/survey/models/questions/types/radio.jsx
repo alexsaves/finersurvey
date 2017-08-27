@@ -79,6 +79,23 @@ class RadioQuestion extends React.Component {
   }
 
   /**
+   * Handle Keypress
+   * @param {*} e
+   */
+  handleKeyPress(e) {
+    if (e) {
+      if (e.key == "Enter" || e.key == " ") {
+        let targ = e.currentTarget,
+          cb = targ.getElementsByTagName("input")[0];
+
+        cb.checked = !!!cb.checked;
+        e.currentTarget = cb;
+        this.handleAnswerChange(e);
+      }
+    }
+  }
+
+  /**
    * Handle when the text input changes (on a throttle)
    */
   handleIptThrottleChange() {
@@ -129,11 +146,14 @@ class RadioQuestion extends React.Component {
               idx = rto.originalPosition;
             return <label
               key={idx}
+              onKeyPress={this
+              .handleKeyPress
+              .bind(this)}
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}              
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
               ? "selected"
               : "")}>{piper.pipe(rt, panswers, ppages)}<input
-              type="radio"
-              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
+              type="radio"              
               name={qname}
               value={idx}
               onClick={ctx

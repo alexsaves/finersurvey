@@ -28,8 +28,7 @@ if (stateElm) {
       .innerText;
     startupState = JSON.parse(atob(rawStateDataStr));
     if (startupState.metadata) {
-      surveyHash = md5(rawStateDataStr);
-      console.log(surveyHash);
+      surveyHash = md5(JSON.stringify(rawStateDataStr));
       persistentKey += "_" + startupState.metadata.guid;
     }
     let oldAnswers = localStorage.getItem(persistentKey);

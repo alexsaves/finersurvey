@@ -148,6 +148,12 @@ Text input questions are of type `text` but can have a `modifier` with `normal` 
  * `wordcountmaxlabel` - (_String_) How many words are left. Default: "Words left".
  * `wordcountlabel` - (_String_) How many words in the text. Default: "Words".
 
+ You can also apply a `modifier` to text inputs in order to enforce an input type, including:
+
+ * `email` - Formats against email addresses
+ * `number` - Must be a number (decimals OK)
+ * `integer` - Must be a whole number (decimals not OK)
+
 #### Multi-Text Question Definitions
 
 If you want multiple text inputs you can use the `multitext` question type. Use the `choices` collection to define the count, and the labels for each. Multi-text support `required` but not `limits`.

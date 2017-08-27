@@ -213,7 +213,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                     metadata: {
                                         title: srvObj.name,
                                         guid: srvObj.survey_model.guid,
-                                        theme: srvObj.theme                                     
+                                        theme: srvObj.theme,
+                                        updated_at: srvObj.updated_at                                 
                                     },
                                     currentPage: Math.min(pg, srvObj.survey_model.pages.length),
                                     pages: srvObj.survey_model.pages,

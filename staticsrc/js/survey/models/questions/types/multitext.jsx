@@ -132,7 +132,7 @@ class MultiTextQuestion extends React.Component {
             return <input
               type="text"
               key={idx}
-              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}
               onFocus={this
               .handleFocus
               .bind(this)}

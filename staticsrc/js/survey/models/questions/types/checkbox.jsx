@@ -91,6 +91,23 @@ class CheckboxQuestion extends React.Component {
   }
 
   /**
+   * Handle Keypress
+   * @param {*} e
+   */
+  handleKeyPress(e) {
+    if (e) {
+      if (e.key == "Enter" || e.key == " ") {
+        let targ = e.currentTarget,
+          cb = targ.getElementsByTagName("input")[0];
+
+        cb.checked = !!!cb.checked;
+        e.currentTarget = cb;
+        this.handleAnswerChange(e);
+      }
+    }
+  }
+
+  /**
    * Handle when the text input changes (on a throttle)
    */
   handleIptThrottleChange() {
@@ -112,11 +129,10 @@ class CheckboxQuestion extends React.Component {
       ppages = this.props.allpages;
 
     if (this.props.isFocused && !this.wasFocused) {
-      console.log("focus cb", this.props.name);
       setTimeout(() => {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
-        btns = root.getElementsByTagName('label');
+          btns = root.getElementsByTagName('label');
         if (btns.length > 0) {
           btns[0].focus();
         }
@@ -145,7 +161,10 @@ class CheckboxQuestion extends React.Component {
               idx = rto.originalPosition;
             return <label
               key={idx}
-              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
+              onKeyPress={this
+              .handleKeyPress
+              .bind(this)}
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
               ? "selected"
               : "")}>{piper.pipe(rt, panswers, ppages)}<input
@@ -160,6 +179,7 @@ class CheckboxQuestion extends React.Component {
         {this.props.other === true && <input
           type="text"
           className="other--textfield"
+          tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + this.state.srcOrder.length + 1}
           onFocus={this
           .handleFocus
           .bind(this)}

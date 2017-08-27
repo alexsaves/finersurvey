@@ -20,6 +20,7 @@ class SortQuestion extends React.Component {
     this.Randomizer = new Randomizer();
     this.iptThrottle = null;
     this.stopRepositioning = false;
+    this.didMount = false;
     this.state = {
       isDragging: false,
       dragItem: -1,
@@ -103,7 +104,7 @@ class SortQuestion extends React.Component {
    * Handle the positioning of the other input
    */
   positionOtherInput() {
-    if (this.props.other === true && !this.stopRepositioning) {
+    if (this.props.other === true && !this.stopRepositioning && this.didMount) {
       let root = ReactDOM.findDOMNode(this),
         floatingother = root.getElementsByClassName('floatingother')[0];
       if (floatingother) {
@@ -123,6 +124,7 @@ class SortQuestion extends React.Component {
    * The component did mount
    */
   componentDidMount() {
+    this.didMount = true;
     let root = ReactDOM.findDOMNode(this);
     root.addEventListener("touchstart", (e) => {
       if (e.target.tagName == "INPUT") {
@@ -149,7 +151,7 @@ class SortQuestion extends React.Component {
         this.positionOtherInput();
         this.setState({hideOtherOverlay: false});
       }, 500);
-    });
+    });    
   }
 
   /**
