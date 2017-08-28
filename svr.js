@@ -1,6 +1,5 @@
 /**
  * Global dependencies.
- * (NewRelic should be 1st in this list.)
  */
 var mysql = require('mysql'),
     express = require('express'),
@@ -16,7 +15,8 @@ var mysql = require('mysql'),
     finercommon = require('finercommon'),
     events = require('events'),
     port = process.env.PORT || 8080,
-    btoa = require('btoa');
+    btoa = require('btoa'),
+    path = require('path');
 
 // Set the time zone
 process.env.TZ = pjson.config.aws.timeZone;
@@ -106,12 +106,14 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
 
     // Force SSL on prod
     if (process.env.NODE_ENV == 'production') {
-        app
-            .use(function (req, res, next) {
-                if ((!req.secure) && (req.protocol !== 'https')) {
-                    res.redirect('https://' + req.get('Host') + req.url);
-                }
-            });
+        console.log("Enforcing SSL...");
+        app.use((req, res, next) => {
+            if (req.headers['x-forwarded-proto'] === 'https') 
+                return next();
+            return res.redirect(301, 'https://' + path.join(req.hostname, req.url));
+        });
+    } else {
+        console.log("Allowing non SSL...");
     }
 
     // Add body parser url parser
