@@ -58,7 +58,7 @@ class DropdownQuestion extends React.Component {
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
-    if (this.props.isFocused && !this.wasFocused) {
+    /*if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
@@ -67,7 +67,7 @@ class DropdownQuestion extends React.Component {
           btns[0].focus();
         }
       }, 25);
-    }
+    }*/
 
     return (
       <div className="question--dropdown">
