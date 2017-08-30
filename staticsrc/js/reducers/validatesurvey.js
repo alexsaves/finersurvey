@@ -26,6 +26,10 @@ function surveyValidatorReducer(state = [], action) {
         let pg = pages[i],
           els = pg.elements;
         pg.isValid = checker.checkAllLogic(pg.showIf, answers, pages);
+        if (!pg.isValid) {
+          pages.splice(i--, 1);
+          continue;
+        }
         if (els) {
           for (let j = 0; j < els.length; j++) {
             let q = els[j];

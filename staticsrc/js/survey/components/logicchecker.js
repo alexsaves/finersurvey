@@ -486,7 +486,7 @@ export default class {
       if (!questionDef.other) {
         throw new Error("Invalid condition for sort. Other not supported.");
       }
-      let order = (answerObj && answerObj.order)
+      var order = (answerObj && answerObj.order)
         ? answerObj.order
         : [];
       if (equalityExp == EQUALITIES.CONTAINSANY) {
@@ -498,7 +498,7 @@ export default class {
         return this._evaluateStandardText(answerObj.other, condition, equalityExp);
       } else {
         subQuestion = 9999;
-        let numCond = parseInt(condition);
+        var numCond = parseInt(condition);
         switch (equalityExp) {
           case(EQUALITIES.EQUAL):
             if (isNaN(numCond)) {
@@ -532,7 +532,7 @@ export default class {
           throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
         }
       } else {
-        let order = (answerObj && answerObj.order)
+        var order = (answerObj && answerObj.order)
             ? answerObj.order
             : [],
           numCond = parseInt(condition);

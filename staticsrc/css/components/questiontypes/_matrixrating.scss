@@ -24,6 +24,9 @@
         background-color: $border_color;
       }
     }
+    @media (max-width: $screen-sm-min) {
+      display: none;
+    }
   }
   .matrix--carousel {
     width: 100%;
@@ -113,6 +116,9 @@
       padding-right: ($general_padding / 2);
       border-radius: $button_radius;
       transition: opacity $fast_anim_timing;
+      @media (max-width: $screen-sm-min) {
+        line-height: ($carousel_height*.75);
+      }
       &.visible {
         opacity: 1;
         cursor: pointer;

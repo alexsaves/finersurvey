@@ -38,7 +38,7 @@ if (stateElm) {
         startupState.answers = ansObj.answers;
       } else {
         console.log("Hash in memory was", ansObj.hash, "is now", surveyHash);
-        debugger;
+        //debugger;
       } 
     }
   }
@@ -56,7 +56,7 @@ let unsubscribe = appStore.subscribe(() => {
     hash: surveyHash,
     answers: st.answers || {}
   }));
-  console.log("STATE CHANGED", appStore.getState())
+  //console.log("STATE CHANGED", appStore.getState())
 });
 // appStore.dispatch(modifyUser({displayName: 'Jason Smith'}));
 // console.log(appStore.getState()) appStore.subscribe(() =>
