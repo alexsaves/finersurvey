@@ -69,13 +69,12 @@ class SurveyComponent extends React.Component {
         .bind(this)}>
         <ProgressComponent uid={uid} progress={desiredPage / this.props.pages.length}/>
         <PageController uid={uid} desiredPage={desiredPage}/>
-        <a
-          href="https://www.finer.ink"
+        <div
           title="Sales Win/Loss Analysis"
           target="_blank"
           className={"logo--finerink" + (hideLogo
           ? " hidden"
-          : "")}></a>
+          : "")}></div>
         {!this.state.hideLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete}/>}
       </div>
     );
