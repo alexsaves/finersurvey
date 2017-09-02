@@ -112,6 +112,7 @@ class PageComponent extends React.Component {
                   questionNumber={idx}
                   answer={ctx.getAnswerForQuestion(q)}
                   answers={this.props.answers}
+                  variables={this.props.variables}
                   isFocused={ctx.props.isSelected && ctx.state.focusItem == idx}
                   allpages={this.props.allpages}
                   onQuestionBeingInteractedWith={interactionBinding}

@@ -81,8 +81,8 @@ class QuestionComponent extends React.Component {
         onAnimationEnd={this
         .handleAnimationEnd
         .bind(this)}>
-        {(this.props.title) && <h2>{this.props.displayNumber && <span className="question--number">{this.props.questionNumber}. </span>}{piper.pipe(this.props.title, answers, pages)}</h2>}
-        {this.props.subtitle && <p className="subtitle">{piper.pipe(this.props.subtitle, answers, pages)}</p>}
+        {(this.props.title) && <h2>{this.props.displayNumber && <span className="question--number">{this.props.questionNumber}. </span>}{piper.pipe(this.props.title, answers, pages, this.props.variables)}</h2>}
+        {this.props.subtitle && <p className="subtitle">{piper.pipe(this.props.subtitle, answers, pages, this.props.variables)}</p>}
         {image && <p><img src={image.url} className={"question--image " + ((image.modifier || "").toLowerCase())} /></p>}
         {this.props.instructions && <p
           className={"instructions " + ((this.state.alarmInstructions || this.props.remindInstructions)

@@ -145,7 +145,8 @@ class RadioQuestion extends React.Component {
 
     let piper = this.piper,
       panswers = this.props.answers,
-      ppages = this.props.allpages;
+      ppages = this.props.allpages,
+      variables = this.props.variables;
 
     /*if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
@@ -174,7 +175,7 @@ class RadioQuestion extends React.Component {
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
               ? "selected"
-              : "")}>{piper.pipe(rt, panswers, ppages)}<input
+              : "")}>{piper.pipe(rt, panswers, ppages, variables)}<input
               type="radio"
               name={qname}
               value={idx}
@@ -192,7 +193,7 @@ class RadioQuestion extends React.Component {
           .bind(ctx)}/><input
           type="text"
           className="other--textfield"
-          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
+          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables)}
           defaultValue={(this.props.answer && this.props.answer.other)
           ? this.props.answer.other
           : ''}
@@ -209,7 +210,7 @@ class RadioQuestion extends React.Component {
 }
 
 // Connect the component
-const ConnectedRadioQuestion = connect()(RadioQuestion)
+const ConnectedRadioQuestion = connect()(RadioQuestion);
 
 // Expose the question
 export default ConnectedRadioQuestion;

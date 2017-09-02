@@ -415,6 +415,7 @@ class SortQuestion extends React.Component {
       ctx = this,
       answers = this.props.answer,
       choices = this.props.choices,
+      variables = this.props.variables,
       count = 1,
       st = this.state,
       dragPlaceholderCSS = {},
@@ -467,7 +468,7 @@ class SortQuestion extends React.Component {
           .handleIptThrottleChange
           .bind(ctx)}
           className="otherinputfield otherOverlayInput"
-          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
+          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables)}
           defaultValue={otherValue}
           style={{
           left: this.state.otherInputX,
@@ -504,7 +505,7 @@ class SortQuestion extends React.Component {
               .preventDrag
               .bind(this)}
                   className="other--textfield floatingother"
-                  placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
+                  placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables)}
                   readOnly={true}
                   value={otherValue}/><input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
             </label>;
@@ -529,7 +530,7 @@ class SortQuestion extends React.Component {
               className={"sortable standalonebutton" + ((!st.isDragging && st.didDrop)
               ? " dropAnim drop" + idx
               : "")}>
-              <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/> {idx + 1}. {piper.pipe(rt, panswers, ppages)}<input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
+              <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/> {idx + 1}. {piper.pipe(rt, panswers, ppages, variables)}<input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
             </label>;
           }
         })}

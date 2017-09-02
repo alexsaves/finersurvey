@@ -131,7 +131,7 @@ class PaginationController extends React.Component {
     if (pageNumber == this.props.pages.length - 1) {
       return false;
     }
-    
+
     pageObj
       .elements
       .forEach((pg) => {
@@ -207,6 +207,7 @@ class PaginationController extends React.Component {
       answers = this.props.answers,
       pages = this.props.pages,
       allpages = this.props.allpages,
+      variables = this.props.variables,
       isAnimatingForward = this.state.animatingForward,
       isAnimatingBackward = this.state.animatingBackward,
       remindInstructionsFor = this.state.remindInstructionsFor,
@@ -246,6 +247,7 @@ class PaginationController extends React.Component {
             remindInstructionsFor={remindInstructionsFor}
             answers={answers}
             allpages={allpages}
+            variables={variables}
             pageNumber={idx}
             onQuestionBeingInteractedWith={this.questionBeingInteractedWith.bind(this)}
             onFullyAnswerQuestion={this
@@ -294,7 +296,14 @@ class PaginationController extends React.Component {
 // This is our select function that will extract from the state the data slice
 // we want to expose through props to our component.
 const mapStateToProps = (state/*, props*/) => {
-  return {metadata: state.metadata, pages: state.validatedPages, allpages: state.pages, currentPage: state.currentPage, answers: state.answers}
+  return {
+    metadata: state.metadata, 
+    pages: state.validatedPages, 
+    allpages: state.pages, 
+    currentPage: state.currentPage, 
+    answers: state.answers,
+    variables: state.variables
+  };
 }
 
 // Connect the survey component

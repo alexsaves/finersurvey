@@ -68,7 +68,8 @@ class ButtonsQuestion extends React.Component {
  * Render the view
  */
   render() {
-    let ctx = this;
+    let ctx = this,
+      piper = this.piper;
     if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
         this.wasFocused = true;
@@ -86,6 +87,8 @@ class ButtonsQuestion extends React.Component {
           .props
           .choices
           .map((val, idx) => {
+            let finalLabel = (val && val.title) ? val.title : "Continue";
+            finalLabel = piper.pipe(finalLabel, ctx.props.answers, ctx.props.pages, ctx.props.variables);
             return <button
               key={"_" + idx}
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
@@ -93,7 +96,7 @@ class ButtonsQuestion extends React.Component {
               data-choice={idx}
               onClick={this
               .handleClick
-              .bind(this)}>{val.title || "Continue"}</button>
+              .bind(this)}>{finalLabel}</button>
           })}
       </div>
     );

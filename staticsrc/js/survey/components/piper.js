@@ -147,7 +147,10 @@ export default class {
    * @param {*} text
    * @param {*} answers
    */
-  pipe(text, answers, survey) {
+  pipe(text, answers, survey, variables) {
+    if (arguments.length != 4) {
+      throw new Error("Piper called with incorrect number of arguments.");
+    }
     text = text.replace(this.pipeMatch, (match, questionName, position) => {
       let capitalize = false,
         lowercaseize = false;
@@ -183,29 +186,44 @@ export default class {
         questionName = questionName.substr(0, questionName.toLowerCase().indexOf('['));
       }
 
-      let q = this._getQuestionDefFromSurvey(survey, questionName);
-      if (q) {
-        let a = this._getAnswerFromKeyName(q, answers, questionName);
-        if (a) {
-          let fres = this
-            ._parseAnswer(q, a, questionName, isOther, subQuestion)
-            .toString();
-          if (fres != null && typeof fres != 'undefined') {
-            fres = fres.trim();
-            if (capitalize) {
-              fres = this._capitalizeFirstLetters(fres);
-            }
-            if (lowercaseize) {
-              fres = fres.toLowerCase();
-            }
-            if (doWordPosition) {
-              let bits = fres.split(' ');
-              fres = bits[Math.min(wordPosition, bits.length - 1)] || "";
-            }
-            return fres;
-          }
+      if (variables && variables[questionName]) {
+        var finalval = (variables[questionName] + '').trim();
+        if (capitalize) {
+          finalval = this._capitalizeFirstLetters(finalval);
         }
-        return "";
+        if (lowercaseize) {
+          finalval = finalval.toLowerCase();
+        }
+        if (doWordPosition) {
+          let bits = finalval.split(' ');
+          finalval = bits[Math.min(wordPosition, bits.length - 1)] || "";
+        }
+        return finalval;
+      } else {
+        let q = this._getQuestionDefFromSurvey(survey, questionName);
+        if (q) {
+          let a = this._getAnswerFromKeyName(q, answers, questionName);
+          if (a) {
+            let fres = this
+              ._parseAnswer(q, a, questionName, isOther, subQuestion)
+              .toString();
+            if (fres != null && typeof fres != 'undefined') {
+              fres = fres.trim();
+              if (capitalize) {
+                fres = this._capitalizeFirstLetters(fres);
+              }
+              if (lowercaseize) {
+                fres = fres.toLowerCase();
+              }
+              if (doWordPosition) {
+                let bits = fres.split(' ');
+                fres = bits[Math.min(wordPosition, bits.length - 1)] || "";
+              }
+              return fres;
+            }
+          }
+          return "";
+        }
       }
       return "";
     });

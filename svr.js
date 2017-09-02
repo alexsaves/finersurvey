@@ -253,7 +253,11 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                         },
                                         currentPage: Math.min(pg, srvObj.survey_model.pages.length),
                                         pages: srvObj.survey_model.pages,
-                                        answers: existingAnswers || {}
+                                        answers: existingAnswers || {},
+                                        variables: {
+                                            surveyTitle: srvObj.name,
+                                            companyName: srvObj._org.name
+                                        }
                                     }))
                                 }));
                             });

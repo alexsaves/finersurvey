@@ -454,6 +454,8 @@ The process of injecting previous responses into questions that appear later is 
 
 This basically means, for the question with the name `firstNameQuestion`, insert the response into this place in the title of this question. This is the approach for `text` questions and single-response questions like `radio` and `dropdown` and `rating`.
 
+You can also pipe from the `variables` collection of the startup state. Reference these variables by name just as you would question names.
+
 #### Formatting on Piping
 
 For cleanliness, excess whitespace is removed from responses when piped. If you want to auto-capitalize (for proper names), prefix your rule with `^`:

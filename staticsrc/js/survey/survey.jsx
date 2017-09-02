@@ -88,6 +88,7 @@ const mapStateToProps = (state/*, props*/) => {
     metadata: state.metadata,
     pages: state.validatedPages,
     currentPage: state.currentPage,
+    variables: state.variables,
     loadingComplete: !!state.loadingComplete
   }
 }

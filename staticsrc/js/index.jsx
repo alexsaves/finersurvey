@@ -21,7 +21,7 @@ if (stateElm) {
   let stateRaw = document
     .querySelector('[type=\'finer/state\']')
     .innerText;
-  if (stateRaw && stateRaw.length > 10) {
+  if (stateRaw && stateRaw.length > 5) {
     let rawStateDataStr = document
       .querySelector('[type=\'finer/state\']')
       .innerText;
