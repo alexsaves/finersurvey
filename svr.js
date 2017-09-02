@@ -243,7 +243,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                     session: req.session,
                                     model: srvObj.survey_model,
                                     surveyID: guid,
-                                    theme: "bokehdark" || srvObj.theme,
+                                    theme: srvObj.theme,
                                     modelstr: btoa(JSON.stringify({
                                         metadata: {
                                             title: srvObj.name,

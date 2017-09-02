@@ -182,7 +182,7 @@ class MatrixRatingQuestion extends React.Component {
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
-    if (this.props.isFocused && !this.wasFocused) {
+    /*if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
@@ -191,7 +191,7 @@ class MatrixRatingQuestion extends React.Component {
           btns[0].focus();
         }
       }, 100);
-    }
+    }*/
 
     // Spit out the question node
     return (
