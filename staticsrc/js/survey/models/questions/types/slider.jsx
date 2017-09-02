@@ -25,6 +25,20 @@ class SliderRatingQuestion extends React.Component {
   }
 
   /**
+   * The component is ready
+   */
+  componentDidMount() {
+    if (typeof this.props.answer == 'undefined' && typeof this.props.initialValue != 'undefined') {
+      this
+        .props
+        .dispatch(changeAnswer(this.props.name, this.props.initialValue));
+      this.setState({
+        sliderValue: this.props.initialValue
+      });
+    }
+  }
+
+  /**
    * Desktop drag start
    * @param {*} e
    */
@@ -184,8 +198,9 @@ class SliderRatingQuestion extends React.Component {
             className={"slider--ball" + (this.state.isDragging
             ? " dragging"
             : "")}
-            /*tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}*/
-            onKeyPress={this.handleKeyPress.bind(this)}
+            onKeyPress={this
+            .handleKeyPress
+            .bind(this)}
             style={{
             left: sliderValue + '%'
           }}

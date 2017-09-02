@@ -131,7 +131,7 @@ class PaginationController extends React.Component {
     if (pageNumber == this.props.pages.length - 1) {
       return false;
     }
-
+    
     pageObj
       .elements
       .forEach((pg) => {

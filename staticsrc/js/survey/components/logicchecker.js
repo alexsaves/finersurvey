@@ -199,9 +199,9 @@ export default class {
       numCond = parseFloat(condition);
     switch (equalityExp) {
       case EQUALITIES.CONTAINSANY:
-        return !isNaN(numCond);
+        return !isNaN(numAns);
       case EQUALITIES.NOTCONTAINSANY:
-        return isNaN(numCond) || answer == null || !answer;
+        return isNaN(numAns) || answer == null || !answer;
       case EQUALITIES.GREATERTHAN:
         return !isNaN(numCond) && numAns > numCond;
       case EQUALITIES.GREATERTHANOREQUAL:
@@ -400,7 +400,7 @@ export default class {
         return this._evaluateStandardText(answerObj.other, condition, equalityExp);
       } else {
         let conditionChoice = parseInt(condition),
-          answerNum = (answerObj && answerObj.response)
+          answerNum = (answerObj && answerObj.response != null && typeof answerObj.response != "undefined")
             ? parseFloat(answerObj.response)
             : null;
         return this._evaluateStandardNumeric(answerNum, condition, equalityExp);

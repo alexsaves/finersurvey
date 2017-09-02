@@ -141,7 +141,7 @@ class CheckboxQuestion extends React.Component {
 
     // Check each value
     let shouldOptionBeSelected = function (val) {
-      if (answers) {
+      if (answers && answers.responses) {
         let result = answers
           .responses
           .indexOf(parseInt(val));

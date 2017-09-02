@@ -187,7 +187,6 @@ class MatrixRatingQuestion extends React.Component {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
           btns = root.getElementsByClassName('selectbutton');
-        console.log("Focusing on ", btns[0])
         if (btns.length > 0) {
           btns[0].focus();
         }
@@ -300,7 +299,7 @@ class MatrixRatingQuestion extends React.Component {
 }
 
 // Connect the component
-const ConnectedMatrixRatingQuestion = connect()(MatrixRatingQuestion)
+const ConnectedMatrixRatingQuestion = connect()(MatrixRatingQuestion);
 
 // Expose the question
 export default ConnectedMatrixRatingQuestion;

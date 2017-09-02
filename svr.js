@@ -175,7 +175,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             pg = parseInt(req.params.pg),
             sv = new SurveyController(pjson.config),
             usSrc = req.headers['user-agent'],
-            ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+            existingAnswers = null;
 
         if (isNaN(pg) || pg < 0) {
             pg = 0;
@@ -183,66 +184,88 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             pg--;
         }
 
-        var requestEmitter = new events.EventEmitter();
-        requestEmitter.setMaxListeners(1);
+        if (req.query && req.query.a) {
+            try {
+                existingAnswers = JSON.parse(req.query.a);
+                req.session.existingAnswers = existingAnswers;
+                req
+                    .session
+                    .save(() => {
+                        res.redirect("/s/" + encodeURIComponent(guid) + "/" + ((pg || 0) + 1));
+                    });
+            } catch (e) {
+                console.log("Could not deserialize answers!", e);
+                res.redirect("/s/" + encodeURIComponent(guid) + "/" + ((pg || 0) + 1));
+            }
+        } else {
+            // Holds any existing answers
+            var existingAnswers = {};
 
-        requestEmitter.on('error', function () {
-            requestEmitter.removeAllListeners();
-            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', {
-                title: "Oops, there's a problem.",
-                details: "We're having difficulties right now, please try again a little later!",
-                session: req.session
-            }, 500));
-        });
+            // First check to see if there is an answer state
+            if (req.session && req.session.existingAnswers) {
+                existingAnswers = JSON.parse(JSON.stringify(req.session.existingAnswers));
+                delete req.session.existingAnswers;
+            }
 
-        requestEmitter.on('timeout', function () {
-            requestEmitter.removeAllListeners();
-            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', {
-                title: "Oops, there's a problem.",
-                details: "We're having difficulties right now, please try again a little later!",
-                session: req.session
-            }, 500));
-        });
+            var requestEmitter = new events.EventEmitter();
+            requestEmitter.setMaxListeners(1);
 
-        // Handle the done value
-        requestEmitter.on('done', function (srvObj) {
-            // Get the respondent object
-            sv
-                .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function (resp) {
-                    req.session.rid = resp;
-                    req
-                        .session
-                        .save(function () {
-                            // var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
-                            // srvObj.survey_model = defaultModel;
-                            _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
-                                title: srvObj.name,
-                                respondent: resp,
-                                session: req.session,
-                                model: srvObj.survey_model,
-                                surveyID: guid,
-                                theme: srvObj.theme,
-                                modelstr: btoa(JSON.stringify({
-                                    metadata: {
-                                        title: srvObj.name,
-                                        guid: srvObj.survey_model.guid,
-                                        theme: srvObj.theme,
-                                        updated_at: srvObj.updated_at
-                                    },
-                                    currentPage: Math.min(pg, srvObj.survey_model.pages.length),
-                                    pages: srvObj.survey_model.pages,
-                                    answers: {}
-                                }))
-                            }));
-                        });
-                });
-        });
+            requestEmitter.on('error', function () {
+                requestEmitter.removeAllListeners();
+                _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', {
+                    title: "Oops, there's a problem.",
+                    details: "We're having difficulties right now, please try again a little later!",
+                    session: req.session
+                }, 500));
+            });
 
-        sv.loadSurveyByGuid(guid, requestEmitter);
-        // var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
-        // _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
-        // title: "test", respondent: respondent, surveyID: guid, session: req.session,
-        // model: defaultModel, modelstr: btoa(JSON.stringify(defaultModel)) }));
+            requestEmitter.on('timeout', function () {
+                requestEmitter.removeAllListeners();
+                _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', {
+                    title: "Oops, there's a problem.",
+                    details: "We're having difficulties right now, please try again a little later!",
+                    session: req.session
+                }, 500));
+            });
+
+            // Handle the done value
+            requestEmitter.on('done', function (srvObj) {
+                // Get the respondent object
+                sv
+                    .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function (resp) {
+                        req.session.rid = resp;
+                        req
+                            .session
+                            .save(() => {
+                                _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
+                                    title: srvObj.name,
+                                    respondent: resp,
+                                    session: req.session,
+                                    model: srvObj.survey_model,
+                                    surveyID: guid,
+                                    theme: srvObj.theme,
+                                    modelstr: btoa(JSON.stringify({
+                                        metadata: {
+                                            title: srvObj.name,
+                                            guid: srvObj.survey_model.guid,
+                                            theme: srvObj.theme,
+                                            updated_at: srvObj.updated_at
+                                        },
+                                        currentPage: Math.min(pg, srvObj.survey_model.pages.length),
+                                        pages: srvObj.survey_model.pages,
+                                        answers: existingAnswers || {}
+                                    }))
+                                }));
+                            });
+                    });
+            });
+
+            sv.loadSurveyByGuid(guid, requestEmitter);
+            // var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
+            // _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
+            // title: "test", respondent: respondent, surveyID: guid, session: req.session,
+            // model: defaultModel, modelstr: btoa(JSON.stringify(defaultModel)) }));
+        }
     });
 
     /**

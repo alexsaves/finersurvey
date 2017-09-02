@@ -37,6 +37,7 @@ Each question in the `elements` collection shares a set of common attributes, bu
  * `subtitle` - (_String_) An optional block of text below the text title. This appears in a less-prominent font than the title.
  * `image` - (_Object_) An image to display (see below for details). Note that this is distinct from the `image` question `type`.
  * `limits` - (_Object_) Any input limitations like maximum choices or characters or words. See question details for specifics.
+ * `initialValue` - (__Number__, __String__) The initial data value for the question. Only some quesitons support this like `rating`, `type` = `slider`.
 
 ### Question Types
 
@@ -225,6 +226,8 @@ There are three types of `rating` questions. The default is `buttons` but you ca
  * `stars` - A Star rating widget
  * `buttons` - A set of regular buttons
  * `slider` - A drag and drop slider
+
+ For `slider` questions, you can specity an `initialValue` attribute with a number between 0-100. This is the default value to assign to the question. It assumes if the user does not interact with the question, that they have in-fact answered the question. Note: having an `initialValue` attribute will mean that auto-advance will not work.
 
 #### Matrix Rating Definition
 
