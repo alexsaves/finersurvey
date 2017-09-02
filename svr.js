@@ -243,7 +243,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                     session: req.session,
                                     model: srvObj.survey_model,
                                     surveyID: guid,
-                                    theme: srvObj.theme,
+                                    theme: srvObj.theme,                                    
                                     modelstr: btoa(JSON.stringify({
                                         metadata: {
                                             title: srvObj.name,
@@ -257,7 +257,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                         variables: {
                                             surveyTitle: srvObj.name,
                                             companyName: srvObj._org.name
-                                        }
+                                        },
+                                        saveUrl: '/s/' + encodeURIComponent(guid)
                                     }))
                                 }));
                             });
@@ -321,20 +322,6 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         });
 
         sv.saveSurveyResults(guid, req.body, rid, requestEmitter);
-    });
-
-    /**
-     * Cross domain xml for flash
-     */
-    app.get('/crossdomain.xml', function (req, res) {
-        _outputResponse(res, {
-            headers: {
-                "Content-Type": "text/x-cross-domain-policy"
-            },
-            body: "<?xml version=\"1.0\"?>\n<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macro" +
-                    "media.com/xml/dtds/cross-domain-policy.dtd\">\n<cross-domain-policy>\n<allow-acc" +
-                    "ess-from domain=\"*\" secure=\"false\"/>\n</cross-domain-policy>"
-        });
     });
 
     /**

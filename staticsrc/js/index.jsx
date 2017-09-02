@@ -26,6 +26,7 @@ if (stateElm) {
       .querySelector('[type=\'finer/state\']')
       .innerText;
     startupState = JSON.parse(atob(rawStateDataStr));
+
     if (startupState.metadata) {
       surveyHash = startupState.metadata.guid + "_" + rawStateDataStr.length;
       persistentKey += "_" + startupState.metadata.guid;

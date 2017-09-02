@@ -28,6 +28,9 @@ export function changeAnswer(questionName, answerState) {
     var st = getState();
     dispatch(_changeAnswer(questionName, answerState));
     dispatch(validateSurvey());
+    if (st.saveUrl) {
+      dispatch(transmitAnswers());
+    }
   };
 };
 
@@ -80,5 +83,22 @@ export function validateSurvey() {
   return (dispatch, getState) => {
     var st = getState();
     dispatch(_validateSurvey(st.answers, st.pages));
+  };
+};
+
+/*
+ * Transmit answers to server
+ */
+export function transmitAnswers() {
+  return (dispatch, getState) => {
+    var st = getState(),
+      answers = st.answers;
+
+    var fd = new FormData();
+    fd.append("answers", JSON.stringify(answers));
+    fetch(st.saveUrl, {
+      method: "POST",
+      body: fd
+    });
   };
 };
