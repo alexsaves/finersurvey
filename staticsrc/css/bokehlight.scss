@@ -36,9 +36,12 @@ Arial,
 sans-serif;
 // images
 $bgimage: "/static/assets/other/bokehlight.jpg";
+$mainlogoimage: "/static/assets/logos/finerink.svg";
+$altlogoimage: "/static/assets/logos/finerink_w.svg";
 // colors
 $fill: #3e885b;
 $greyfill: #999999;
+$solidcontrolcolor: #000000;
 $question_clr: #000000;
 $instructions_clr: lighten($question_clr, 35%);
 $border_color: rgba(100, 100, 100, 0.2);

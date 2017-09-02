@@ -35,6 +35,7 @@ if (stateElm) {
     if (oldAnswers) {
       ansObj = JSON.parse(oldAnswers);
     }
+    
     let existingAnsOnObject = JSON.stringify(startupState.answers);
     if (existingAnsOnObject && existingAnsOnObject.length > 1 && existingAnsOnObject != "{}") {
       localStorage.setItem(persistentKey, JSON.stringify({

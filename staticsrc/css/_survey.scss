@@ -34,13 +34,13 @@ html {
         }
         &.overflowing {
           .logo--finerink {
-            background-image: url(/static/assets/logos/finerink_w.svg);
+            background-image: url($altlogoimage);
           }
         }
         .logo--finerink {
           position: fixed;
           bottom: 0.65em;
-          background-image: url(/static/assets/logos/finerink.svg);
+          background-image: url($mainlogoimage);
           height: 2em;
           width: 100%;
           background-position: center;
@@ -50,7 +50,7 @@ html {
           opacity: 1;
           transition: opacity $slow_anim_timing;
           @media (max-width: $screen-sm-min) {
-            background-image: url(/static/assets/logos/finerink_w.svg);
+            background-image: url($altlogoimage);
           }
           &.hidden {
             display: block;
