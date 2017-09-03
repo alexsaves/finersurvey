@@ -90,7 +90,7 @@ SurveyController.prototype.saveSurveyResults = function (guid, submitBody, rid, 
                 requestEmitter.emit('error', err);
             } else {
                 srv.survey_model = JSON.parse(srv.survey_model.toString());
-                console.log("1");
+
                 // Get the respondent
                 finercommon
                     .models
@@ -99,12 +99,12 @@ SurveyController.prototype.saveSurveyResults = function (guid, submitBody, rid, 
                         if (err) {
                             requestEmitter.emit('error', err);
                         } else {
-                            console.log("2");
-                            resp.setTimeZone(this.cfg, parseInt(submitBody.submitBody), (err, resp) => {
+                            // Set the time zone if it hasn't already
+                            resp.setTimeZone(this.cfg, submitBody.tz, (err, resp) => {
                                 if (err) {
                                     requestEmitter.emit('error', err);
                                 } else {
-                                    console.log("3");
+                                    // Now integrate the responses
                                     srv.saveRespondent(this.cfg, resp, submitBody, (err, resp) => {
                                         if (err) {
                                             requestEmitter.emit('error', err);
