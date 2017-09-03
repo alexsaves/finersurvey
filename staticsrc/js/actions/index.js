@@ -92,13 +92,23 @@ export function validateSurvey() {
 export function transmitAnswers() {
   return (dispatch, getState) => {
     var st = getState(),
-      answers = st.answers;
+      answers = st.answers,
+      resultData = {
+        guid: st.metadata.guid,
+        when: (new Date()).getTime(),
+        tz: (new Date()).getTimezoneOffset(),
+        answers: answers
+      };
 
-    var fd = new FormData();
-    fd.append("answers", JSON.stringify(answers));
+    // Send the data
     fetch(st.saveUrl, {
       method: "POST",
-      body: fd
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(resultData),
+      credentials: 'include'
     });
   };
 };

@@ -55,10 +55,14 @@ class SurveyComponent extends React.Component {
     let uid = this.props.match.params.uid,
       desiredPage = this.props.match.params.pg,
       pages = this.props.pages,
-      hideLogo = false;
+      hideLogo = false,
+      showingLoadingScreen = !this.state.hideLoadingScreen;
+
     if (this.props.pages && this.props.pages.length > 0) {
       hideLogo = !!this.props.pages[this.props.currentPage].hideLogo;
     }
+
+    // Spit out the survey
     return (
       <div
         className={"survey" + (this.state.isOverflowing
@@ -75,7 +79,7 @@ class SurveyComponent extends React.Component {
           className={"logo--finerink" + (hideLogo
           ? " hidden"
           : "")}></div>
-        {!this.state.hideLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete}/>}
+        {showingLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete}/>}
       </div>
     );
   }

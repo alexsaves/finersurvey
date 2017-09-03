@@ -119,6 +119,9 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     // Add body parser url parser
     app.use(bodyParser.urlencoded({extended: true}));
 
+    // Parse JSON
+    app.use(bodyParser.json());
+
     // Set up the session handler
     /*pjson.config.session.store = new RedisStore({
       client: redisClient
@@ -267,10 +270,6 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             });
 
             sv.loadSurveyByGuid(guid, requestEmitter);
-            // var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
-            // _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
-            // title: "test", respondent: respondent, surveyID: guid, session: req.session,
-            // model: defaultModel, modelstr: btoa(JSON.stringify(defaultModel)) }));
         }
     });
 
