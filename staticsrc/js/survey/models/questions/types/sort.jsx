@@ -143,6 +143,9 @@ class SortQuestion extends React.Component {
     }, 500);
     this.resizeThrottle = null;
     window.addEventListener("resize", (e) => {
+      if (!this.didMount) {
+        return;
+      }
       if (!this.state.hideOtherOverlay) {
         this.setState({hideOtherOverlay: true});
       }
@@ -152,6 +155,13 @@ class SortQuestion extends React.Component {
         this.setState({hideOtherOverlay: false});
       }, 500);
     });
+  }
+
+  /**
+   * The component unmounted
+   */
+  componentWillUnmount() {
+    this.didMount = false;
   }
 
   /**
@@ -258,8 +268,8 @@ class SortQuestion extends React.Component {
     let root = ReactDOM.findDOMNode(this),
       otheript = root.getElementsByClassName('otherOverlayInput')[0],
       othervalue = (this.props.other && otheript)
-      ? otheript.value
-      : null;
+        ? otheript.value
+        : null;
 
     if (othervalue === null) {
       otheript = root.getElementsByClassName('floatingother')[0];
