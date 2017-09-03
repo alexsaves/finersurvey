@@ -14,6 +14,7 @@ class LoadingScreenComponent extends React.Component {
     super(props);
     this.startTime = new Date();
     this.minTime = 500;
+    this.imgRx = /url\(['"]*([^'"]*)['"]*\)/i;
   }
 
   /**
@@ -26,14 +27,49 @@ class LoadingScreenComponent extends React.Component {
       currentTime = new Date(),
       currentDiff = currentTime - this.startTime,
       minDelay = Math.max(100, this.minTime - currentDiff),
-      failsafeTImer = null;
+      failsafeTImer = null,
+      alms = document.querySelectorAll("*"),
+      imgsToLoad = [],
+      imgObjs = [];
+
+    for (let u = 0; u < alms.length; u++) {
+      var bgImg = this.getBackgroundImg(alms[u]);
+      if (bgImg && imgsToLoad.indexOf(bgImg) == -1) {
+        imgsToLoad.push(bgImg);
+        var bgimg = new Image();
+        bgimg.onload = function(img) {
+          return function() {
+            var whichone = imgObjs.find((el) => {
+              return el.src == img;
+            });
+            imgObjs.splice(imgObjs.indexOf(whichone), 1);            
+          };
+        }(bgImg);
+        bgimg.onerror = function(img) {
+          return function() {
+            console.error("This survey has a missing image: ", img);
+            var whichone = imgObjs.find((el) => {
+              return el.src == img;
+            });
+            imgObjs.splice(imgObjs.indexOf(whichone), 1);            
+          };
+        }(bgImg);
+        imgObjs.push({
+          src: bgImg,
+          iObj: bgimg
+        });
+        bgimg.src = bgImg;
+      }
+    }
 
     // Compare rectangles
     var rectsAreTheSame = function (rect1, rect2) {
         return rect1.left == rect2.left && rect1.top == rect2.top && rect1.width == rect2.width && rect1.height == rect2.height;
       },
       done = () => {
-        this.props.dispatch(removeTheLoadingScreen());
+        this
+          .props
+          .dispatch(removeTheLoadingScreen());
       };
 
     // Do the initial minimum delay
@@ -42,7 +78,7 @@ class LoadingScreenComponent extends React.Component {
       if (rectsAreTheSame(initialItemSize, tryTwo)) {
         this.repeatInterval = setInterval(() => {
           let tryThree = loaderNode.getBoundingClientRect();
-          if (!rectsAreTheSame(initialItemSize, tryThree)) {
+          if (!rectsAreTheSame(initialItemSize, tryThree) && imgObjs.length == 0) {
             clearTimeout(failsafeTImer);
             clearInterval(this.repeatInterval);
             done();
@@ -50,7 +86,7 @@ class LoadingScreenComponent extends React.Component {
         }, 25);
         failsafeTImer = setTimeout(() => {
           clearInterval(this.repeatInterval);
-            done();
+          done();
         }, 1500);
       } else {
         done();
@@ -58,7 +94,26 @@ class LoadingScreenComponent extends React.Component {
     }, minDelay);
 
     // Now validate the survey
-    this.props.dispatch(validateSurvey());
+    this
+      .props
+      .dispatch(validateSurvey());
+  }
+
+  /**
+   * Get a background image attribute
+   * @param {*} element
+   */
+  getBackgroundImg(element) {
+    var theCSSprop = window
+      .getComputedStyle(element, null)
+      .getPropertyValue("background-image");
+    if (theCSSprop) {
+      var res = theCSSprop.match(this.imgRx);
+      if (res) {
+        return res[1];
+      }
+    }
+    return false;
   }
 
   /**
@@ -66,7 +121,10 @@ class LoadingScreenComponent extends React.Component {
  */
   render() {
     return (
-      <div className={"loading--container" + (this.props.loadingComplete ? " complete" : "")}>
+      <div
+        className={"loading--container" + (this.props.loadingComplete
+        ? " complete"
+        : "")}>
         <div className="loading--inner">
           <svg
             version="1.0"
