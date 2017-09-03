@@ -72,8 +72,8 @@ export function removeTheLoadingScreen() {
 /*
  * Validate the entire survey with all the showIf conditions
  */
-function _validateSurvey(answers, pages) {
-  return {type: VALIDATE_SURVEY, answers, pages};
+function _validateSurvey(answers, pages, variables) {
+  return {type: VALIDATE_SURVEY, answers, pages, variables};
 };
 
 /*
@@ -82,7 +82,7 @@ function _validateSurvey(answers, pages) {
 export function validateSurvey() {
   return (dispatch, getState) => {
     var st = getState();
-    dispatch(_validateSurvey(st.answers, st.pages));
+    dispatch(_validateSurvey(st.answers, st.pages, st.variables || {}));
   };
 };
 

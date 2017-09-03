@@ -256,7 +256,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                         answers: existingAnswers || {},
                                         variables: {
                                             surveyTitle: srvObj.name,
-                                            companyName: srvObj._org.name
+                                            companyName: srvObj._org.name,
+                                            surveyTheme: srvObj.theme
                                         },
                                         saveUrl: '/s/' + encodeURIComponent(guid)
                                     }))

@@ -19,13 +19,14 @@ function surveyValidatorReducer(state = [], action) {
     case VALIDATE_SURVEY:
       let answers = action.answers,
         pages = clone(action.pages),
+        variables = clone(action.variables || {}),
         checker = new LogicChecker(),
         questionCount = 0;
 
       for (let i = 0; i < pages.length; i++) {
         let pg = pages[i],
           els = pg.elements;
-        pg.isValid = checker.checkAllLogic(pg.showIf, answers, pages);
+        pg.isValid = checker.checkAllLogic(pg.showIf, answers, pages, variables);
         if (!pg.isValid) {
           pages.splice(i--, 1);
           continue;
@@ -34,7 +35,7 @@ function surveyValidatorReducer(state = [], action) {
           for (let j = 0; j < els.length; j++) {
             let q = els[j];
             if (q.showIf) {
-              q.isValid = checker.checkAllLogic(q.showIf, answers, pages);
+              q.isValid = checker.checkAllLogic(q.showIf, answers, pages, variables);
               if (!q.isValid) {
                 els.splice(j--, 1);
               }

@@ -123,6 +123,8 @@ class RadioQuestion extends React.Component {
 
     if (val.length > 0) {
       otherrd.checked = true;
+    } else {
+      otherrd.checked = false;
     }
 
   }

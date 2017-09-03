@@ -302,6 +302,8 @@ Rules may generally only apply to questions on pages that appeared earlier in th
  * `myRankingQuestion[2]>3` - (Ranking questions only) The 3rd item is further down than the 4th position.
  * `myRankingQuestion[0]=2` - (Ranking questions only) The first item is in position 3.
 
+You can also create rules based on variables in your `variables` block of the startup state. Simply reference them the say way you would any question name.
+
 #### Zero Based
 
 All numeric values are zero based. For example, in a dropdown question, the first choice is `0` and the second choice is `1` and so-on. 
