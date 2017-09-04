@@ -248,6 +248,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                     surveyID: guid,
                                     theme: srvObj.theme,                                    
                                     modelstr: btoa(JSON.stringify({
+                                        respondent: resp,
                                         metadata: {
                                             title: srvObj.name,
                                             guid: srvObj.survey_model.guid,
@@ -295,7 +296,10 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     app.post('/s/:surveyGuid', (req, res, next) => {
         var guid = req.params.surveyGuid,
             sv = new SurveyController(pjson.config),
-            rid = req.session.rid;
+            rid = req.body.respondent;
+
+        // Re-assign the session id
+        req.session.rid = req.body.respondent;
 
         var requestEmitter = new events.EventEmitter();
         requestEmitter.setMaxListeners(1);

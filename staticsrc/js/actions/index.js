@@ -97,6 +97,7 @@ export function transmitAnswers() {
         guid: st.metadata.guid,
         when: (new Date()).getTime(),
         tz: (new Date()).getTimezoneOffset(),
+        respondent: st.respondent,
         answers: answers
       };
 
