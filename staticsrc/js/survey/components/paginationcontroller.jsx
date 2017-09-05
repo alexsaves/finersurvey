@@ -208,6 +208,7 @@ class PaginationController extends React.Component {
       pages = this.props.pages,
       allpages = this.props.allpages,
       variables = this.props.variables,
+      hidePagination = pages.length == 0 || !!pages[currentPage].hidePagination,     
       isAnimatingForward = this.state.animatingForward,
       isAnimatingBackward = this.state.animatingBackward,
       remindInstructionsFor = this.state.remindInstructionsFor,
@@ -260,7 +261,7 @@ class PaginationController extends React.Component {
         })}
         <div className={"paginator--backdropmobile"}></div>
         <div
-          className={"paginator--buttonholder left " + (currentPage === 0
+          className={"paginator--buttonholder left " + ((currentPage === 0 || hidePagination)
           ? "hidden"
           : "")}>
           <Link
@@ -272,7 +273,7 @@ class PaginationController extends React.Component {
             .bind(this)}>&lt;</Link>
         </div>
         <div
-          className={"paginator--buttonholder right " + (currentPage === (this.props.pages.length - 1)
+          className={"paginator--buttonholder right " + (((currentPage === (this.props.pages.length - 1)) || hidePagination)
           ? "hidden"
           : "")}>
           <Link

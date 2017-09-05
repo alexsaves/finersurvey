@@ -78,7 +78,8 @@ class PageComponent extends React.Component {
   render() {
     let ctx = this,
       remindInstructionsFor = this.props.remindInstructionsFor,
-      pageNumber = this.props.pageNumber;
+      pageNumber = this.props.pageNumber;      
+
     return (
       <div
         data-page={pageNumber}

@@ -13,6 +13,7 @@ Pages have the following properties:
  * `elements` - (_Array_) The list of question objects. *Required*
  * `name` - (_String_) The ID of the page.
  * `hideLogo` - (_Boolean_) Temporarily hide the logo on the page. Default: `false`. Optional.
+ * `hidePagination` - (_Boolean_) Temporarily hide the pagination controls on the page. Default: `false`. Optional.
 
 ### Question Definitions
 
@@ -73,7 +74,12 @@ Invalid question name examples:
 
 ### Images
 
-You can use the optional `image` attribute on any question to add an image to a question.
+You can use the optional `image` attribute on any question to add an image to a question. Image elements take the following attributes:
+
+ * `url` - The URL to the image
+ * `modifier` - The size modifier
+ * `title` - The HTML `title` attribute (for accessibility)
+ * `link` - Should the image be clickable? If so, the link to the destination.
 
 ```json
 {
