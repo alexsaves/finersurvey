@@ -275,22 +275,6 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     });
 
     /**
-     * Survey Display
-     */
-    app.get('/s/:surveyGuid/complete', (req, res, next) => {
-        var guid = req.params.surveyGuid;
-
-        req
-            .session
-            .destroy(function () {
-                _outputResponse(res, templs.renderWithBase('surveybase', 'surveycomplete', {
-                    surveyID: guid,
-                    title: "Thanks! Discover Win/Loss Analysis with Finer Ink."
-                }));
-            });
-    });
-
-    /**
      * Survey Results Save
      */
     app.post('/s/:surveyGuid', (req, res, next) => {
