@@ -8,6 +8,7 @@ export const JUMP_TO_PAGE = 'JUMP_TO_PAGE';
 export const CHANGE_ANSWER = 'CHANGE_ANSWER';
 export const LOADING_SCREEN_REMOVE = 'LOADING_SCREEN_REMOVE';
 export const VALIDATE_SURVEY = 'VALIDATE_SURVEY';
+export const CHANGE_RESPONDENT = "CHANGE_RESPONDENT";
 
 /**
  * Change or add an answer
@@ -86,6 +87,14 @@ export function validateSurvey() {
   };
 };
 
+
+/*
+ * Change the respondent
+ */
+function setRespondentId(respid) {
+  return {type: CHANGE_RESPONDENT, respid};
+};
+
 /*
  * Transmit answers to server
  */
@@ -110,6 +119,8 @@ export function transmitAnswers() {
       },
       body: JSON.stringify(resultData),
       credentials: 'include'
+    }).then((resp) => resp.json()).then((data) => {
+      dispatch(setRespondentId(data.respondent));
     });
   };
 };

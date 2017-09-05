@@ -61,61 +61,72 @@ SurveyController.prototype.getRespondentFromSession = function (session, request
                 if (err) {
                     requestEmitter.emit('error', err);
                 } else {
-                    cb(resp.id);
+                    cb(resp);
                 }
             });
     } else {
-        // Just return immediately
-        process
-            .nextTick(function () {
-                cb(parseInt(respid));
-            })
+        finercommon
+            .models
+            .Respondent
+            .GetById(this.cfg, respid, (err, respondent) => {
+                if (err) {
+                    finercommon
+                        .models
+                        .Respondent
+                        .Create(this.cfg, {
+                            prospect_id: 0,
+                            survey_guid: sguid,
+                            user_agent: ua,
+                            ip_addr: ip,
+                            time_zone: 99999
+                        }, function (err, resp) {
+                            if (err) {
+                                requestEmitter.emit('error', err);
+                            } else {
+                                cb(resp);
+                            }
+                        });
+                } else {
+                    cb(respondent);
+                }
+            });
     }
 };
 
 /**
  * Save the survey data
  */
-SurveyController.prototype.saveSurveyResults = function (guid, submitBody, rid, requestEmitter) {
+SurveyController.prototype.saveSurveyResults = function (guid, submitBody, resp, cb) {
     if (arguments.length < 4) {
         throw new Error("Missing argments in save survey results.");
     }
-
     // First get the survey object
     finercommon
         .models
         .Survey
         .GetByGuid(this.cfg, guid, (err, srv) => {
             if (err) {
+                console.log("Could not get survey by guid", guid);
                 requestEmitter.emit('error', err);
             } else {
                 srv.survey_model = JSON.parse(srv.survey_model.toString());
 
-                // Get the respondent
-                finercommon
-                    .models
-                    .Respondent
-                    .GetById(this.cfg, rid, (err, resp) => {
-                        if (err) {
-                            requestEmitter.emit('error', err);
-                        } else {
-                            // Set the time zone if it hasn't already
-                            resp.setTimeZone(this.cfg, submitBody.tz, (err, resp) => {
-                                if (err) {
-                                    requestEmitter.emit('error', err);
-                                } else {
-                                    // Now integrate the responses
-                                    srv.saveRespondent(this.cfg, resp, submitBody, (err, resp) => {
-                                        if (err) {
-                                            requestEmitter.emit('error', err);
-                                        } else {
-                                            requestEmitter.emit('done', resp);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
+                // Set the time zone if it hasn't already
+                resp.setTimeZone(this.cfg, submitBody.tz, (err, resp) => {
+                    if (err) {
+                        cb(err);
+                    } else {
+                        // Now integrate the responses
+                        srv.saveRespondent(this.cfg, resp, submitBody, (err, resp) => {
+                            if (err) {
+                                cb(err);
+                            } else {
+                                cb(null);
+                            }
+                        });
+                    }
+                });
+
             }
         });
 };

@@ -236,19 +236,19 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                 // Get the respondent object
                 sv
                     .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function (resp) {
-                        req.session.rid = resp;
+                        req.session.rid = resp.id;
                         req
                             .session
                             .save(() => {
                                 _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
                                     title: srvObj.name,
-                                    respondent: resp,
+                                    respondent: resp.id,
                                     session: req.session,
                                     model: srvObj.survey_model,
                                     surveyID: guid,
-                                    theme: srvObj.theme,                                    
+                                    theme: srvObj.theme,
                                     modelstr: btoa(JSON.stringify({
-                                        respondent: resp,
+                                        respondent: resp.id,
                                         metadata: {
                                             title: srvObj.name,
                                             guid: srvObj.survey_model.guid,
@@ -296,7 +296,9 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     app.post('/s/:surveyGuid', (req, res, next) => {
         var guid = req.params.surveyGuid,
             sv = new SurveyController(pjson.config),
-            rid = req.body.respondent;
+            rid = req.body.respondent,
+            usSrc = req.headers['user-agent'],
+            ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
         // Re-assign the session id
         req.session.rid = req.body.respondent;
@@ -304,9 +306,10 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         var requestEmitter = new events.EventEmitter();
         requestEmitter.setMaxListeners(1);
 
-        requestEmitter.on('done', function (srvObj) {
+        // Handles successful completion
+        requestEmitter.on('done', function (respondent) {
             _outputResponse(res, {
-                body: JSON.stringify({success: true}),
+                body: JSON.stringify({success: true, respondent: respondent.id}),
                 status: 200,
                 headers: {
                     "Content-Type": "application/json"
@@ -314,10 +317,11 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             });
         });
 
+        // Handles an error state
         requestEmitter.on('error', function () {
             requestEmitter.removeAllListeners();
             _outputResponse(res, {
-                body: JSON.stringify({error: "There was an error saving the data."}),
+                body: JSON.stringify({error: "There was an error saving the data.", respondent: req.body.respondent}),
                 status: 500,
                 headers: {
                     "Content-Type": "application/json"
@@ -325,7 +329,20 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             });
         });
 
-        sv.saveSurveyResults(guid, req.body, rid, requestEmitter);
+        // Get a respondent and save the results
+        sv.getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function (respondent) {
+            req.session.rid = req.body.respondent = respondent.id;
+
+            // Save the reults now
+            sv.saveSurveyResults(guid, req.body, respondent, function(err) {
+                if (err) {
+                    requestEmitter.emit("error");
+                } else {
+                    requestEmitter.emit("done", respondent);
+                }
+            });
+        });
+
     });
 
     /**

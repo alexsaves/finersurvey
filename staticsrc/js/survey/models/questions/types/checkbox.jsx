@@ -71,6 +71,9 @@ class CheckboxQuestion extends React.Component {
     finalResponse.responses = responses;
     if (this.props.other) {
       finalResponse.other = otherval;
+      if (otherval && otherval.trim().length > 0) {
+        responses.push(9999);
+      }
     }
     if ((!limits || typeof limits.max == 'undefined') || (limits.max >= howManySelected)) {
       this
