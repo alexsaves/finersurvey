@@ -36,6 +36,8 @@ class ButtonsQuestion extends React.Component {
       choice = parseInt(targ.getAttribute('data-choice')),
       choiceObj = this.props.choices[choice];
 
+    this.mounted = false;
+
     this
       .props
       .dispatch(changeAnswer(this.props.name, choice));
@@ -62,7 +64,16 @@ class ButtonsQuestion extends React.Component {
   /**
    * The component mounted
    */
-  componentDidMount() {}
+  componentDidMount() {
+    this.mounted = true;
+  }
+
+  /**
+   * The component unmounted
+   */
+  componentWillUnmount() {
+    this.mounted = false;
+  }
 
   /**
  * Render the view
@@ -72,11 +83,13 @@ class ButtonsQuestion extends React.Component {
       piper = this.piper;
     if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
-        this.wasFocused = true;
-        let root = ReactDOM.findDOMNode(this);
-        let btns = root.getElementsByTagName('button');
-        if (btns.length > 0) {
-          btns[0].focus();
+        if (this.mounted) {
+          this.wasFocused = true;
+          let root = ReactDOM.findDOMNode(this);
+          let btns = root.getElementsByTagName('button');
+          if (btns.length > 0) {
+            btns[0].focus();
+          }
         }
       }, 25);
     }
@@ -87,7 +100,9 @@ class ButtonsQuestion extends React.Component {
           .props
           .choices
           .map((val, idx) => {
-            let finalLabel = (val && val.title) ? val.title : "Continue";
+            let finalLabel = (val && val.title)
+              ? val.title
+              : "Continue";
             finalLabel = piper.pipe(finalLabel, ctx.props.answers, ctx.props.pages, ctx.props.variables);
             return <button
               key={"_" + idx}

@@ -4,6 +4,7 @@ import pages from './pages';
 import currentPage from './currentpage';
 import answers from './answers';
 import variables from './variables';
+import messages from './messages';
 import saveUrl from './saveurl';
 import respondent from './respondent';
 import {loadingStatus} from './loading';
@@ -22,7 +23,8 @@ const surveyReducers = combineReducers({
   validatedPages: surveyValidatorReducer,
   variables,
   saveUrl,
-  respondent
+  respondent,
+  messages
 });
 
 // Export it

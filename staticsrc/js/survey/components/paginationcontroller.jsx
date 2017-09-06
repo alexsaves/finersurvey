@@ -49,6 +49,10 @@ class PaginationController extends React.Component {
    * Handle advancing
    */
   handleAdvanceRequest(e) {
+    if (this.props.currentPage == this.props.pages.length - 1) {
+      e.preventDefault();
+      return;
+    }
     let failedValidationItems = this.hasRequiredAnswersForPage(this.props.currentPage),
       validated = failedValidationItems.length === 0;
     this.setState({showValidation: false, remindInstructionsFor: []});
@@ -208,7 +212,7 @@ class PaginationController extends React.Component {
       pages = this.props.pages,
       allpages = this.props.allpages,
       variables = this.props.variables,
-      hidePagination = pages.length == 0 || !!pages[currentPage].hidePagination,     
+      hidePagination = currentPage < 0 || pages.length == 0 || currentPage > pages.length - 1 || !!pages[currentPage].hidePagination,     
       isAnimatingForward = this.state.animatingForward,
       isAnimatingBackward = this.state.animatingBackward,
       remindInstructionsFor = this.state.remindInstructionsFor,
@@ -222,7 +226,7 @@ class PaginationController extends React.Component {
       this.advancejump = setTimeout(() => {
         this
           .props
-          .dispatch(jumpToPage(desiredPage));
+          .dispatch(jumpToPage(Math.max(0, desiredPage)));
       }, 20);
     }
     return (
@@ -238,7 +242,7 @@ class PaginationController extends React.Component {
           ? "hidden"
           : "")}>
           <div className="validationcontainer">
-            <div className="rightarrow"></div>This question is required.</div>
+            <div className="rightarrow"></div>{this.props.messages.requiredQ}</div>
         </div>}
         {pages.map((pg, idx) => {
           return <PageComponent
@@ -267,7 +271,7 @@ class PaginationController extends React.Component {
           <Link
             to={"/s/" + this.props.uid + "/" + (currentPage)}
             className="paginator--button"
-            title="Previous page"
+            title={this.props.messages.prevPage}
             onClick={this
             .handlePreviousRequest
             .bind(this)}>&lt;</Link>
@@ -281,7 +285,7 @@ class PaginationController extends React.Component {
             className={"paginator--button advance--button " + (isValidated
             ? "validated"
             : "")}
-            title="Next page"
+            title={this.props.messages.nextPage}
             onMouseOut={this
             .cancelValidation
             .bind(this)}
@@ -303,7 +307,8 @@ const mapStateToProps = (state/*, props*/) => {
     allpages: state.pages, 
     currentPage: state.currentPage, 
     answers: state.answers,
-    variables: state.variables
+    variables: state.variables,
+    messages: state.messages
   };
 }
 

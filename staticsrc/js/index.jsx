@@ -11,6 +11,18 @@ import thunk from 'redux-thunk'
 // The apps initial state
 const initialState = {};
 
+// Provides default application messages
+const MESSAGES = {
+  prevPage: "Previous page",
+  nextPage: "Next page",
+  reqQuestion: "This question is required.",
+  pageNotFound: "That page was not found.",
+  startOver: "Don't worry. We'll return you to the beginning of the survey.",
+  ok: "OK",
+  requiredQ: "This question is required",
+  winLossAnalysis: "Sales Win/Loss Analysis"
+};
+
 // Create a Redux store holding the state of your app. Its API is { subscribe,
 // dispatch, getState }.
 let stateElm = document.querySelector('[type=\'finer/state\']'),
@@ -26,7 +38,7 @@ if (stateElm) {
       .querySelector('[type=\'finer/state\']')
       .innerText;
     startupState = JSON.parse(atob(rawStateDataStr));
-
+    startupState.validatedPages = JSON.parse(JSON.stringify(startupState.pages));
     if (startupState.metadata) {
       surveyHash = startupState.metadata.guid + "_" + rawStateDataStr.length;
       persistentKey += "_" + startupState.metadata.guid;
@@ -36,7 +48,7 @@ if (stateElm) {
     if (oldAnswers) {
       ansObj = JSON.parse(oldAnswers);
     }
-    
+    startupState.messages = Object.assign({}, MESSAGES, startupState.messages);
     let existingAnsOnObject = JSON.stringify(startupState.answers);
     if (existingAnsOnObject && existingAnsOnObject.length > 1 && existingAnsOnObject != "{}") {
       localStorage.setItem(persistentKey, JSON.stringify({

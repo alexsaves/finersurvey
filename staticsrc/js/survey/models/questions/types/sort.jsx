@@ -134,12 +134,14 @@ class SortQuestion extends React.Component {
     }, true);
     this.positionOtherInput();
     setInterval(() => {
-      if (this.props.isSelected && !this.props.isAnimating) {
+      if (this.didMount && this.props.isSelected && !this.props.isAnimating) {
         this.positionOtherInput();
       }
     }, 250);
     setTimeout(() => {
-      this.setState({hideOtherOverlay: false});
+      if (this.didMount) {
+        this.setState({hideOtherOverlay: false});
+      }
     }, 500);
     this.resizeThrottle = null;
     window.addEventListener("resize", (e) => {
@@ -459,7 +461,9 @@ class SortQuestion extends React.Component {
     if (this.isAnimating && !this.props.isAnimating) {
       hideOtherOverlay = true;
       setTimeout(() => {
-        this.positionOtherInput();
+        if (this.didMount) {
+          this.positionOtherInput();
+        }
       }, 200);
     }
     this.isAnimating = this.props.isAnimating;

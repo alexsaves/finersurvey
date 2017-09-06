@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import ProgressComponent from './components/progress.jsx';
 import PageController from './components/paginationcontroller.jsx';
 import LoadingScreen from './components/loadingscreen.jsx';
+import MissingPageMessage from './components/missingpagemessage.jsx';
 
 /**
 * Represents the entire survey
@@ -53,13 +54,18 @@ class SurveyComponent extends React.Component {
  */
   render() {
     let uid = this.props.match.params.uid,
-      desiredPage = this.props.match.params.pg,
+      desiredPage = this.props.match.params.pg || 0,
       pages = this.props.pages,
       hideLogo = false,
+      showMissingPageUI = false,
       showingLoadingScreen = !this.state.hideLoadingScreen;
 
-    if (this.props.pages && this.props.pages.length > 0) {
-      hideLogo = !!this.props.pages[this.props.currentPage].hideLogo;
+    if (desiredPage > pages.length) {
+      showMissingPageUI = true;
+    }
+
+    if (!showMissingPageUI && this.props.currentPage >= 0 && this.props.pages && this.props.pages.length > 0) {
+      hideLogo = this.props.currentPage < this.props.pages.length ? !!this.props.pages[this.props.currentPage].hideLogo : true;
     }
 
     // Spit out the survey
@@ -71,10 +77,11 @@ class SurveyComponent extends React.Component {
         onTransitionEnd={this
         .handleTransitionEnd
         .bind(this)}>
-        <ProgressComponent uid={uid} progress={desiredPage / this.props.pages.length}/>
-        <PageController uid={uid} desiredPage={desiredPage}/>
+        {!showMissingPageUI && <ProgressComponent uid={uid} progress={desiredPage / this.props.pages.length}/>}
+        {!showMissingPageUI && <PageController uid={uid} desiredPage={desiredPage}/>}
+        {showMissingPageUI && <MissingPageMessage />}
         <div
-          title="Sales Win/Loss Analysis"
+          title={this.props.messages.winLossAnalysis}
           target="_blank"
           className={"logo--finerink" + (hideLogo
           ? " hidden"
@@ -93,7 +100,8 @@ const mapStateToProps = (state/*, props*/) => {
     pages: state.validatedPages,
     currentPage: state.currentPage,
     variables: state.variables,
-    loadingComplete: !!state.loadingComplete
+    loadingComplete: !!state.loadingComplete,
+    messages: state.messages
   }
 }
 

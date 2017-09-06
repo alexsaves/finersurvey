@@ -249,6 +249,16 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                     theme: srvObj.theme,
                                     modelstr: btoa(JSON.stringify({
                                         respondent: resp.id,
+                                        messages: {
+                                            prevPage: "Previous page",
+                                            nextPage: "Next page",
+                                            reqQuestion: "This question is required.",
+                                            pageNotFound: "That page was not found.",
+                                            startOver: "Don't worry. We'll return you to the beginning of the survey.",
+                                            ok: "OK",
+                                            requiredQ: "This question is required",
+                                            winLossAnalysis: "Sales Win/Loss Analysis"
+                                        },
                                         metadata: {
                                             title: srvObj.name,
                                             guid: srvObj.survey_model.guid,
@@ -318,7 +328,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             req.session.rid = req.body.respondent = respondent.id;
 
             // Save the reults now
-            sv.saveSurveyResults(guid, req.body, respondent, function(err) {
+            sv.saveSurveyResults(guid, req.body, respondent, function (err) {
                 if (err) {
                     requestEmitter.emit("error");
                 } else {
