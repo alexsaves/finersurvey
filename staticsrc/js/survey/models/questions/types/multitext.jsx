@@ -102,7 +102,8 @@ class MultiTextQuestion extends React.Component {
       piper = this.piper,
       panswer = this.props.answer,
       panswers = this.props.answers,
-      ppages = this.props.allpages;
+      ppages = this.props.allpages,
+      variables = this.props.variables;
 
     if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
@@ -138,7 +139,7 @@ class MultiTextQuestion extends React.Component {
               .bind(this)}
               data-which={idx}
               data-order={idxo}
-              placeholder={piper.pipe(rt, panswers, ppages)}
+              placeholder={piper.pipe(rt, panswers, ppages, variables)}
               defaultValue={storedValue}
               onKeyDown={this
               .handleTypeThrottle
@@ -151,7 +152,7 @@ class MultiTextQuestion extends React.Component {
 }
 
 // Connect the component
-const ConnectedMultiTextQuestion = connect()(MultiTextQuestion)
+const ConnectedMultiTextQuestion = connect()(MultiTextQuestion);
 
 // Expose the question
 export default ConnectedMultiTextQuestion;

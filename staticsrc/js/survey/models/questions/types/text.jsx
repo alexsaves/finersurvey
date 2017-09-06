@@ -34,9 +34,21 @@ class TextQuestion extends React.Component {
     let targ = e && e.target,
       root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByClassName("main--textfield");
-    this
-      .props
-      .dispatch(changeAnswer(this.props.name, ipts[0].value));
+
+    if (this.props.modifier == 'number' || this.props.modifier == 'integer') {
+      var nval = ipts[0].value;
+      nval = parseFloat(nval);
+      if (isNaN(nval)) {
+        nval = null;
+      }
+      this
+        .props
+        .dispatch(changeAnswer(this.props.name, nval));
+    } else {
+      this
+        .props
+        .dispatch(changeAnswer(this.props.name, ipts[0].value.toString()));
+    }
     // Signal that the user is interacting with the question
     if (this.props.onQuestionBeingInteractedWith) {
       this
@@ -78,12 +90,21 @@ class TextQuestion extends React.Component {
 
   /**
    * Validate a keypress
-   * @param {*} e 
+   * @param {*} e
    */
   validateKeyDown(e) {
     if (e) {
-      let validKeys = [91, 13, 37, 39, 8, 46, 27, 9];
-      if (validKeys.indexOf(e.keyCode) == -1 && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {    
+      let validKeys = [
+        91,
+        13,
+        37,
+        39,
+        8,
+        46,
+        27,
+        9
+      ];
+      if (validKeys.indexOf(e.keyCode) == -1 && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
         if ((this.props.modifier == 'number') && !!!e.key.match(/[0-9\.]/)) {
           e.stopPropagation();
           e.preventDefault();
@@ -193,7 +214,9 @@ class TextQuestion extends React.Component {
               onFocus={this
               .handleFocus
               .bind(this)}
-              onKeyDownCapture={this.validateKeyDown.bind(this)}
+              onKeyDownCapture={this
+              .validateKeyDown
+              .bind(this)}
               onKeyUp={this
               .handleIptThrottleChange
               .bind(this)}
@@ -208,7 +231,9 @@ class TextQuestion extends React.Component {
           <div className="text--inputcontainer"><input
             type={iptType}
             tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
-            onKeyDownCapture={this.validateKeyDown.bind(this)}
+            onKeyDownCapture={this
+          .validateKeyDown
+          .bind(this)}
             onFocus={this
           .handleFocus
           .bind(this)}

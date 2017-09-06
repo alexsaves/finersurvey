@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import ProgressComponent from './components/progress.jsx';
 import PageController from './components/paginationcontroller.jsx';
 import LoadingScreen from './components/loadingscreen.jsx';
+import MissingPageMessage from './components/missingpagemessage.jsx';
 
 /**
 * Represents the entire survey
@@ -53,12 +54,21 @@ class SurveyComponent extends React.Component {
  */
   render() {
     let uid = this.props.match.params.uid,
-      desiredPage = this.props.match.params.pg,
+      desiredPage = this.props.match.params.pg || 0,
       pages = this.props.pages,
-      hideLogo = false;
-    if (this.props.pages && this.props.pages.length > 0) {
-      hideLogo = !!this.props.pages[this.props.currentPage].hideLogo;
+      hideLogo = false,
+      showMissingPageUI = false,
+      showingLoadingScreen = !this.state.hideLoadingScreen;
+
+    if (desiredPage > pages.length) {
+      showMissingPageUI = true;
     }
+
+    if (!showMissingPageUI && this.props.currentPage >= 0 && this.props.pages && this.props.pages.length > 0) {
+      hideLogo = this.props.currentPage < this.props.pages.length ? !!this.props.pages[this.props.currentPage].hideLogo : true;
+    }
+
+    // Spit out the survey
     return (
       <div
         className={"survey" + (this.state.isOverflowing
@@ -67,16 +77,16 @@ class SurveyComponent extends React.Component {
         onTransitionEnd={this
         .handleTransitionEnd
         .bind(this)}>
-        <ProgressComponent uid={uid} progress={desiredPage / this.props.pages.length}/>
-        <PageController uid={uid} desiredPage={desiredPage}/>
-        <a
-          href="https://www.finer.ink"
-          title="Sales Win/Loss Analysis"
+        {!showMissingPageUI && <ProgressComponent uid={uid} progress={desiredPage / this.props.pages.length}/>}
+        {!showMissingPageUI && <PageController uid={uid} desiredPage={desiredPage}/>}
+        {showMissingPageUI && <MissingPageMessage />}
+        <div
+          title={this.props.messages.winLossAnalysis}
           target="_blank"
           className={"logo--finerink" + (hideLogo
           ? " hidden"
-          : "")}></a>
-        {!this.state.hideLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete}/>}
+          : "")}></div>
+        {showingLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete}/>}
       </div>
     );
   }
@@ -89,7 +99,9 @@ const mapStateToProps = (state/*, props*/) => {
     metadata: state.metadata,
     pages: state.validatedPages,
     currentPage: state.currentPage,
-    loadingComplete: !!state.loadingComplete
+    variables: state.variables,
+    loadingComplete: !!state.loadingComplete,
+    messages: state.messages
   }
 }
 

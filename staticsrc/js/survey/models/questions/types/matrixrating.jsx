@@ -180,19 +180,19 @@ class MatrixRatingQuestion extends React.Component {
       answer = (this.props.answer && this.props.answer[this.state.srcOrder[this.state.selectedItem].originalPosition]) || null,
       piper = this.piper,
       panswers = this.props.answers,
-      ppages = this.props.allpages;
+      ppages = this.props.allpages,
+      variables = this.props.variables;
 
-    if (this.props.isFocused && !this.wasFocused) {
+    /*if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
           btns = root.getElementsByClassName('selectbutton');
-        console.log("Focusing on ", btns[0])
         if (btns.length > 0) {
           btns[0].focus();
         }
       }, 100);
-    }
+    }*/
 
     // Spit out the question node
     return (
@@ -227,7 +227,7 @@ class MatrixRatingQuestion extends React.Component {
                 : "") + ((selectedItem == (idxo + 1) && animatingBackward)
                 ? " afPrevSelected"
                 : "")}>
-                <div className="choiceinner">{piper.pipe(rt, panswers, ppages)}</div>
+                <div className="choiceinner">{piper.pipe(rt, panswers, ppages, variables)}</div>
               </div>
             })}
           <a
@@ -300,7 +300,7 @@ class MatrixRatingQuestion extends React.Component {
 }
 
 // Connect the component
-const ConnectedMatrixRatingQuestion = connect()(MatrixRatingQuestion)
+const ConnectedMatrixRatingQuestion = connect()(MatrixRatingQuestion);
 
 // Expose the question
 export default ConnectedMatrixRatingQuestion;

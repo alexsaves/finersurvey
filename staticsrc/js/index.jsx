@@ -3,7 +3,6 @@ import {render} from 'react-dom';
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import {Provider} from 'react-redux';
 import Application from './application.jsx';
-import md5 from './survey/components/md5.js';
 import {ConnectedRouter, routerMiddleware, push} from 'react-router-redux';
 import reducers from './reducers';
 import createHistory from 'history/createBrowserHistory';
@@ -11,6 +10,18 @@ import thunk from 'redux-thunk'
 
 // The apps initial state
 const initialState = {};
+
+// Provides default application messages
+const MESSAGES = {
+  prevPage: "Previous page",
+  nextPage: "Next page",
+  reqQuestion: "This question is required.",
+  pageNotFound: "That page was not found.",
+  startOver: "Don't worry. We'll return you to the beginning of the survey.",
+  ok: "OK",
+  requiredQ: "This question is required",
+  winLossAnalysis: "Sales Win/Loss Analysis"
+};
 
 // Create a Redux store holding the state of your app. Its API is { subscribe,
 // dispatch, getState }.
@@ -22,24 +33,32 @@ if (stateElm) {
   let stateRaw = document
     .querySelector('[type=\'finer/state\']')
     .innerText;
-  if (stateRaw && stateRaw.length > 10) {
+  if (stateRaw && stateRaw.length > 5) {
     let rawStateDataStr = document
       .querySelector('[type=\'finer/state\']')
       .innerText;
     startupState = JSON.parse(atob(rawStateDataStr));
+    startupState.validatedPages = JSON.parse(JSON.stringify(startupState.pages));
     if (startupState.metadata) {
-      surveyHash = md5(JSON.stringify(rawStateDataStr));
+      surveyHash = startupState.metadata.guid + "_" + rawStateDataStr.length;
       persistentKey += "_" + startupState.metadata.guid;
     }
-    let oldAnswers = localStorage.getItem(persistentKey);
+    let oldAnswers = localStorage.getItem(persistentKey),
+      ansObj = {};
     if (oldAnswers) {
-      var ansObj = JSON.parse(oldAnswers);
-      if (ansObj.key == persistentKey && ansObj.hash == surveyHash) {
-        startupState.answers = ansObj.answers;
-      } else {
-        console.log("Hash in memory was", ansObj.hash, "is now", surveyHash);
-        debugger;
-      } 
+      ansObj = JSON.parse(oldAnswers);
+    }
+    startupState.messages = Object.assign({}, MESSAGES, startupState.messages);
+    let existingAnsOnObject = JSON.stringify(startupState.answers);
+    if (existingAnsOnObject && existingAnsOnObject.length > 1 && existingAnsOnObject != "{}") {
+      localStorage.setItem(persistentKey, JSON.stringify({
+        key: persistentKey,
+        hash: surveyHash,
+        answers: startupState.answers
+      }));
+    }
+    if (ansObj.key == persistentKey && ansObj.hash == surveyHash && (!existingAnsOnObject || existingAnsOnObject == '{}')) {
+      startupState.answers = ansObj.answers;
     }
   }
 }
@@ -56,9 +75,9 @@ let unsubscribe = appStore.subscribe(() => {
     hash: surveyHash,
     answers: st.answers || {}
   }));
-  console.log("STATE CHANGED", appStore.getState())
+  //console.log("STATE CHANGED", appStore.getState())
 });
-// appStore.dispatch(modifyUser({displayName: 'Jason Smith'}));
+
 // console.log(appStore.getState()) appStore.subscribe(() =>
 // console.log(store.getState())) The only way to mutate the internal state is
 // to dispatch an action. The actions can be serialized, logged or stored and

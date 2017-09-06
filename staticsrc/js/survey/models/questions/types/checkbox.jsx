@@ -71,6 +71,9 @@ class CheckboxQuestion extends React.Component {
     finalResponse.responses = responses;
     if (this.props.other) {
       finalResponse.other = otherval;
+      if (otherval && otherval.trim().length > 0) {
+        responses.push(9999);
+      }
     }
     if ((!limits || typeof limits.max == 'undefined') || (limits.max >= howManySelected)) {
       this
@@ -124,11 +127,12 @@ class CheckboxQuestion extends React.Component {
     let qname = this.props.name,
       ctx = this,
       answers = this.props.answer,
+      variables = this.props.variables,
       piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
-    if (this.props.isFocused && !this.wasFocused) {
+    /*if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
@@ -137,11 +141,11 @@ class CheckboxQuestion extends React.Component {
           btns[0].focus();
         }
       }, 25);
-    }
+    }*/
 
     // Check each value
     let shouldOptionBeSelected = function (val) {
-      if (answers) {
+      if (answers && answers.responses) {
         let result = answers
           .responses
           .indexOf(parseInt(val));
@@ -167,7 +171,7 @@ class CheckboxQuestion extends React.Component {
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
               ? "selected"
-              : "")}>{piper.pipe(rt, panswers, ppages)}<input
+              : "")}>{piper.pipe(rt, panswers, ppages, variables)}<input
               type="checkbox"
               name={idx}
               value={idx}
@@ -183,7 +187,7 @@ class CheckboxQuestion extends React.Component {
           onFocus={this
           .handleFocus
           .bind(this)}
-          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
+          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables)}
           onKeyUp={ctx
           .handleIptThrottleChange
           .bind(ctx)}
@@ -196,7 +200,7 @@ class CheckboxQuestion extends React.Component {
 }
 
 // Connect the component
-const ConnectedCheckboxQuestion = connect()(CheckboxQuestion)
+const ConnectedCheckboxQuestion = connect()(CheckboxQuestion);
 
 // Expose the question
 export default ConnectedCheckboxQuestion;

@@ -36,17 +36,20 @@ Arial,
 sans-serif;
 // images
 $bgimage: "/static/assets/other/bokehdark.jpg";
+$mainlogoimage: "/static/assets/logos/finerink_w.svg";
+$altlogoimage: "/static/assets/logos/finerink_w.svg";
 // colors
 $fill: #3e885b;
-$greyfill: #999999;
-$question_clr: #000000;
-$instructions_clr: lighten($question_clr, 35%);
-$border_color: #999999;
-$background-image-match: #EEEEEE;
+$greyfill: #111111;
+$solidcontrolcolor: #666666;
+$question_clr: #eeeeee;
+$instructions_clr: darken($question_clr, 35%);
+$border_color: rgba(200, 200, 200, 0.2);
+$background-image-match: #212A34;
 $light_border_color: lighten($border_color, 18%);
 $alarm_color: #ee6666;
 $invert_text_color: white;
-$slider_color: white;
+$slider_color: rgba(0, 0, 0, 0.4);
 // sizes and spacing
 $general_padding: 1em;
 $general_small_padding: ($general_padding * 0.7);
@@ -77,6 +80,7 @@ textarea {
   box-sizing: border-box;
   padding-left: $general_small_padding;
   padding-right: $general_small_padding;
+  background-color: rgb( 220, 220, 220);
   &::placeholder {
     color: $greyfill;
     font-family: $lightfont;
@@ -149,7 +153,7 @@ textarea {
   border-top: 1px solid $border_color;
   border-bottom: 1px solid $border_color;
   border-left: 1px solid $border_color;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(0, 0, 0, 0.4);
   line-height: $button_lineheight;
   text-align: center;
   display: inline-block;

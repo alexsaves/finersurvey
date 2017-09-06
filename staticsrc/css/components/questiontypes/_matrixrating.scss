@@ -24,6 +24,9 @@
         background-color: $border_color;
       }
     }
+    @media (max-width: $screen-sm-min) {
+      display: none;
+    }
   }
   .matrix--carousel {
     width: 100%;
@@ -37,6 +40,10 @@
     .choiceitem {
       height: $carousel_height;
       line-height: $carousel_height;
+      @media (max-width: $screen-sm-min) {
+        height: ($carousel_height * 0.75);
+        line-height: ($carousel_height * 0.75);
+      }
       width: 100%;
       padding-left: ($general_padding * 3);
       padding-right: ($general_padding * 3);
@@ -89,9 +96,9 @@
         vertical-align: middle;
         white-space: normal;
         line-height: 1.2em;
-        font-size: 1.4em;
+        font-size: 1.2em;
         @media (max-width: $screen-sm-min) {
-          font-size: 1.2em;
+          font-size: 1.0em;
         }
       }
       box-sizing: border-box;
@@ -104,11 +111,14 @@
       cursor: default;
       line-height: $carousel_height;
       text-decoration: none;
-      color: $greyfill;
+      color: $solidcontrolcolor;
       padding-left: ($general_padding / 2);
       padding-right: ($general_padding / 2);
       border-radius: $button_radius;
       transition: opacity $fast_anim_timing;
+      @media (max-width: $screen-sm-min) {
+        line-height: ($carousel_height*.75);
+      }
       &.visible {
         opacity: 1;
         cursor: pointer;

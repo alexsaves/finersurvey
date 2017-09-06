@@ -1,6 +1,5 @@
 /**
  * Global dependencies.
- * (NewRelic should be 1st in this list.)
  */
 var mysql = require('mysql'),
     express = require('express'),
@@ -16,7 +15,8 @@ var mysql = require('mysql'),
     finercommon = require('finercommon'),
     events = require('events'),
     port = process.env.PORT || 8080,
-    btoa = require('btoa');
+    btoa = require('btoa'),
+    path = require('path');
 
 // Set the time zone
 process.env.TZ = pjson.config.aws.timeZone;
@@ -100,11 +100,27 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
      * Run the server on the right port (look for the AWS environment variable)
      */
     app.set('port', port);
+
     // Trust the first proxy
     app.set('trust proxy', 1);
 
+    // Force SSL on prod
+    if (process.env.NODE_ENV == 'production') {
+        console.log("Enforcing SSL...");
+        app.use((req, res, next) => {
+            if (req.headers['x-forwarded-proto'] === 'https') 
+                return next();
+            return res.redirect(301, 'https://' + path.join(req.hostname, req.url));
+        });
+    } else {
+        console.log("Allowing non SSL...");
+    }
+
     // Add body parser url parser
     app.use(bodyParser.urlencoded({extended: true}));
+
+    // Parse JSON
+    app.use(bodyParser.json());
 
     // Set up the session handler
     /*pjson.config.session.store = new RedisStore({
@@ -162,7 +178,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             pg = parseInt(req.params.pg),
             sv = new SurveyController(pjson.config),
             usSrc = req.headers['user-agent'],
-            ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+            existingAnswers = null;
 
         if (isNaN(pg) || pg < 0) {
             pg = 0;
@@ -170,82 +187,101 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             pg--;
         }
 
-        var requestEmitter = new events.EventEmitter();
-        requestEmitter.setMaxListeners(1);
+        if (req.query && req.query.a) {
+            try {
+                existingAnswers = JSON.parse(req.query.a);
+                req.session.existingAnswers = existingAnswers;
+                req
+                    .session
+                    .save(() => {
+                        res.redirect("/s/" + encodeURIComponent(guid) + "/" + ((pg || 0) + 1));
+                    });
+            } catch (e) {
+                console.log("Could not deserialize answers!", e);
+                res.redirect("/s/" + encodeURIComponent(guid) + "/" + ((pg || 0) + 1));
+            }
+        } else {
+            // Holds any existing answers
+            var existingAnswers = {};
 
-        requestEmitter.on('error', function () {
-            requestEmitter.removeAllListeners();
-            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', {
-                title: "Oops, there's a problem.",
-                details: "We're having difficulties right now, please try again a little later!",
-                session: req.session
-            }, 500));
-        });
+            // First check to see if there is an answer state
+            if (req.session && req.session.existingAnswers) {
+                existingAnswers = JSON.parse(JSON.stringify(req.session.existingAnswers));
+                delete req.session.existingAnswers;
+            }
 
-        requestEmitter.on('timeout', function () {
-            requestEmitter.removeAllListeners();
-            _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', {
-                title: "Oops, there's a problem.",
-                details: "We're having difficulties right now, please try again a little later!",
-                session: req.session
-            }, 500));
-        });
+            var requestEmitter = new events.EventEmitter();
+            requestEmitter.setMaxListeners(1);
 
-        // Handle the done value
-        requestEmitter.on('done', function (srvObj) {
-            // Get the respondent object
-            sv
-                .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function (resp) {
-                    req.session.rid = resp;
-                    req
-                        .session
-                        .save(function () {
-                            // var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
-                            // srvObj.survey_model = defaultModel;
-                            _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
-                                title: srvObj.name,
-                                respondent: resp,
-                                session: req.session,
-                                model: srvObj.survey_model,
-                                surveyID: guid,
-                                theme: srvObj.theme,
-                                modelstr: btoa(JSON.stringify({
-                                    metadata: {
-                                        title: srvObj.name,
-                                        guid: srvObj.survey_model.guid,
-                                        theme: srvObj.theme,
-                                        updated_at: srvObj.updated_at                                 
-                                    },
-                                    currentPage: Math.min(pg, srvObj.survey_model.pages.length),
-                                    pages: srvObj.survey_model.pages,
-                                    answers: {}
-                                }))
-                            }));
-                        });
-                });
-        });
-
-        sv.loadSurveyByGuid(guid, requestEmitter);
-        // var defaultModel = finercommon.models.Survey.GetDefaultSurveyModel();
-        // _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
-        // title: "test", respondent: respondent, surveyID: guid, session: req.session,
-        // model: defaultModel, modelstr: btoa(JSON.stringify(defaultModel)) }));
-    });
-
-    /**
-     * Survey Display
-     */
-    app.get('/s/:surveyGuid/complete', (req, res, next) => {
-        var guid = req.params.surveyGuid;
-
-        req
-            .session
-            .destroy(function () {
-                _outputResponse(res, templs.renderWithBase('surveybase', 'surveycomplete', {
-                    surveyID: guid,
-                    title: "Thanks! Discover Win/Loss Analysis with Finer Ink."
-                }));
+            requestEmitter.on('error', function () {
+                requestEmitter.removeAllListeners();
+                _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', {
+                    title: "Oops, there's a problem.",
+                    details: "We're having difficulties right now, please try again a little later!",
+                    session: req.session
+                }, 500));
             });
+
+            requestEmitter.on('timeout', function () {
+                requestEmitter.removeAllListeners();
+                _outputResponse(res, templs.renderWithBase('surveybase', 'errormessage', {
+                    title: "Oops, there's a problem.",
+                    details: "We're having difficulties right now, please try again a little later!",
+                    session: req.session
+                }, 500));
+            });
+
+            // Handle the done value
+            requestEmitter.on('done', function (srvObj) {
+                // Get the respondent object
+                sv
+                    .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function (resp) {
+                        req.session.rid = resp.id;
+                        req
+                            .session
+                            .save(() => {
+                                _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
+                                    title: srvObj.name,
+                                    respondent: resp.id,
+                                    session: req.session,
+                                    model: srvObj.survey_model,
+                                    surveyID: guid,
+                                    theme: srvObj.theme,
+                                    modelstr: btoa(JSON.stringify({
+                                        respondent: resp.id,
+                                        messages: {
+                                            prevPage: "Previous page",
+                                            nextPage: "Next page",
+                                            reqQuestion: "This question is required.",
+                                            pageNotFound: "That page was not found.",
+                                            startOver: "Don't worry. We'll return you to the beginning of the survey.",
+                                            ok: "OK",
+                                            requiredQ: "This question is required",
+                                            winLossAnalysis: "Sales Win/Loss Analysis"
+                                        },
+                                        metadata: {
+                                            title: srvObj.name,
+                                            guid: srvObj.survey_model.guid,
+                                            theme: srvObj.theme,
+                                            updated_at: srvObj.updated_at
+                                        },
+                                        currentPage: Math.min(pg, srvObj.survey_model.pages.length),
+                                        pages: srvObj.survey_model.pages,
+                                        answers: existingAnswers || {},
+                                        variables: {
+                                            surveyTitle: srvObj.name,
+                                            companyName: srvObj._org.name,
+                                            surveyTheme: srvObj.theme
+                                        },
+                                        saveUrl: '/s/' + encodeURIComponent(guid)
+                                    }))
+                                }));
+                            });
+                    });
+            });
+
+            sv.loadSurveyByGuid(guid, requestEmitter);
+        }
     });
 
     /**
@@ -254,14 +290,20 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     app.post('/s/:surveyGuid', (req, res, next) => {
         var guid = req.params.surveyGuid,
             sv = new SurveyController(pjson.config),
-            rid = req.session.rid;
+            rid = req.body.respondent,
+            usSrc = req.headers['user-agent'],
+            ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+        // Re-assign the session id
+        req.session.rid = req.body.respondent;
 
         var requestEmitter = new events.EventEmitter();
         requestEmitter.setMaxListeners(1);
 
-        requestEmitter.on('done', function (srvObj) {
+        // Handles successful completion
+        requestEmitter.on('done', function (respondent) {
             _outputResponse(res, {
-                body: JSON.stringify({success: true}),
+                body: JSON.stringify({success: true, respondent: respondent.id}),
                 status: 200,
                 headers: {
                     "Content-Type": "application/json"
@@ -269,10 +311,11 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             });
         });
 
+        // Handles an error state
         requestEmitter.on('error', function () {
             requestEmitter.removeAllListeners();
             _outputResponse(res, {
-                body: JSON.stringify({error: "There was an error saving the data."}),
+                body: JSON.stringify({error: "There was an error saving the data.", respondent: req.body.respondent}),
                 status: 500,
                 headers: {
                     "Content-Type": "application/json"
@@ -280,21 +323,20 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             });
         });
 
-        sv.saveSurveyResults(guid, req.body, rid, requestEmitter);
-    });
+        // Get a respondent and save the results
+        sv.getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function (respondent) {
+            req.session.rid = req.body.respondent = respondent.id;
 
-    /**
-     * Cross domain xml for flash
-     */
-    app.get('/crossdomain.xml', function (req, res) {
-        _outputResponse(res, {
-            headers: {
-                "Content-Type": "text/x-cross-domain-policy"
-            },
-            body: "<?xml version=\"1.0\"?>\n<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macro" +
-                    "media.com/xml/dtds/cross-domain-policy.dtd\">\n<cross-domain-policy>\n<allow-acc" +
-                    "ess-from domain=\"*\" secure=\"false\"/>\n</cross-domain-policy>"
+            // Save the reults now
+            sv.saveSurveyResults(guid, req.body, respondent, function (err) {
+                if (err) {
+                    requestEmitter.emit("error");
+                } else {
+                    requestEmitter.emit("done", respondent);
+                }
+            });
         });
+
     });
 
     /**

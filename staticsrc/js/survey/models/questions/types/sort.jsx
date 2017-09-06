@@ -134,15 +134,20 @@ class SortQuestion extends React.Component {
     }, true);
     this.positionOtherInput();
     setInterval(() => {
-      if (this.props.isSelected && !this.props.isAnimating) {
+      if (this.didMount && this.props.isSelected && !this.props.isAnimating) {
         this.positionOtherInput();
       }
     }, 250);
     setTimeout(() => {
-      this.setState({hideOtherOverlay: false});
+      if (this.didMount) {
+        this.setState({hideOtherOverlay: false});
+      }
     }, 500);
     this.resizeThrottle = null;
     window.addEventListener("resize", (e) => {
+      if (!this.didMount) {
+        return;
+      }
       if (!this.state.hideOtherOverlay) {
         this.setState({hideOtherOverlay: true});
       }
@@ -152,6 +157,13 @@ class SortQuestion extends React.Component {
         this.setState({hideOtherOverlay: false});
       }, 500);
     });
+  }
+
+  /**
+   * The component unmounted
+   */
+  componentWillUnmount() {
+    this.didMount = false;
   }
 
   /**
@@ -258,8 +270,8 @@ class SortQuestion extends React.Component {
     let root = ReactDOM.findDOMNode(this),
       otheript = root.getElementsByClassName('otherOverlayInput')[0],
       othervalue = (this.props.other && otheript)
-      ? otheript.value
-      : null;
+        ? otheript.value
+        : null;
 
     if (othervalue === null) {
       otheript = root.getElementsByClassName('floatingother')[0];
@@ -415,6 +427,7 @@ class SortQuestion extends React.Component {
       ctx = this,
       answers = this.props.answer,
       choices = this.props.choices,
+      variables = this.props.variables,
       count = 1,
       st = this.state,
       dragPlaceholderCSS = {},
@@ -448,7 +461,9 @@ class SortQuestion extends React.Component {
     if (this.isAnimating && !this.props.isAnimating) {
       hideOtherOverlay = true;
       setTimeout(() => {
-        this.positionOtherInput();
+        if (this.didMount) {
+          this.positionOtherInput();
+        }
       }, 200);
     }
     this.isAnimating = this.props.isAnimating;
@@ -467,7 +482,7 @@ class SortQuestion extends React.Component {
           .handleIptThrottleChange
           .bind(ctx)}
           className="otherinputfield otherOverlayInput"
-          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
+          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables)}
           defaultValue={otherValue}
           style={{
           left: this.state.otherInputX,
@@ -504,7 +519,7 @@ class SortQuestion extends React.Component {
               .preventDrag
               .bind(this)}
                   className="other--textfield floatingother"
-                  placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
+                  placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables)}
                   readOnly={true}
                   value={otherValue}/><input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
             </label>;
@@ -529,7 +544,7 @@ class SortQuestion extends React.Component {
               className={"sortable standalonebutton" + ((!st.isDragging && st.didDrop)
               ? " dropAnim drop" + idx
               : "")}>
-              <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/> {idx + 1}. {piper.pipe(rt, panswers, ppages)}<input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
+              <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/> {idx + 1}. {piper.pipe(rt, panswers, ppages, variables)}<input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
             </label>;
           }
         })}

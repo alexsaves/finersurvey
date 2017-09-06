@@ -78,7 +78,8 @@ class PageComponent extends React.Component {
   render() {
     let ctx = this,
       remindInstructionsFor = this.props.remindInstructionsFor,
-      pageNumber = this.props.pageNumber;
+      pageNumber = this.props.pageNumber;      
+
     return (
       <div
         data-page={pageNumber}
@@ -112,6 +113,7 @@ class PageComponent extends React.Component {
                   questionNumber={idx}
                   answer={ctx.getAnswerForQuestion(q)}
                   answers={this.props.answers}
+                  variables={this.props.variables}
                   isFocused={ctx.props.isSelected && ctx.state.focusItem == idx}
                   allpages={this.props.allpages}
                   onQuestionBeingInteractedWith={interactionBinding}

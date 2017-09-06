@@ -4,7 +4,8 @@ $buttoncolors_blue: lighten(#1111ff, 15%);
 $buttoncolors_orange: #ff9999;
 
 .question--buttons {
-  button {
+  button, a {
+    text-decoration: none;
     @include button_list_style;
     margin-right: ($general_padding / 2);  
     color: white;  

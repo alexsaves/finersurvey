@@ -36,13 +36,13 @@ export default class {
    * @param {*} question
    * @param {*} answer
    */
-  checkAllLogic(showIfBlock, answers, surveyDef) {
+  checkAllLogic(showIfBlock, answers, surveyDef, variables) {
     if (showIfBlock) {
       if (typeof showIfBlock == "string") {
-        return !!this._checkIndividualLogicRule(showIfBlock, answers, surveyDef);
+        return !!this._checkIndividualLogicRule(showIfBlock, answers, surveyDef, variables);
       } else if (showIfBlock instanceof Array) {
         for (let i = 0; i < showIfBlock.length; i++) {
-          let res = this.checkAllLogic(showIfBlock[i], answers, surveyDef);
+          let res = this.checkAllLogic(showIfBlock[i], answers, surveyDef, variables);
           if (!res) {
             return false;
           }
@@ -51,7 +51,7 @@ export default class {
       } else if (showIfBlock instanceof Object) {
         let okeys = Object.keys(showIfBlock);
         for (let i = 0; i < okeys.length; i++) {
-          let res = this.checkAllLogic(showIfBlock[okeys[i]], answers, surveyDef);
+          let res = this.checkAllLogic(showIfBlock[okeys[i]], answers, surveyDef, variables);
           if (res) {
             return true;
           }
@@ -107,7 +107,7 @@ export default class {
    * @param {*} surveyDef
    * @private
    */
-  _checkIndividualLogicRule(logicRule, answers, surveyDef) {
+  _checkIndividualLogicRule(logicRule, answers, surveyDef, variables) {
     if (!logicRule) {
       throw new Error("Missing logic rule.");
     }
@@ -143,6 +143,7 @@ export default class {
         .trim(),
       ruleStr = logicRule.substr(dependentQuestionName.length + splitterSymbol.length),
       isOther = false,
+      isVariable = false,
       subQuestion = -1;
 
     if (dependentQuestionName.toLowerCase().indexOf('[other]') > -1) {
@@ -161,6 +162,19 @@ export default class {
     let dependentQuestion = this._locateQuestionObjectForName(dependentQuestionName, surveyDef);
 
     if (!dependentQuestion) {
+      // Maybe we're referencing variables
+      if (variables && variables[dependentQuestionName]) {
+        isVariable = true;
+      }
+    }
+
+    if (isVariable) {
+      if (!isNaN(parseFloat(variables[dependentQuestionName]))) {
+        return this._evaluateRadioLogic({}, variables[dependentQuestionName], ruleStr, splitterSymbol, isOther);
+      } else {
+        return this._evaluateTextLogic({}, variables[dependentQuestionName], ruleStr, splitterSymbol, isOther);
+      }
+    } else if (!dependentQuestion) {
       throw new Error("Could not find question for logic rule. Question name was: " + dependentQuestionName);
     } else {
       let answerObject = this._locateAnswerObjectForName(dependentQuestionName, answers);
@@ -199,9 +213,9 @@ export default class {
       numCond = parseFloat(condition);
     switch (equalityExp) {
       case EQUALITIES.CONTAINSANY:
-        return !isNaN(numCond);
+        return !isNaN(numAns);
       case EQUALITIES.NOTCONTAINSANY:
-        return isNaN(numCond) || answer == null || !answer;
+        return isNaN(numAns) || answer == null || !answer;
       case EQUALITIES.GREATERTHAN:
         return !isNaN(numCond) && numAns > numCond;
       case EQUALITIES.GREATERTHANOREQUAL:
@@ -354,7 +368,9 @@ export default class {
             if (subQuestion == -1) {
               return condition == overallAnswer;
             } else if (answerObj && answerObj.length === 0) {
-              return answerObj[subQuestion].trim().toLowerCase() == condition.toLowerCase();
+              return answerObj[subQuestion]
+                .trim()
+                .toLowerCase() == condition.toLowerCase();
             } else {
               return false;
             }
@@ -362,19 +378,24 @@ export default class {
             if (subQuestion == -1) {
               return condition != overallAnswer;
             } else if (answerObj && answerObj.length === 0) {
-              return answerObj[subQuestion].trim().toLowerCase() != condition.toLowerCase();
+              return answerObj[subQuestion]
+                .trim()
+                .toLowerCase() != condition.toLowerCase();
             } else {
               return false;
             }
           case EQUALITIES.LIKE:
-          if (subQuestion == -1) {
+            if (subQuestion == -1) {
               return overallAnswer.indexOf(condition) > -1;
             } else if (answerObj && answerObj.length === 0) {
-              return answerObj[subQuestion].trim().toLowerCase().indexOf(condition.toLowerCase());
+              return answerObj[subQuestion]
+                .trim()
+                .toLowerCase()
+                .indexOf(condition.toLowerCase());
             } else {
               return false;
             }
-            
+
           case EQUALITIES.NOTLIKE:
             return overallAnswer.indexOf(condition) == -1;
           default:
@@ -400,7 +421,7 @@ export default class {
         return this._evaluateStandardText(answerObj.other, condition, equalityExp);
       } else {
         let conditionChoice = parseInt(condition),
-          answerNum = (answerObj && answerObj.response)
+          answerNum = (answerObj && answerObj.response != null && typeof answerObj.response != "undefined")
             ? parseFloat(answerObj.response)
             : null;
         return this._evaluateStandardNumeric(answerNum, condition, equalityExp);
@@ -486,7 +507,7 @@ export default class {
       if (!questionDef.other) {
         throw new Error("Invalid condition for sort. Other not supported.");
       }
-      let order = (answerObj && answerObj.order)
+      var order = (answerObj && answerObj.order)
         ? answerObj.order
         : [];
       if (equalityExp == EQUALITIES.CONTAINSANY) {
@@ -498,7 +519,7 @@ export default class {
         return this._evaluateStandardText(answerObj.other, condition, equalityExp);
       } else {
         subQuestion = 9999;
-        let numCond = parseInt(condition);
+        var numCond = parseInt(condition);
         switch (equalityExp) {
           case(EQUALITIES.EQUAL):
             if (isNaN(numCond)) {
@@ -532,7 +553,7 @@ export default class {
           throw new Error(LOGICERRORMESSAGES.UNSUPPTYPE);
         }
       } else {
-        let order = (answerObj && answerObj.order)
+        var order = (answerObj && answerObj.order)
             ? answerObj.order
             : [],
           numCond = parseInt(condition);

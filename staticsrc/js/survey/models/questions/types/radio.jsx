@@ -48,7 +48,8 @@ class RadioQuestion extends React.Component {
       ipts = root.getElementsByTagName("input"),
       value = null,
       otherval = "",
-      finalResponse = {};
+      finalResponse = {},
+      otheript = null;
 
     for (let i = 0; i < ipts.length; i++) {
       let ipt = ipts[i];
@@ -56,12 +57,21 @@ class RadioQuestion extends React.Component {
         value = parseInt(ipt.value);
       } else if (ipt.type == "text") {
         otherval = ipt.value;
+        otheript = ipt;
       }
     }
     finalResponse.response = value;
     if (this.props.other) {
       finalResponse.other = otherval;
+      if (finalResponse.response != 9999) {
+        // Clear the text box
+        finalResponse.other = "";
+        if (otheript) {
+          otheript.value = "";
+        }
+      }
     }
+    
     this
       .props
       .dispatch(changeAnswer(this.props.name, finalResponse));
@@ -98,11 +108,25 @@ class RadioQuestion extends React.Component {
   /**
    * Handle when the text input changes (on a throttle)
    */
-  handleIptThrottleChange() {
+  handleIptThrottleChange(e) {
     clearTimeout(this.iptThrottle);
     this.iptThrottle = setTimeout(() => {
       this.handleAnswerChange(null, null, true);
     }, 200);
+
+    let targ = e.currentTarget,
+      val = targ
+        .value
+        .trim(),
+      root = ReactDOM.findDOMNode(this),
+      otherrd = root.getElementsByClassName('other--rd')[0];
+
+    if (val.length > 0) {
+      otherrd.checked = true;
+    } else {
+      otherrd.checked = false;
+    }
+
   }
 
   /**
@@ -123,9 +147,10 @@ class RadioQuestion extends React.Component {
 
     let piper = this.piper,
       panswers = this.props.answers,
-      ppages = this.props.allpages;
+      ppages = this.props.allpages,
+      variables = this.props.variables;
 
-    if (this.props.isFocused && !this.wasFocused) {
+    /*if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
@@ -134,7 +159,7 @@ class RadioQuestion extends React.Component {
           btns[0].focus();
         }
       }, 25);
-    }
+    }*/
 
     return (
       <div className="question--radio">
@@ -149,21 +174,28 @@ class RadioQuestion extends React.Component {
               onKeyPress={this
               .handleKeyPress
               .bind(this)}
-              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}              
+              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
               ? "selected"
-              : "")}>{piper.pipe(rt, panswers, ppages)}<input
-              type="radio"              
+              : "")}>{piper.pipe(rt, panswers, ppages, variables)}<input
+              type="radio"
               name={qname}
               value={idx}
               onClick={ctx
               .handleAnswerChange
               .bind(ctx)}/></label>
           })}
-        {this.props.other === true && <input
+        {this.props.other === true && <label className="otherLabelStackButton"><input
+          type="radio"
+          name={qname}
+          className="other--rd"
+          value={9999}
+          onClick={ctx
+          .handleAnswerChange
+          .bind(ctx)}/><input
           type="text"
           className="other--textfield"
-          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages)}
+          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables)}
           defaultValue={(this.props.answer && this.props.answer.other)
           ? this.props.answer.other
           : ''}
@@ -172,14 +204,15 @@ class RadioQuestion extends React.Component {
           .bind(ctx)}
           onKeyUp={ctx
           .handleIptThrottleChange
-          .bind(ctx)}/>}
+          .bind(ctx)}/>
+        </label>}
       </div>
     );
   }
 }
 
 // Connect the component
-const ConnectedRadioQuestion = connect()(RadioQuestion)
+const ConnectedRadioQuestion = connect()(RadioQuestion);
 
 // Expose the question
 export default ConnectedRadioQuestion;

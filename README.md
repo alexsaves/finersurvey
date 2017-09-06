@@ -13,6 +13,7 @@ Pages have the following properties:
  * `elements` - (_Array_) The list of question objects. *Required*
  * `name` - (_String_) The ID of the page.
  * `hideLogo` - (_Boolean_) Temporarily hide the logo on the page. Default: `false`. Optional.
+ * `hidePagination` - (_Boolean_) Temporarily hide the pagination controls on the page. Default: `false`. Optional.
 
 ### Question Definitions
 
@@ -37,6 +38,7 @@ Each question in the `elements` collection shares a set of common attributes, bu
  * `subtitle` - (_String_) An optional block of text below the text title. This appears in a less-prominent font than the title.
  * `image` - (_Object_) An image to display (see below for details). Note that this is distinct from the `image` question `type`.
  * `limits` - (_Object_) Any input limitations like maximum choices or characters or words. See question details for specifics.
+ * `initialValue` - (__Number__, __String__) The initial data value for the question. Only some quesitons support this like `rating`, `type` = `slider`.
 
 ### Question Types
 
@@ -72,7 +74,12 @@ Invalid question name examples:
 
 ### Images
 
-You can use the optional `image` attribute on any question to add an image to a question.
+You can use the optional `image` attribute on any question to add an image to a question. Image elements take the following attributes:
+
+ * `url` - The URL to the image
+ * `modifier` - The size modifier
+ * `title` - The HTML `title` attribute (for accessibility)
+ * `link` - Should the image be clickable? If so, the link to the destination.
 
 ```json
 {
@@ -226,6 +233,8 @@ There are three types of `rating` questions. The default is `buttons` but you ca
  * `buttons` - A set of regular buttons
  * `slider` - A drag and drop slider
 
+ For `slider` questions, you can specity an `initialValue` attribute with a number between 0-100. This is the default value to assign to the question. It assumes if the user does not interact with the question, that they have in-fact answered the question. Note: having an `initialValue` attribute will mean that auto-advance will not work.
+
 #### Matrix Rating Definition
 
 This question type lets you rank a set of statements. Use `type` = `matrixrating`. Here is an example:
@@ -298,6 +307,8 @@ Rules may generally only apply to questions on pages that appeared earlier in th
  * `myQuestionName[OTHER]<3` - The other answer value was less than 3. For ranking questions this means it was ranked higher.
  * `myRankingQuestion[2]>3` - (Ranking questions only) The 3rd item is further down than the 4th position.
  * `myRankingQuestion[0]=2` - (Ranking questions only) The first item is in position 3.
+
+You can also create rules based on variables in your `variables` block of the startup state. Simply reference them the say way you would any question name.
 
 #### Zero Based
 
@@ -450,6 +461,8 @@ The process of injecting previous responses into questions that appear later is 
 ```
 
 This basically means, for the question with the name `firstNameQuestion`, insert the response into this place in the title of this question. This is the approach for `text` questions and single-response questions like `radio` and `dropdown` and `rating`.
+
+You can also pipe from the `variables` collection of the startup state. Reference these variables by name just as you would question names.
 
 #### Formatting on Piping
 

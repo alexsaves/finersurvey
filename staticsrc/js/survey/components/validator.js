@@ -13,7 +13,6 @@ export default class {
    * @param {*} answer
    */
   validate(question, answer) {
-    //console.log(question, answer); Switch based on question type
     switch (question.type) {
       case "rating":
         // Simple rating

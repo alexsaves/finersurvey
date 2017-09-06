@@ -49,6 +49,10 @@ class PaginationController extends React.Component {
    * Handle advancing
    */
   handleAdvanceRequest(e) {
+    if (this.props.currentPage == this.props.pages.length - 1) {
+      e.preventDefault();
+      return;
+    }
     let failedValidationItems = this.hasRequiredAnswersForPage(this.props.currentPage),
       validated = failedValidationItems.length === 0;
     this.setState({showValidation: false, remindInstructionsFor: []});
@@ -207,6 +211,8 @@ class PaginationController extends React.Component {
       answers = this.props.answers,
       pages = this.props.pages,
       allpages = this.props.allpages,
+      variables = this.props.variables,
+      hidePagination = currentPage < 0 || pages.length == 0 || currentPage > pages.length - 1 || !!pages[currentPage].hidePagination,     
       isAnimatingForward = this.state.animatingForward,
       isAnimatingBackward = this.state.animatingBackward,
       remindInstructionsFor = this.state.remindInstructionsFor,
@@ -220,7 +226,7 @@ class PaginationController extends React.Component {
       this.advancejump = setTimeout(() => {
         this
           .props
-          .dispatch(jumpToPage(desiredPage));
+          .dispatch(jumpToPage(Math.max(0, desiredPage)));
       }, 20);
     }
     return (
@@ -236,7 +242,7 @@ class PaginationController extends React.Component {
           ? "hidden"
           : "")}>
           <div className="validationcontainer">
-            <div className="rightarrow"></div>This question is required.</div>
+            <div className="rightarrow"></div>{this.props.messages.requiredQ}</div>
         </div>}
         {pages.map((pg, idx) => {
           return <PageComponent
@@ -246,6 +252,7 @@ class PaginationController extends React.Component {
             remindInstructionsFor={remindInstructionsFor}
             answers={answers}
             allpages={allpages}
+            variables={variables}
             pageNumber={idx}
             onQuestionBeingInteractedWith={this.questionBeingInteractedWith.bind(this)}
             onFullyAnswerQuestion={this
@@ -258,19 +265,19 @@ class PaginationController extends React.Component {
         })}
         <div className={"paginator--backdropmobile"}></div>
         <div
-          className={"paginator--buttonholder left " + (currentPage === 0
+          className={"paginator--buttonholder left " + ((currentPage === 0 || hidePagination)
           ? "hidden"
           : "")}>
           <Link
             to={"/s/" + this.props.uid + "/" + (currentPage)}
             className="paginator--button"
-            title="Previous page"
+            title={this.props.messages.prevPage}
             onClick={this
             .handlePreviousRequest
             .bind(this)}>&lt;</Link>
         </div>
         <div
-          className={"paginator--buttonholder right " + (currentPage === (this.props.pages.length - 1)
+          className={"paginator--buttonholder right " + (((currentPage === (this.props.pages.length - 1)) || hidePagination)
           ? "hidden"
           : "")}>
           <Link
@@ -278,7 +285,7 @@ class PaginationController extends React.Component {
             className={"paginator--button advance--button " + (isValidated
             ? "validated"
             : "")}
-            title="Next page"
+            title={this.props.messages.nextPage}
             onMouseOut={this
             .cancelValidation
             .bind(this)}
@@ -294,7 +301,15 @@ class PaginationController extends React.Component {
 // This is our select function that will extract from the state the data slice
 // we want to expose through props to our component.
 const mapStateToProps = (state/*, props*/) => {
-  return {metadata: state.metadata, pages: state.validatedPages, allpages: state.pages, currentPage: state.currentPage, answers: state.answers}
+  return {
+    metadata: state.metadata, 
+    pages: state.validatedPages, 
+    allpages: state.pages, 
+    currentPage: state.currentPage, 
+    answers: state.answers,
+    variables: state.variables,
+    messages: state.messages
+  };
 }
 
 // Connect the survey component

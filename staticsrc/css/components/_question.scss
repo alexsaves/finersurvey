@@ -16,6 +16,7 @@
   display: block;
   width: $desktop_question_width;
   text-align: center;
+  margin-bottom: ($general_padding / 2);
   .question--image {
     display: inline-block;
     &.big {

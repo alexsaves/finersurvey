@@ -3,6 +3,10 @@ import metadata from './metadata';
 import pages from './pages';
 import currentPage from './currentpage';
 import answers from './answers';
+import variables from './variables';
+import messages from './messages';
+import saveUrl from './saveurl';
+import respondent from './respondent';
 import {loadingStatus} from './loading';
 import surveyValidatorReducer from './validatesurvey';
 import {routerReducer} from 'react-router-redux';
@@ -16,7 +20,11 @@ const surveyReducers = combineReducers({
   currentPage, 
   answers, 
   loadingComplete: loadingStatus,
-  validatedPages: surveyValidatorReducer
+  validatedPages: surveyValidatorReducer,
+  variables,
+  saveUrl,
+  respondent,
+  messages
 });
 
 // Export it
