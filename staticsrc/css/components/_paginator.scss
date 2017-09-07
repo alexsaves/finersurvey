@@ -10,6 +10,12 @@
     background-color: $greyfill;
     height: $bottombar_height;
     z-index: 9999;
+    opacity: 1;
+    transition: opacity $slow_anim_timing;
+    &.hidden {
+      display: block !important;
+      opacity: 0;
+    }
   }
   &--buttonholder {
     position: fixed;

@@ -14,6 +14,7 @@ Pages have the following properties:
  * `name` - (_String_) The ID of the page.
  * `hideLogo` - (_Boolean_) Temporarily hide the logo on the page. Default: `false`. Optional.
  * `hidePagination` - (_Boolean_) Temporarily hide the pagination controls on the page. Default: `false`. Optional.
+ * `isStartable` - (_Boolean_) Is the user allowed to begin the survey on this page? Normally this will be `false` by default (except for the first page), but you can override it. Optional.
 
 ### Question Definitions
 

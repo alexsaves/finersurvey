@@ -1,7 +1,6 @@
 @import "reset";
 @import "vars";
 @import "components/all";
-
 html {
   height: 100%;
   margin: 0;
@@ -28,9 +27,18 @@ html {
         background-image: url($bgimage);
         height: 100%;
         overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;        
+        -webkit-overflow-scrolling: touch;
         .hidden {
           display: none;
+        }
+        .resetSurveyLink {
+          position: absolute;
+          top: -100px;
+          left: -100px;
+          width: 1px;
+          height: 1px;
+          display: block;
+          opacity: 0;
         }
         &.overflowing {
           .logo--finerink {

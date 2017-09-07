@@ -58,6 +58,20 @@ class TextQuestion extends React.Component {
   }
 
   /**
+   * The component is mounting
+   */
+  componentDidMount() {
+    this.didMount = true;
+  }
+
+  /**
+   * Component is unmounting
+   */
+  componentWillUnmount() {
+    this.didMount = false;
+  }
+
+  /**
    * Handle when the text input changes (on a throttle)
    */
   handleIptThrottleChange(e) {
@@ -192,6 +206,9 @@ class TextQuestion extends React.Component {
 
     if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
+        if (!this.didMount) {
+          return;
+        }
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
           btns = root.getElementsByClassName('main--textfield');

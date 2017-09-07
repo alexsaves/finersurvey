@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import PageComponent from '../models/page.jsx';
 import Validator from './validator.js';
-import {nextPage, prevPage, jumpToPage} from '../../actions';
+import {nextPage, prevPage, jumpToPage, changePaginationControllerVisibility} from '../../actions';
 import {BrowserRouter as Router, Link, Route, Switch, Redirect} from 'react-router-dom';
 
 /**
@@ -19,6 +19,7 @@ class PaginationController extends React.Component {
       showValidation: false,
       animatingForward: false,
       animatingBackward: false,
+      previousPaginationVisibility: false,
       remindInstructionsFor: []
     };
   }
@@ -263,7 +264,7 @@ class PaginationController extends React.Component {
             animatingInBackward={idx === (currentPage - 1) && isAnimatingBackward}
             animatingInForward={idx === (currentPage + 1) && isAnimatingForward}/>;
         })}
-        <div className={"paginator--backdropmobile"}></div>
+        <div className={"paginator--backdropmobile" + (hidePagination ? " hidden" : "")}></div>
         <div
           className={"paginator--buttonholder left " + ((currentPage === 0 || hidePagination)
           ? "hidden"
@@ -308,7 +309,8 @@ const mapStateToProps = (state/*, props*/) => {
     currentPage: state.currentPage, 
     answers: state.answers,
     variables: state.variables,
-    messages: state.messages
+    messages: state.messages,
+    paginationControllerVisibility: state.paginationControllerVisibility
   };
 }
 
