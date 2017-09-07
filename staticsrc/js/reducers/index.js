@@ -7,6 +7,7 @@ import variables from './variables';
 import messages from './messages';
 import saveUrl from './saveurl';
 import respondent from './respondent';
+import isNew from './isnew';
 import {loadingStatus} from './loading';
 import surveyValidatorReducer from './validatesurvey';
 import {routerReducer} from 'react-router-redux';
@@ -24,7 +25,8 @@ const surveyReducers = combineReducers({
   variables,
   saveUrl,
   respondent,
-  messages
+  messages,
+  isNew
 });
 
 // Export it

@@ -126,14 +126,15 @@ class SortQuestion extends React.Component {
   componentDidMount() {
     this.didMount = true;
     let root = ReactDOM.findDOMNode(this);
-    root.addEventListener("touchstart", (e) => {
+    this.touchHandler = (e) => {
       if (e.target.tagName == "INPUT") {
         return;
       }
       e.preventDefault();
-    }, true);
+    };
+    root.addEventListener("touchstart", this.touchHandler, true);
     this.positionOtherInput();
-    setInterval(() => {
+    this.generalPositionTimer = setInterval(() => {
       if (this.didMount && this.props.isSelected && !this.props.isAnimating) {
         this.positionOtherInput();
       }
@@ -144,7 +145,7 @@ class SortQuestion extends React.Component {
       }
     }, 500);
     this.resizeThrottle = null;
-    window.addEventListener("resize", (e) => {
+    this.sizeHandler = (e) => {
       if (!this.didMount) {
         return;
       }
@@ -156,14 +157,34 @@ class SortQuestion extends React.Component {
         this.positionOtherInput();
         this.setState({hideOtherOverlay: false});
       }, 500);
-    });
+    };
+    window.addEventListener("resize", this.sizeHandler);
+    this.scrollHandler = (e) => {
+      if (!this.state.hideOtherOverlay) {
+        this.setState({hideOtherOverlay: true});
+      }
+      clearTimeout(this._restoreOtherOverlay);
+      this._restoreOtherOverlay = setTimeout(() => {
+        this.setState({hideOtherOverlay: false});
+      }, 250);
+    };
+    document
+      .body
+      .addEventListener("scroll", this.scrollHandler, true);
   }
 
   /**
-   * The component unmounted
+   * The component is unmounting
    */
   componentWillUnmount() {
+    let root = ReactDOM.findDOMNode(this);
     this.didMount = false;
+    clearInterval(this.generalPositionTimer);
+    window.removeEventListener("resize", this.sizeHandler);
+    root.removeEventListener("touchstart", this.touchHandler, true);
+    document
+      .body
+      .removeEventListener("scroll", this.scrollHandler, true);
   }
 
   /**

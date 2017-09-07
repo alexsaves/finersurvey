@@ -179,7 +179,12 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             sv = new SurveyController(pjson.config),
             usSrc = req.headers['user-agent'],
             ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-            existingAnswers = null;
+            existingAnswers = null,
+            isNew = true;
+
+        if (req.session.rid) {
+            isNew = false;
+        }
 
         if (isNaN(pg) || pg < 0) {
             pg = 0;
@@ -188,6 +193,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         }
 
         if (req.query && req.query.a) {
+            isNew = true;
             try {
                 existingAnswers = JSON.parse(req.query.a);
                 req.session.existingAnswers = existingAnswers;
@@ -240,6 +246,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                         req
                             .session
                             .save(() => {
+                                //console.log("is new?", isNew);
                                 _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
                                     title: srvObj.name,
                                     respondent: resp.id,
@@ -249,6 +256,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                     theme: srvObj.theme,
                                     modelstr: btoa(JSON.stringify({
                                         respondent: resp.id,
+                                        isNew: isNew,
                                         messages: {
                                             prevPage: "Previous page",
                                             nextPage: "Next page",

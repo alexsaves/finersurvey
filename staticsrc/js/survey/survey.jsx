@@ -5,6 +5,8 @@ import ProgressComponent from './components/progress.jsx';
 import PageController from './components/paginationcontroller.jsx';
 import LoadingScreen from './components/loadingscreen.jsx';
 import MissingPageMessage from './components/missingpagemessage.jsx';
+import {nextPage, prevPage, jumpToPage, changeIsNewStatus} from '../actions';
+import {Link} from 'react-router-dom';
 
 /**
 * Represents the entire survey
@@ -26,6 +28,22 @@ class SurveyComponent extends React.Component {
    */
   componentDidMount() {
     this.updateOverflowStatus();
+    // Only let it be new once
+    if (this.props.isNew) {
+      this
+        .props
+        .dispatch(changeIsNewStatus(false));
+      let pgs = this.props.pages;
+      if (this.props.currentPage >= 0 && this.props.currentPage < pgs.length) {
+        if (pgs[this.props.currentPage].isStartable !== true) {
+          let root = ReactDOM.findDOMNode(this),
+            restarter = root.getElementsByClassName("resetSurveyLink")[0];
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent('click', true, true, window, 1, 12, 345, 7, 220, false, false, false, false, 0, null);
+          restarter.dispatchEvent(evObj);
+        }
+      }
+    }
   }
 
   /**
@@ -65,9 +83,11 @@ class SurveyComponent extends React.Component {
     }
 
     if (!showMissingPageUI && this.props.currentPage >= 0 && this.props.pages && this.props.pages.length > 0) {
-      hideLogo = this.props.currentPage < this.props.pages.length ? !!this.props.pages[this.props.currentPage].hideLogo : true;
+      hideLogo = this.props.currentPage < this.props.pages.length
+        ? !!this.props.pages[this.props.currentPage].hideLogo
+        : true;
     }
-
+    
     // Spit out the survey
     return (
       <div
@@ -79,7 +99,7 @@ class SurveyComponent extends React.Component {
         .bind(this)}>
         {!showMissingPageUI && <ProgressComponent uid={uid} progress={desiredPage / this.props.pages.length}/>}
         {!showMissingPageUI && <PageController uid={uid} desiredPage={desiredPage}/>}
-        {showMissingPageUI && <MissingPageMessage />}
+        {showMissingPageUI && <MissingPageMessage/>}
         <div
           title={this.props.messages.winLossAnalysis}
           target="_blank"
@@ -87,6 +107,7 @@ class SurveyComponent extends React.Component {
           ? " hidden"
           : "")}></div>
         {showingLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete}/>}
+        <Link to={"/s/" + uid} aria-hidden="true" className="resetSurveyLink"></Link>
       </div>
     );
   }
@@ -101,7 +122,9 @@ const mapStateToProps = (state/*, props*/) => {
     currentPage: state.currentPage,
     variables: state.variables,
     loadingComplete: !!state.loadingComplete,
-    messages: state.messages
+    messages: state.messages,
+    answers: state.answers,
+    isNew: state.isNew
   }
 }
 

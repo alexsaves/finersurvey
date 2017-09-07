@@ -48,14 +48,14 @@ if (stateElm) {
     if (oldAnswers) {
       ansObj = JSON.parse(oldAnswers);
     }
+    if (typeof startupState.isNew == "undefined") {
+      startupState.isNew = !!!localStorage.getItem("_" + startupState.metadata.guid);
+    }
+    localStorage.setItem("_" + startupState.metadata.guid, (new Date()).getTime().toString());
     startupState.messages = Object.assign({}, MESSAGES, startupState.messages);
     let existingAnsOnObject = JSON.stringify(startupState.answers);
     if (existingAnsOnObject && existingAnsOnObject.length > 1 && existingAnsOnObject != "{}") {
-      localStorage.setItem(persistentKey, JSON.stringify({
-        key: persistentKey,
-        hash: surveyHash,
-        answers: startupState.answers
-      }));
+      localStorage.setItem(persistentKey, JSON.stringify({key: persistentKey, hash: surveyHash, answers: startupState.answers}));
     }
     if (ansObj.key == persistentKey && ansObj.hash == surveyHash && (!existingAnsOnObject || existingAnsOnObject == '{}')) {
       startupState.answers = ansObj.answers;

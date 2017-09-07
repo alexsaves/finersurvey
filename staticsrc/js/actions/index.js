@@ -9,6 +9,7 @@ export const CHANGE_ANSWER = 'CHANGE_ANSWER';
 export const LOADING_SCREEN_REMOVE = 'LOADING_SCREEN_REMOVE';
 export const VALIDATE_SURVEY = 'VALIDATE_SURVEY';
 export const CHANGE_RESPONDENT = "CHANGE_RESPONDENT";
+export const CHANGE_NEW_STATUS = "CHANGE_NEW_STATUS";
 
 /**
  * Change or add an answer
@@ -87,7 +88,6 @@ export function validateSurvey() {
   };
 };
 
-
 /*
  * Change the respondent
  */
@@ -123,4 +123,11 @@ export function transmitAnswers() {
       dispatch(setRespondentId(data.respondent));
     });
   };
+};
+
+/*
+ * Set the is-new status of the respondent
+ */
+export function changeIsNewStatus(isNew) {
+  return {type: CHANGE_NEW_STATUS, isNew};
 };

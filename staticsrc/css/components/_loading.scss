@@ -22,7 +22,7 @@
   }
   .logo--finerink {
     @media (max-width: $screen-sm-min) {
-      background-image: url(/static/assets/logos/finerink.svg) !important;
+      background-image: url($loadinglogoimage) !important;
     }
   }
   .fontTestZone {
