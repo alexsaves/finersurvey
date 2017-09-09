@@ -175,7 +175,8 @@ export default class {
         return this._evaluateTextLogic({}, variables[dependentQuestionName], ruleStr, splitterSymbol, isOther);
       }
     } else if (!dependentQuestion) {
-      throw new Error("Could not find question for logic rule. Question name was: " + dependentQuestionName);
+      //throw new Error("Could not find question for logic rule. Question name was: " + dependentQuestionName);
+      return false;
     } else {
       let answerObject = this._locateAnswerObjectForName(dependentQuestionName, answers);
       switch (dependentQuestion.type) {

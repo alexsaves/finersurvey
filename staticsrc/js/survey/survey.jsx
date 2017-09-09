@@ -29,7 +29,7 @@ class SurveyComponent extends React.Component {
   componentDidMount() {
     this.updateOverflowStatus();
     // Only let it be new once
-    if (this.props.isNew) {
+    if (this.props.isNew) {      
       this
         .props
         .dispatch(changeIsNewStatus(false));
@@ -50,8 +50,8 @@ class SurveyComponent extends React.Component {
    * Update whether or not the Y axis is overflowing
    */
   updateOverflowStatus() {
-    let surveyNode = document.getElementsByClassName("survey")[0];
-    let isOverflowing = surveyNode.scrollHeight > surveyNode.offsetHeight;
+    let surveyNode = document.getElementsByClassName("survey")[0],
+      isOverflowing = surveyNode.scrollHeight > surveyNode.offsetHeight;
     if (isOverflowing != this.state.isOverflowing) {
       this.setState({isOverflowing: isOverflowing});
     }
@@ -87,7 +87,7 @@ class SurveyComponent extends React.Component {
         ? !!this.props.pages[this.props.currentPage].hideLogo
         : true;
     }
-    
+
     // Spit out the survey
     return (
       <div

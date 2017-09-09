@@ -39,7 +39,8 @@ Each question in the `elements` collection shares a set of common attributes, bu
  * `subtitle` - (_String_) An optional block of text below the text title. This appears in a less-prominent font than the title.
  * `image` - (_Object_) An image to display (see below for details). Note that this is distinct from the `image` question `type`.
  * `limits` - (_Object_) Any input limitations like maximum choices or characters or words. See question details for specifics.
- * `initialValue` - (__Number__, __String__) The initial data value for the question. Only some quesitons support this like `rating`, `type` = `slider`.
+ * `initialValue` - (_Number_, _String_) The initial data value for the question. Only some quesitons support this like `rating`, `type` = `slider`.
+ * `background` - (_Boolean_) Should the control be visually backgrounded before you start editing it. Only supported by `text` quesiton types right now. Optional.
 
 ### Question Types
 
@@ -55,6 +56,7 @@ A variety of question types are supported, including:
  * `checkbox` - Multiple choice question with a possible "other" text input.
  * `radio` - Single choice question with a possible "other" text input.
  * `buttons` - Just a list of buttons that take you to different locations.
+ * `hr` - Horizontal rule. A space in the survey.
  * `none` - No inputs. Used to display only text and/or images.
 
 ### Question Names
