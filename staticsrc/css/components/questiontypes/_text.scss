@@ -1,4 +1,9 @@
 .question--text {
+  &.background {
+    input, textarea {
+      opacity: 0.5;
+    }
+  }
   .text--inputcontainer {
     display: -webkit-flex;
     display: flex;

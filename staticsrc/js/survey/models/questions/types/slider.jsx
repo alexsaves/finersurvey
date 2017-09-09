@@ -22,20 +22,27 @@ class SliderRatingQuestion extends React.Component {
       didSetSliderFromAnswer: false
     };
     this.piper = new Piper();
+    this.didMount = false;
   }
 
   /**
    * The component is ready
    */
   componentDidMount() {
+    this.didMount = true;
     if (typeof this.props.answer == 'undefined' && typeof this.props.initialValue != 'undefined') {
       this
         .props
         .dispatch(changeAnswer(this.props.name, this.props.initialValue));
-      this.setState({
-        sliderValue: this.props.initialValue
-      });
+      this.setState({sliderValue: this.props.initialValue});
     }
+  }
+
+  /**
+   * The component is unmounting
+   */
+  componentWillUnmount() {
+    this.didMount = false;
   }
 
   /**
@@ -101,7 +108,6 @@ class SliderRatingQuestion extends React.Component {
    * @param {*} e
    */
   handleDragMove(e) {
-    e.preventDefault();
     if (e.touches && e.touches.length > 0) {
       e = e.touches[0];
     }
@@ -147,16 +153,6 @@ class SliderRatingQuestion extends React.Component {
   }
 
   /**
-   * Handle Keypress
-   * @param {*} e
-   */
-  handleKeyPress(e) {
-    if (e) {
-      //console.log("key", e.keyCode);
-    }
-  }
-
-  /**
  * Render the view
  */
   render() {
@@ -164,27 +160,19 @@ class SliderRatingQuestion extends React.Component {
       ctx = this,
       answer = this.props.answer,
       sliderValue = this.state.sliderValue;
+
     if (!this.state.didSetSliderFromAnswer && answer) {
       sliderValue = answer;
       setTimeout(() => {
-        this.setState({didSetSliderFromAnswer: true});
+        if (this.didMount) {
+          this.setState({didSetSliderFromAnswer: true});
+        }
       }, 20);
     }
 
     let piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages;
-
-    /*if (this.props.isFocused && !this.wasFocused) {
-      setTimeout(() => {
-        this.wasFocused = true;
-        let root = ReactDOM.findDOMNode(this),
-          btns = root.getElementsByTagName('a');
-        if (btns.length > 0) {
-          btns[0].focus();
-        }
-      }, 25);
-    }*/
 
     return (
       <div className="question--rating slider">
@@ -193,14 +181,13 @@ class SliderRatingQuestion extends React.Component {
             className="slider--backdrop"
             onMouseDownCapture={this
             .handleLineTap
-            .bind(this)}></div>
+            .bind(this)}>
+            <div className="sliderMidpoint"/>
+          </div>
           <a
             className={"slider--ball" + (this.state.isDragging
             ? " dragging"
             : "")}
-            onKeyPress={this
-            .handleKeyPress
-            .bind(this)}
             style={{
             left: sliderValue + '%'
           }}

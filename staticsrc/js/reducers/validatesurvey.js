@@ -8,7 +8,7 @@ import LogicChecker from '../survey/components/logicchecker';
  */
 function questionNameIsValid(name) {
   if (name && name.trim().length > 0 && name.trim().length == name.length) {
-    return name.match(/[a-zA-Z_][a-zA-Z_0-9]*/gi) && !name.match(/[^a-zA-Z0-9]/);
+    return name.match(/[a-zA-Z_][a-zA-Z_0-9]*/gi) && !name.match(/[^a-zA-Z0-9_]/);
   }
   return false;
 }
@@ -30,7 +30,7 @@ function surveyValidatorReducer(state = [], action) {
         if (typeof pg.isStartable == "undefined") {
           pg.isStartable = i == 0;
         }
-        
+
         pg.isValid = checker.checkAllLogic(pg.showIf, answers, pages, variables);
         if (!pg.isValid) {
           pages.splice(i--, 1);

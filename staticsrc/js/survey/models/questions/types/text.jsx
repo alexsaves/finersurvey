@@ -144,6 +144,15 @@ class TextQuestion extends React.Component {
         .props
         .onQuestionBeingInteractedWith();
     }
+    this.setState({isFocused: true});
+  }
+
+  /**
+   * Handle blur on the input
+   * @param {*} e
+   */
+  handleBlur(e) {
+    this.setState({isFocused: false});
   }
 
   /**
@@ -162,6 +171,7 @@ class TextQuestion extends React.Component {
       limitalarm = false,
       wordlimitalarm = false,
       wordlimittext = null,
+      isBackgrounded = this.props.background && this.state.charcount == 0 && !this.state.isFocused,
       iptType = "text";
 
     if (this.props.modifier == 'email') {
@@ -220,7 +230,7 @@ class TextQuestion extends React.Component {
 
     // Spit out the node
     return (
-      <div className="question--text">
+      <div className={"question--text" + (isBackgrounded ? " background" : "")}>
         {isMultiline && <div className="text--outercontainer">
           <div className="text--inputcontainer">
             <textarea
@@ -230,6 +240,9 @@ class TextQuestion extends React.Component {
               placeholder={this.props.placeholder || ''}
               onFocus={this
               .handleFocus
+              .bind(this)}
+              onBlur={this
+              .handleBlur
               .bind(this)}
               onKeyDownCapture={this
               .validateKeyDown

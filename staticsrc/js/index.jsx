@@ -38,9 +38,20 @@ if (stateElm) {
       .querySelector('[type=\'finer/state\']')
       .innerText;
     startupState = JSON.parse(atob(rawStateDataStr));
+    for (let b = 0; b < startupState.pages.length; b++) {
+      if (typeof startupState.pages[b].isStartable == "undefined") {
+        startupState.pages[b].isStartable = (b == 0);
+      }
+      for (let k = 0; k < startupState.pages[b].elements.length; k++) {
+        let elm = startupState.pages[b].elements[k];
+        if (typeof elm.name == "undefined") {
+          elm.name = "unnamed_" + elm.type + "_" + b + "_" + k;
+        }
+      }
+    }
     startupState.validatedPages = JSON.parse(JSON.stringify(startupState.pages));
     if (startupState.metadata) {
-      surveyHash = startupState.metadata.guid + "_" + rawStateDataStr.length;
+      surveyHash = startupState.metadata.guid + "_" + startupState.respondent;
       persistentKey += "_" + startupState.metadata.guid;
     }
     let oldAnswers = localStorage.getItem(persistentKey),
@@ -55,9 +66,11 @@ if (stateElm) {
     startupState.messages = Object.assign({}, MESSAGES, startupState.messages);
     let existingAnsOnObject = JSON.stringify(startupState.answers);
     if (existingAnsOnObject && existingAnsOnObject.length > 1 && existingAnsOnObject != "{}") {
+      //console.log("OVERWRITING WITH", startupState.answers);
       localStorage.setItem(persistentKey, JSON.stringify({key: persistentKey, hash: surveyHash, answers: startupState.answers}));
     }
     if (ansObj.key == persistentKey && ansObj.hash == surveyHash && (!existingAnsOnObject || existingAnsOnObject == '{}')) {
+      //console.log("Writing to ", ansObj.answers);
       startupState.answers = ansObj.answers;
     }
   }
@@ -66,16 +79,22 @@ if (stateElm) {
 // Set up a history object
 const history = createHistory();
 
+var __lastAnsState;
+
 // Build the middleware for intercepting and dispatching navigation actions
 let appStore = createStore(reducers, startupState, applyMiddleware(thunk), applyMiddleware(routerMiddleware(history)));
 let unsubscribe = appStore.subscribe(() => {
-  let st = appStore.getState();
-  localStorage.setItem(persistentKey, JSON.stringify({
-    key: persistentKey,
-    hash: surveyHash,
-    answers: st.answers || {}
-  }));
-  //console.log("STATE CHANGED", appStore.getState())
+  let st = appStore.getState(),
+    ansState = {
+      key: persistentKey,
+      hash: surveyHash,
+      answers: st.answers || {}
+    },
+    ansStateStr = JSON.stringify(ansState);
+  if (ansStateStr != __lastAnsState && !st.isNew) {
+    __lastAnsState = ansStateStr;
+    localStorage.setItem(persistentKey, ansStateStr);
+  }
 });
 
 // console.log(appStore.getState()) appStore.subscribe(() =>

@@ -249,6 +249,9 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                 //console.log("is new?", isNew);
                                 _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
                                     title: srvObj.name,
+                                    pageUrl: req.protocol + '://' + req.get('host') + '/s/' + guid,
+                                    surveyDescription: "Help " + srvObj._org.name + " by giving your feedback on your recent interactions.",
+                                    surveyImage: req.protocol + '://' + req.get('host') + "/static/assets/logos/finerink.svg",
                                     respondent: resp.id,
                                     session: req.session,
                                     model: srvObj.survey_model,
@@ -279,7 +282,11 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                         variables: {
                                             surveyTitle: srvObj.name,
                                             companyName: srvObj._org.name,
-                                            surveyTheme: srvObj.theme
+                                            surveyTheme: srvObj.theme,
+                                            decisionMakerList: "Sarah Bannister, John Smith, Kevin Hanks",
+                                            decisionMaker1: "Sarah Bannister (VP Engineering)",
+                                            decisionMaker2: "John Smith (Engineer)",
+                                            decisionMaker3: "Kevin Hanks"
                                         },
                                         saveUrl: '/s/' + encodeURIComponent(guid)
                                     }))

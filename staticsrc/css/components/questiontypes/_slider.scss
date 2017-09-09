@@ -20,6 +20,14 @@ $slider_height: 1.5em;
       border-radius: $button_radius;
       margin-top: ($slider_height / 3);
       cursor: default;
+      .sliderMidpoint {
+        position: absolute;
+        top: -0.45em;
+        left: 50%;
+        width: 1px;
+        height: 1.5em;
+        background-color: $border_color;
+      }
     }
     .slider--ball {
       cursor: default;

@@ -4,27 +4,22 @@ $faintfont: "latohairline",
 Helvetica,
 Arial,
 sans-serif;
-$desktopfont: "latolight",
-"Open Sans",
+$desktopfont: "Open Sans",
 "Helvetica Neue",
 Helvetica,
 Arial,
 sans-serif;
-$lightfont: "proxima-nova",
-"latolight",
-"Open Sans",
+$lightfont: "Open Sans",
 "Helvetica Neue",
 Helvetica,
 Arial,
 sans-serif;
-$heavierfont: "latoregular",
-"Open Sans",
+$heavierfont: "Open Sans",
 "Helvetica Neue",
 Helvetica,
 Arial,
 sans-serif;
-$heaviestfont: "latobold",
-"Open Sans",
+$heaviestfont: "Open Sans",
 "Helvetica Neue",
 Helvetica,
 Arial,
@@ -44,7 +39,7 @@ $fill: #3e885b;
 $greyfill: #999999;
 $solidcontrolcolor: #000000;
 $question_clr: #000000;
-$instructions_clr: lighten($question_clr, 35%);
+$instructions_clr: lighten($question_clr, 30%);
 $border_color: rgba(100, 100, 100, 0.2);
 $background-image-match: #EEEEEE;
 $light_border_color: lighten($border_color, 18%);
@@ -149,6 +144,7 @@ textarea {
 }
 
 @mixin button_style {
+  font-family: $desktopfont;
   user-select: none;
   border-top: 1px solid $border_color;
   border-bottom: 1px solid $border_color;
@@ -205,7 +201,7 @@ textarea {
   border-right: 1px solid;
   border-color: $light_border_color;
   margin-bottom: ($general_padding / 2);
-  font-weight: 600;
+  font-weight: 300;
   &:last-child {
     margin-bottom: 0;
   }

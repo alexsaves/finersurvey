@@ -96,11 +96,11 @@ export default class {
           return answer.other;
         } else {
           let whatsinposition = answer.order[subQuestion];
-          if (subQuestion == 9999) {
+          if (whatsinposition == 9999) {
             // other
             return answer.other;
           } else {
-            return questionDef.choices[subQuestion];
+            return questionDef.choices[whatsinposition];
           }
         }
       case "matrixrating":
@@ -154,7 +154,7 @@ export default class {
     text = text.replace(this.pipeMatch, (match, questionName, position) => {
       let capitalize = false,
         lowercaseize = false;
-
+      // console.log(questionName);
       if (questionName.substr(0, 1) == "^") {
         questionName = questionName.substr(1);
         capitalize = true;
@@ -204,9 +204,9 @@ export default class {
         if (q) {
           let a = this._getAnswerFromKeyName(q, answers, questionName);
           if (a) {
-            let fres = this
-              ._parseAnswer(q, a, questionName, isOther, subQuestion)
-              .toString();
+            let fres = this._parseAnswer(q, a, questionName, isOther, subQuestion);            
+            fres = fres.toString();
+
             if (fres != null && typeof fres != 'undefined') {
               fres = fres.trim();
               if (capitalize) {
