@@ -171,7 +171,7 @@ class CheckboxQuestion extends React.Component {
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
               ? "selected"
-              : "")}>{piper.pipe(rt, panswers, ppages, variables)}<input
+              : "")}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}<input
               type="checkbox"
               name={idx}
               value={idx}
@@ -187,7 +187,7 @@ class CheckboxQuestion extends React.Component {
           onFocus={this
           .handleFocus
           .bind(this)}
-          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables)}
+          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables, this.props.messages)}
           onKeyUp={ctx
           .handleIptThrottleChange
           .bind(ctx)}

@@ -15,7 +15,7 @@ class SliderRatingQuestion extends React.Component {
     super(props);
     this.wasFocused = false;
     this.state = {
-      sliderValue: this.props.answer || 50,
+      sliderValue: (typeof this.props.answer != "undefined" ? this.props.answer : 50),
       startScreenX: 0,
       startScreenY: 0,
       isDragging: false,
@@ -161,7 +161,7 @@ class SliderRatingQuestion extends React.Component {
       answer = this.props.answer,
       sliderValue = this.state.sliderValue;
 
-    if (!this.state.didSetSliderFromAnswer && answer) {
+    if (!this.state.didSetSliderFromAnswer && typeof answer != "undefined") {
       sliderValue = answer;
       setTimeout(() => {
         if (this.didMount) {

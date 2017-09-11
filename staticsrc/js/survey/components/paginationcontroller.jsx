@@ -212,6 +212,7 @@ class PaginationController extends React.Component {
       answers = this.props.answers,
       pages = this.props.pages,
       allpages = this.props.allpages,
+      messages = this.props.messages,
       variables = this.props.variables,
       hidePagination = currentPage < 0 || pages.length == 0 || currentPage > pages.length - 1 || !!pages[currentPage].hidePagination,     
       isAnimatingForward = this.state.animatingForward,
@@ -252,6 +253,7 @@ class PaginationController extends React.Component {
             isSelected={idx === currentPage}
             remindInstructionsFor={remindInstructionsFor}
             answers={answers}
+            messages={messages}
             allpages={allpages}
             variables={variables}
             pageNumber={idx}

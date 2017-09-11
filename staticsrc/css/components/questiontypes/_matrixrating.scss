@@ -3,6 +3,11 @@
   text-align: center;
   .rating-zone {
     margin-top: $general_padding;
+    transition: opacity $slow_anim_timing;
+    opacity: 1;
+    &.is-animating {
+      opacity: 0;
+    }
     label {
       -webkit-touch-callout: none;
       -webkit-user-select: none;

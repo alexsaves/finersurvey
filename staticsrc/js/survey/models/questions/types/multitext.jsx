@@ -139,7 +139,7 @@ class MultiTextQuestion extends React.Component {
               .bind(this)}
               data-which={idx}
               data-order={idxo}
-              placeholder={piper.pipe(rt, panswers, ppages, variables)}
+              placeholder={piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}
               defaultValue={storedValue}
               onKeyDown={this
               .handleTypeThrottle

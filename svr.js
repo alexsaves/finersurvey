@@ -268,7 +268,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                             startOver: "Don't worry. We'll return you to the beginning of the survey.",
                                             ok: "OK",
                                             requiredQ: "This question is required",
-                                            winLossAnalysis: "Sales Win/Loss Analysis"
+                                            winLossAnalysis: "Sales Win/Loss Analysis",
+                                            otherDefaultValue: "Other"
                                         },
                                         metadata: {
                                             title: srvObj.name,

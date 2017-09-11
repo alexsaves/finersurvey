@@ -163,8 +163,8 @@ class MatrixRadioQuestion extends React.Component {
  * Render the view
  */
   render() {
-    let qname = this.props.name;
-    let ctx = this,
+    let qname = this.props.name,
+      ctx = this,
       selectedItem = this.state.selectedItem,
       animatingBackward = this.state.animatingBackward,
       animatingForward = this.state.animatingForward,
@@ -227,7 +227,7 @@ class MatrixRadioQuestion extends React.Component {
                 : "") + ((selectedItem == (idxo + 1) && animatingBackward)
                 ? " afPrevSelected"
                 : "")}>
-                <div className="choiceinner">{piper.pipe(rt, panswers, ppages, variables)}</div>
+                <div className="choiceinner">{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}</div>
               </div>
             })}
           <a
@@ -277,7 +277,7 @@ class MatrixRadioQuestion extends React.Component {
                 tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idx + 1}
                 className={"standalonebutton " + (shouldOptionBeSelected(idx)
                 ? "selected"
-                : "")}>{piper.pipe(rt, panswers, ppages, variables)}<input
+                : "")}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}<input
                 type="checkbox"
                 name={idx}
                 value={idx}

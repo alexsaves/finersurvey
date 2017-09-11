@@ -103,7 +103,7 @@ class ButtonsQuestion extends React.Component {
             let finalLabel = (val && val.title)
               ? val.title
               : "Continue";
-            finalLabel = piper.pipe(finalLabel, ctx.props.answers, ctx.props.pages, ctx.props.variables);
+            finalLabel = piper.pipe(finalLabel, ctx.props.answers, ctx.props.pages, ctx.props.variables, ctx.props.messages);
             return <button
               key={"_" + idx}
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}

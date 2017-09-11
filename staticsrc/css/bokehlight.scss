@@ -195,8 +195,8 @@ textarea {
   @include button_style;
   display: block;
   text-align: left;
-  font-size: 0.9em;
-  line-height: ($button_lineheight * 1.3);
+  font-size: 1.0em !important;
+  line-height: ($button_lineheight * 1.1) !important;
   border-radius: $button_radius;
   border-right: 1px solid;
   border-color: $light_border_color;

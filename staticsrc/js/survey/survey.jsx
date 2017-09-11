@@ -121,6 +121,7 @@ const mapStateToProps = (state/*, props*/) => {
     pages: state.validatedPages,
     currentPage: state.currentPage,
     variables: state.variables,
+    messages: state.messages,
     loadingComplete: !!state.loadingComplete,
     messages: state.messages,
     answers: state.answers,
