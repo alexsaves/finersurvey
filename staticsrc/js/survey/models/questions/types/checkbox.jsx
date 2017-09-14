@@ -36,6 +36,17 @@ class CheckboxQuestion extends React.Component {
         .props
         .onQuestionBeingInteractedWith();
     }
+    // Now check is we shouldnt be typing here
+    let targ = e.currentTarget,
+      limits = this.props.limits;
+    if (e && limits && typeof limits.max != 'undefined' && this.props.answer) {
+      let totalCount = this.props.answer.responses.length;
+      if (totalCount >= limits.max && this.props.answer.responses.indexOf(9999) == -1) {
+        e.preventDefault();
+        targ.blur();
+        return false;
+      }
+    }
   }
 
   /**
@@ -94,6 +105,23 @@ class CheckboxQuestion extends React.Component {
   }
 
   /**
+   * Handle click
+   * @param {*} e
+   */
+  handleClick(e) {
+    let limits = this.props.limits;
+    let targ = e && e.currentTarget,
+      oval = parseInt(targ.getAttribute("data-originalValue"));
+    if (e && limits && typeof limits.max != 'undefined' && this.props.answer) {
+      let totalCount = this.props.answer.responses.length;
+      if (totalCount >= limits.max && this.props.answer.responses.indexOf(oval) == -1) {
+        e.preventDefault();
+        return false;
+      }
+    }
+  }
+
+  /**
    * Handle Keypress
    * @param {*} e
    */
@@ -132,17 +160,6 @@ class CheckboxQuestion extends React.Component {
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
-    /*if (this.props.isFocused && !this.wasFocused) {
-      setTimeout(() => {
-        this.wasFocused = true;
-        let root = ReactDOM.findDOMNode(this),
-          btns = root.getElementsByTagName('label');
-        if (btns.length > 0) {
-          btns[0].focus();
-        }
-      }, 25);
-    }*/
-
     // Check each value
     let shouldOptionBeSelected = function (val) {
       if (answers && answers.responses) {
@@ -165,6 +182,10 @@ class CheckboxQuestion extends React.Component {
               idx = rto.originalPosition;
             return <label
               key={idx}
+              onClick={this
+              .handleClick
+              .bind(this)}
+              data-originalValue={idx}
               onKeyPress={this
               .handleKeyPress
               .bind(this)}

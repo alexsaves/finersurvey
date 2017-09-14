@@ -1,6 +1,6 @@
 {
     "name": "survey",
-    "version": "0.3.16",
+    "version": "0.3.17",
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
@@ -76,6 +76,7 @@
         "connect-redis": "^3.2.0",
         "connect-timeout": "^1.8.0",
         "cookie-parser": "^1.4.3",
+        "debounce": "^1.0.2",
         "del": "^3.0.0",
         "email-validator": "^1.0.7",
         "encoding": "^0.1.12",

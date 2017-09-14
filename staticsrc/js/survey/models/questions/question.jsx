@@ -13,6 +13,7 @@ import MatrixRadioQuestion from './types/matrixradio.jsx';
 import SortQuestion from './types/sort.jsx';
 import ButtonsQuestion from './types/buttons.jsx';
 import MultitextQuestion from './types/multitext.jsx';
+import LinkQuestion from './types/link.jsx';
 import Piper from '../../components/piper';
 
 /**
@@ -52,7 +53,9 @@ class QuestionComponent extends React.Component {
    */
   handleFullyAnswerQuestion() {
     if (this.props.onFullyAnswerQuestion) {
-      this.props.onFullyAnswerQuestion();
+      this
+        .props
+        .onFullyAnswerQuestion();
     }
   }
 
@@ -61,7 +64,9 @@ class QuestionComponent extends React.Component {
    */
   handleQuestionBeingInteractedWith() {
     if (this.props.onQuestionBeingInteractedWith) {
-      this.props.onQuestionBeingInteractedWith();
+      this
+        .props
+        .onQuestionBeingInteractedWith();
     }
   }
 
@@ -81,98 +86,170 @@ class QuestionComponent extends React.Component {
         onAnimationEnd={this
         .handleAnimationEnd
         .bind(this)}>
-        {(this.props.title) && <h2>{this.props.displayNumber && <span className="question--number">{this.props.questionNumber}. </span>}{piper.pipe(this.props.title, answers, pages, this.props.variables, this.props.messages)}</h2>}
+        {(this.props.title) && <h2>{this.props.displayNumber && <span className="question--number">{this.props.questionNumber}.
+          </span>}{piper.pipe(this.props.title, answers, pages, this.props.variables, this.props.messages)}</h2>}
         {this.props.subtitle && <p className="subtitle">{piper.pipe(this.props.subtitle, answers, pages, this.props.variables, this.props.messages)}</p>}
-        {image && !image.link && <p><img src={image.url} title={image.title ? image.title : null} className={"question--image " + ((image.modifier || "").toLowerCase())} /></p>}
-        {image && image.link && <p><a href={image.link}><img src={image.url} title={image.title ? image.title : null} className={"question--image " + ((image.modifier || "").toLowerCase())} /></a></p>}
+        {image && !image.link && <p><img
+          src={image.url}
+          title={image.title
+          ? image.title
+          : null}
+          className={"question--image " + ((image.modifier || "").toLowerCase())}/></p>}
+        {image && image.link && <p>
+          <a href={image.link}><img
+            src={image.url}
+            title={image.title
+          ? image.title
+          : null}
+            className={"question--image " + ((image.modifier || "").toLowerCase())}/></a>
+        </p>}
         {this.props.instructions && <p
           className={"instructions " + ((this.state.alarmInstructions || this.props.remindInstructions)
           ? "alarm"
           : "")}>
           <span className="fa fa-info-circle"></span>
           &nbsp;{this.props.instructions}</p>}
-        {this.props.type == "hr" && <hr />}
+        {this.props.type == "hr" && <hr/>}
         {(this.props.type == "buttons" || this.props.type == "button") && <ButtonsQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
+          onRemindAboutRules={this
+          .highlightInstructions
+          .bind(this)}/>}
+        {this.props.type == "link" && <LinkQuestion
+          {...this.props}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "matrixrating" && <MatrixRatingQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "matrixradio" && <MatrixRadioQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "checkbox" && <CheckboxQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
-          .bind(this)}/>}        
+          .bind(this)}/>}
         {this.props.type == "radio" && <RadioQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "dropdown" && <DropdownQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "rating" && (!this.props.modifier || this.props.modifier == "buttons") && <RatingQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "rating" && this.props.modifier == "stars" && <StarsRatingQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "rating" && this.props.modifier == "slider" && <SliderRatingQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "text" && <TextQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "multitext" && <MultitextQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           onRemindAboutRules={this
           .highlightInstructions
           .bind(this)}/>}
         {this.props.type == "sort" && <SortQuestion
           {...this.props}
-          onFullyAnswerQuestion={this.handleFullyAnswerQuestion.bind(this)}
-          onQuestionBeingInteractedWith={this.handleQuestionBeingInteractedWith.bind(this)}
+          onFullyAnswerQuestion={this
+          .handleFullyAnswerQuestion
+          .bind(this)}
+          onQuestionBeingInteractedWith={this
+          .handleQuestionBeingInteractedWith
+          .bind(this)}
           isSelected={this.props.isSelected}
           isAnimating={this.props.isAnimating}
           onRemindAboutRules={this

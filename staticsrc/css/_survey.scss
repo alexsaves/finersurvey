@@ -1,19 +1,22 @@
 @import "reset";
 @import "vars";
 @import "components/all";
-html {
-  height: 100%;
-  margin: 0;
+html, body, .app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+html {
   overflow: hidden !important;
   background-color: $background-image-match;
   body {
     font-family: $lightfont;
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-    padding: 0;
-    -webkit-text-size-adjust: 100% !important;
+    -webkit-text-size-adjust: 100% !important;    
     @media (max-width: $screen-sm-min) {
       font-family: $mobile_lightfont;
     }

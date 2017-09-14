@@ -16,6 +16,10 @@
   width: $desktop_question_width;
   text-align: center;
   margin-bottom: ($general_padding / 2);
+  a {
+    text-decoration: underline;
+    color: $question_clr;
+  }
   hr {
     border-bottom: 0;
     border-right: 0;

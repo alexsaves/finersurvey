@@ -41,6 +41,7 @@ Each question in the `elements` collection shares a set of common attributes, bu
  * `limits` - (_Object_) Any input limitations like maximum choices or characters or words. See question details for specifics.
  * `initialValue` - (_Number_, _String_) The initial data value for the question. Only some quesitons support this like `rating`, `type` = `slider`.
  * `background` - (_Boolean_) Should the control be visually backgrounded before you start editing it. Only supported by `text` quesiton types right now. Optional.
+ * `link` - (_Object_) The information for the link. Similar to `image`.
 
 ### Question Types
 
@@ -56,6 +57,7 @@ A variety of question types are supported, including:
  * `checkbox` - Multiple choice question with a possible "other" text input.
  * `radio` - Single choice question with a possible "other" text input.
  * `buttons` - Just a list of buttons that take you to different locations.
+ * `link` - A hyperlink.
  * `hr` - Horizontal rule. A space in the survey.
  * `none` - No inputs. Used to display only text and/or images.
 
@@ -227,6 +229,26 @@ The users choice will be stored as an answer with the index of the choice as the
  * `orange`
 
 You can leave the `href` blank, which will cause the question to advance to the next page.
+
+#### Link Question Definitions
+
+The `link` question type provides the ability to insert a hyperlink. Define the URL and other properties inside a `link` attribute, similar to `image` objects. The `link` attribute supports these properties:
+
+ * `url` - The URL for the link.
+ * `modifier` - Whether you want the link to open in the same window (`self`) or a new window `new`.
+ * `title` - The text of the link.
+
+```json
+{
+    "name": "interest",
+    "type": "link",
+    "link": {
+        "url": "https://www.mysite.com",
+        "modifier": "NEW",
+        "title": "Interested in learning more?"
+    }
+}
+```
 
 #### Rating Question Definitions
 
