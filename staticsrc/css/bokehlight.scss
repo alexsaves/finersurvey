@@ -76,6 +76,11 @@ textarea {
   box-sizing: border-box;
   padding-left: $general_small_padding;
   padding-right: $general_small_padding;
+  background-image: url("/static/assets/other/kbtrans.png");
+  background-repeat: no-repeat;
+  background-size: 2em 1.5em;
+  background-position: 0.5em 0.5em;
+  padding-left: 3em;
   &::placeholder {
     color: $greyfill;
     font-family: $lightfont;
