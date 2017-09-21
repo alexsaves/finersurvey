@@ -89,6 +89,10 @@ textarea {
   }
 }
 
+select {
+  background-image: none !important;
+}
+
 // Animation for when the instructions are animated
 @keyframes instructionsAnimation {
   50% {
