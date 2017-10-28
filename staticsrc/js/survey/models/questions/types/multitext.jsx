@@ -121,11 +121,13 @@ class MultiTextQuestion extends React.Component {
 
     if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
-        this.wasFocused = true;
-        let root = ReactDOM.findDOMNode(this),
-          btns = root.getElementsByTagName('input');
-        if (btns.length > 0) {
-          btns[0].focus();
+        if (this.mounted) {
+          this.wasFocused = true;
+          let root = ReactDOM.findDOMNode(this),
+            btns = root.getElementsByTagName('input');
+          if (btns.length > 0) {
+            btns[0].focus();
+          }
         }
       }, 25);
     }
