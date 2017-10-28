@@ -18,6 +18,20 @@ class LinkQuestion extends React.Component {
   }
 
   /**
+   * The component mounted
+   */
+  componentDidMount() {
+    this.mounted = true;
+  }
+
+  /**
+   * Component is unmounting
+   */
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  /**
  * Render the view
  */
   render() {

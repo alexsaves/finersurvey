@@ -50,6 +50,10 @@ class SliderRatingQuestion extends React.Component {
    * @param {*} e
    */
   handleMouseDragStart(e) {
+    if (this.state.isDragging) {
+      this.dropDrag(e);
+      return;
+    }
     if (e) {
       e.stopPropagation();
     }
