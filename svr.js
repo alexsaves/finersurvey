@@ -252,9 +252,11 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
 
             // Handle the done value
             requestEmitter.on('done', function (srvObj) {
+                //console.log("SESSION", req.session);
                 // Get the respondent object
                 sv
                     .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, approval, function (resp) {
+                        //console.log("RESP", resp);
                         req.session.rid = resp.id;
                         req
                             .session

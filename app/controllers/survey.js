@@ -113,7 +113,7 @@ SurveyController.prototype.saveSurveyResults = function (guid, submitBody, resp,
                 console.log("Could not get survey by guid", guid);
                 requestEmitter.emit('error', err);
             } else {
-                srv.survey_model = JSON.parse(srv.survey_model.toString());
+                srv.survey_model = srv.survey_model;
 
                 // Set the time zone if it hasn't already
                 resp.setTimeZone(this.cfg, submitBody.tz, (err, resp) => {

@@ -22,7 +22,7 @@
             "resave": false,
             "saveUninitialized": true,
             "cookie": {
-                "maxAge": 86400
+                "maxAge": 604800000
             }
         },
         "cache": {

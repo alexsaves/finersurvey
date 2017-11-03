@@ -220,7 +220,6 @@ class SortQuestion extends React.Component {
     window.addEventListener('touchmove', this.proxyDM, true);
     window.addEventListener('mousemove', this.proxyDM, true);
     window.addEventListener('mouseup', this.proxySD, true);
-    window.addEventListener('mouseleave', this.proxySD, true);
     window.addEventListener('touchcancel', this.proxySD, true);
     window.addEventListener('touchend', this.proxySD, true);
 
@@ -405,7 +404,6 @@ class SortQuestion extends React.Component {
     window.removeEventListener('touchmove', this.proxyDM, true);
     window.removeEventListener('mousemove', this.proxyDM, true);
     window.removeEventListener('mouseup', this.proxySD, true);
-    window.removeEventListener('mouseleave', this.proxySD, true);
     window.removeEventListener('touchcancel', this.proxySD, true);
     window.removeEventListener('touchend', this.proxySD, true);
     this
