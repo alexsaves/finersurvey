@@ -26,6 +26,20 @@ class RadioQuestion extends React.Component {
   }
 
   /**
+   * The component mounted
+   */
+  componentDidMount() {
+    this.mounted = true;
+  }
+
+  /**
+   * Component is unmounting
+   */
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  /**
    * Handle focus on the input
    * @param {*} e
    */
@@ -177,7 +191,7 @@ class RadioQuestion extends React.Component {
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
               ? "selected"
-              : "")}>{piper.pipe(rt, panswers, ppages, variables)}<input
+              : "")}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}<input
               type="radio"
               name={qname}
               value={idx}
@@ -195,7 +209,7 @@ class RadioQuestion extends React.Component {
           .bind(ctx)}/><input
           type="text"
           className="other--textfield"
-          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables)}
+          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables, this.props.messages)}
           defaultValue={(this.props.answer && this.props.answer.other)
           ? this.props.answer.other
           : ''}

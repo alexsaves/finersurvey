@@ -36,6 +36,20 @@ class MatrixRatingQuestion extends React.Component {
   }
 
   /**
+   * The component mounted
+   */
+  componentDidMount() {
+    this.mounted = true;
+  }
+
+  /**
+   * Component is unmounting
+   */
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  /**
    * Handle input from the user
    * @param {*} e
    */
@@ -163,20 +177,21 @@ class MatrixRatingQuestion extends React.Component {
  * Render the view
  */
   render() {
-    let qname = this.props.name;
-    let ratingScale = [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7
-    ];
-    let ctx = this,
+    let qname = this.props.name,
+      ratingScale = [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      ctx = this,
       selectedItem = this.state.selectedItem,
       animatingBackward = this.state.animatingBackward,
       animatingForward = this.state.animatingForward,
+      isAnimating = animatingBackward || animatingForward,
       answer = (this.props.answer && this.props.answer[this.state.srcOrder[this.state.selectedItem].originalPosition]) || null,
       piper = this.piper,
       panswers = this.props.answers,
@@ -227,7 +242,7 @@ class MatrixRatingQuestion extends React.Component {
                 : "") + ((selectedItem == (idxo + 1) && animatingBackward)
                 ? " afPrevSelected"
                 : "")}>
-                <div className="choiceinner">{piper.pipe(rt, panswers, ppages, variables)}</div>
+                <div className="choiceinner">{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}</div>
               </div>
             })}
           <a
@@ -266,7 +281,7 @@ class MatrixRatingQuestion extends React.Component {
                 .bind(this)}></a>;
             })}
         </div>}
-        <div className="rating-zone">
+        <div className={"rating-zone" + (isAnimating ? " is-animating" : "")}>
           <div className="question--rating">
             <div className="buttongroup">
               {ratingScale.map((rt, idx) => {

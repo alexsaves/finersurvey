@@ -48,9 +48,15 @@ $slider_height: 1.5em;
         transform: scale(1.5, 1.5);
         opacity: 0.5;
         box-shadow: 0.1em 0.1em 0.7em rgba(0, 0, 0, 0.5);
+        @media (max-width: $screen-sm-min) {
+          transform: scale(1.75, 1.75);
+        }
       }
       &:hover {
         background-color: lighten($fill, 15%);
+      }
+      @media (max-width: $screen-sm-min) {
+        transform: scale(1.5, 1.5);
       }
     }
   }

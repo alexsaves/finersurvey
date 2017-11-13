@@ -47,7 +47,7 @@ export default class {
    * @param {*} answer
    * @param {*} questionName
    */
-  _parseAnswer(questionDef, answer, questionName, isOther, subQuestion) {
+  _parseAnswer(questionDef, answer, questionName, isOther, subQuestion, meta) {
     switch (questionDef.type) {
       case "text":
         if (isOther) {
@@ -80,7 +80,7 @@ export default class {
         }
       case "radio":
         if (isOther) {
-          return answer.other || "";
+          return answer.other || (meta && meta.otherDefaultValue);
         }
         return questionDef.choices[answer.response];
       case "dropdown":
@@ -89,16 +89,16 @@ export default class {
         if (!isOther) {
           throw new Error("You can only pipe from \"other\" on checkbox questions.");
         } else {
-          return answer.other;
+          return answer.other || (meta && meta.otherDefaultValue);
         }
       case "sort":
         if (isOther) {
-          return answer.other;
+          return answer.other || (meta && meta.otherDefaultValue);
         } else {
           let whatsinposition = answer.order[subQuestion];
           if (whatsinposition == 9999) {
             // other
-            return answer.other;
+            return answer.other || (meta && meta.otherDefaultValue);
           } else {
             return questionDef.choices[whatsinposition];
           }
@@ -147,14 +147,17 @@ export default class {
    * @param {*} text
    * @param {*} answers
    */
-  pipe(text, answers, survey, variables) {
-    if (arguments.length != 4) {
+  pipe(text, answers, survey, variables, meta) {
+    if (arguments.length != 5 || !meta) {
       throw new Error("Piper called with incorrect number of arguments.");
     }
     text = text.replace(this.pipeMatch, (match, questionName, position) => {
       let capitalize = false,
         lowercaseize = false;
       // console.log(questionName);
+      /*if (questionName == "mostImportantVendorCriteria[0]") {
+        debugger;
+      }*/
       if (questionName.substr(0, 1) == "^") {
         questionName = questionName.substr(1);
         capitalize = true;
@@ -204,7 +207,7 @@ export default class {
         if (q) {
           let a = this._getAnswerFromKeyName(q, answers, questionName);
           if (a) {
-            let fres = this._parseAnswer(q, a, questionName, isOther, subQuestion);            
+            let fres = this._parseAnswer(q, a, questionName, isOther, subQuestion, meta);            
             fres = fres.toString();
 
             if (fres != null && typeof fres != 'undefined') {

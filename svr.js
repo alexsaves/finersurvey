@@ -175,7 +175,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         '/s/:surveyGuid/:pg', '/s/:surveyGuid'
     ], (req, res, next) => {
         var guid = req.params.surveyGuid,
-            pg = parseInt(req.params.pg),
+            pg = parseInt(req.params.pg),            
             sv = new SurveyController(pjson.config),
             usSrc = req.headers['user-agent'],
             ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,
@@ -192,11 +192,17 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             pg--;
         }
 
-        if (req.query && req.query.a) {
+        if (req.query && (req.query.a || req.query.p)) {
             isNew = true;
             try {
-                existingAnswers = JSON.parse(req.query.a);
-                req.session.existingAnswers = existingAnswers;
+                if (req.query.a) {
+                    existingAnswers = JSON.parse(req.query.a);
+                    req.session.existingAnswers = existingAnswers;
+                }
+                if (req.query.p) {
+                    req.session.approval = req.query.p;
+                }
+                
                 req
                     .session
                     .save(() => {
@@ -208,12 +214,19 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             }
         } else {
             // Holds any existing answers
-            var existingAnswers = {};
+            var existingAnswers = {},
+                approval;
 
             // First check to see if there is an answer state
             if (req.session && req.session.existingAnswers) {
                 existingAnswers = JSON.parse(JSON.stringify(req.session.existingAnswers));
                 delete req.session.existingAnswers;
+            }
+
+            // Then check to see if we have an approval
+            if (req.session && req.session.approval) {
+                approval = req.session.approval;
+                delete req.session.approval;
             }
 
             var requestEmitter = new events.EventEmitter();
@@ -239,9 +252,11 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
 
             // Handle the done value
             requestEmitter.on('done', function (srvObj) {
+                //console.log("SESSION", req.session);
                 // Get the respondent object
                 sv
-                    .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function (resp) {
+                    .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, approval, function (resp) {
+                        //console.log("RESP", resp);
                         req.session.rid = resp.id;
                         req
                             .session
@@ -268,7 +283,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                             startOver: "Don't worry. We'll return you to the beginning of the survey.",
                                             ok: "OK",
                                             requiredQ: "This question is required",
-                                            winLossAnalysis: "Sales Win/Loss Analysis"
+                                            winLossAnalysis: "Sales Win/Loss Analysis",
+                                            otherDefaultValue: "Other"
                                         },
                                         metadata: {
                                             title: srvObj.name,
@@ -339,7 +355,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         });
 
         // Get a respondent and save the results
-        sv.getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, function (respondent) {
+        sv.getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, '', function (respondent) {
             req.session.rid = req.body.respondent = respondent.id;
 
             // Save the reults now

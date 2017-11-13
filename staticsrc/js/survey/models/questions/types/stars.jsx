@@ -21,6 +21,20 @@ class StarsRatingQuestion extends React.Component {
   }
 
   /**
+   * The component mounted
+   */
+  componentDidMount() {
+    this.mounted = true;
+  }
+
+  /**
+   * The component unmounted
+   */
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  /**
    * Handle input from the user
    * @param {*} e
    */

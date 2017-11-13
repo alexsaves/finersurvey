@@ -16,7 +16,7 @@ export default class {
     switch (question.type) {
       case "rating":
         // Simple rating
-        return (answer && !isNaN(answer));
+        return (typeof answer != "undefined" && answer != null && !isNaN(answer));
       case "checkbox":
         if (answer && answer.responses) {
           let totalAnswers = answer.responses.length;

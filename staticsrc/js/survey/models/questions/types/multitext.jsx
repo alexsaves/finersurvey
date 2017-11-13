@@ -25,6 +25,20 @@ class MultiTextQuestion extends React.Component {
   }
 
   /**
+   * The component mounted
+   */
+  componentDidMount() {
+    this.mounted = true;
+  }
+
+  /**
+   * Component is unmounting
+   */
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  /**
    * Handle input from the user
    * @param {*} e
    */
@@ -107,11 +121,13 @@ class MultiTextQuestion extends React.Component {
 
     if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
-        this.wasFocused = true;
-        let root = ReactDOM.findDOMNode(this),
-          btns = root.getElementsByTagName('input');
-        if (btns.length > 0) {
-          btns[0].focus();
+        if (this.mounted) {
+          this.wasFocused = true;
+          let root = ReactDOM.findDOMNode(this),
+            btns = root.getElementsByTagName('input');
+          if (btns.length > 0) {
+            btns[0].focus();
+          }
         }
       }, 25);
     }
@@ -139,7 +155,7 @@ class MultiTextQuestion extends React.Component {
               .bind(this)}
               data-which={idx}
               data-order={idxo}
-              placeholder={piper.pipe(rt, panswers, ppages, variables)}
+              placeholder={piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}
               defaultValue={storedValue}
               onKeyDown={this
               .handleTypeThrottle

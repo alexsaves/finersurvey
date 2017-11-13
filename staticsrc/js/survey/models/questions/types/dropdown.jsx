@@ -25,6 +25,20 @@ class DropdownQuestion extends React.Component {
   }
 
   /**
+   * The component mounted
+   */
+  componentDidMount() {
+    this.mounted = true;
+  }
+
+  /**
+   * Component is unmounting
+   */
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  /**
    * Handle input from the user
    * @param {*} e
    */
@@ -81,14 +95,14 @@ class DropdownQuestion extends React.Component {
           defaultValue={(typeof(answer) != 'undefined' && answer !== null)
           ? answer
           : -1}>
-          <option disabled={true} value={-1}>{piper.pipe(this.props.placeholder || "Choose one...", panswers, ppages, variables)}</option>
+          <option disabled={true} value={-1}>{piper.pipe(this.props.placeholder || "Choose one...", panswers, ppages, variables, this.props.messages)}</option>
           {this
             .state
             .srcOrder
             .map((rto, idxo) => {
               let rt = rto.choice,
                 idx = rto.originalPosition;
-              return <option key={idx} value={idx}>{piper.pipe(rt, panswers, ppages, variables)}</option>
+              return <option key={idx} value={idx}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}</option>
             })}
         </select>
       </div>

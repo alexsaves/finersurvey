@@ -22,7 +22,7 @@ SurveyController.prototype.loadSurveyByGuid = function (guid, requestEmitter) {
             if (err) {
                 requestEmitter.emit('error', err);
             } else {
-                srv.survey_model = JSON.parse(srv.survey_model.toString());
+                srv.survey_model = srv.survey_model;
                 srv.survey_model.guid = guid;
                 finercommon
                     .models
@@ -44,9 +44,11 @@ SurveyController.prototype.loadSurveyByGuid = function (guid, requestEmitter) {
  * @param session {Session}
  * @param cb {Function} callback
  */
-SurveyController.prototype.getRespondentFromSession = function (session, requestEmitter, sguid, ua, ip, cb) {
+SurveyController.prototype.getRespondentFromSession = function (session, requestEmitter, sguid, ua, ip, approval, cb) {
     var respid = session.rid;
-
+    if (!cb) {
+        throw new Error("Missing callback!");
+    }
     if (!respid) {
         finercommon
             .models
@@ -56,7 +58,8 @@ SurveyController.prototype.getRespondentFromSession = function (session, request
                 survey_guid: sguid,
                 user_agent: ua,
                 ip_addr: ip,
-                time_zone: 99999
+                time_zone: 99999,
+                approval_guid: approval || ''
             }, function (err, resp) {
                 if (err) {
                     requestEmitter.emit('error', err);
@@ -78,7 +81,8 @@ SurveyController.prototype.getRespondentFromSession = function (session, request
                             survey_guid: sguid,
                             user_agent: ua,
                             ip_addr: ip,
-                            time_zone: 99999
+                            time_zone: 99999,
+                            approval_guid: approval || ''
                         }, function (err, resp) {
                             if (err) {
                                 requestEmitter.emit('error', err);
@@ -109,7 +113,7 @@ SurveyController.prototype.saveSurveyResults = function (guid, submitBody, resp,
                 console.log("Could not get survey by guid", guid);
                 requestEmitter.emit('error', err);
             } else {
-                srv.survey_model = JSON.parse(srv.survey_model.toString());
+                srv.survey_model = srv.survey_model;
 
                 // Set the time zone if it hasn't already
                 resp.setTimeZone(this.cfg, submitBody.tz, (err, resp) => {

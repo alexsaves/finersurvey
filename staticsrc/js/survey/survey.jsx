@@ -19,7 +19,8 @@ class SurveyComponent extends React.Component {
     super(props);
     this.state = {
       isOverflowing: false,
-      hideLoadingScreen: false
+      hideLoadingScreen: false,
+      didShowLoadingScreen: false
     };
   }
 
@@ -29,7 +30,7 @@ class SurveyComponent extends React.Component {
   componentDidMount() {
     this.updateOverflowStatus();
     // Only let it be new once
-    if (this.props.isNew) {      
+    if (this.props.isNew) {
       this
         .props
         .dispatch(changeIsNewStatus(false));
@@ -121,6 +122,7 @@ const mapStateToProps = (state/*, props*/) => {
     pages: state.validatedPages,
     currentPage: state.currentPage,
     variables: state.variables,
+    messages: state.messages,
     loadingComplete: !!state.loadingComplete,
     messages: state.messages,
     answers: state.answers,

@@ -6,7 +6,8 @@ import Application from './application.jsx';
 import {ConnectedRouter, routerMiddleware, push} from 'react-router-redux';
 import reducers from './reducers';
 import createHistory from 'history/createBrowserHistory';
-import thunk from 'redux-thunk'
+import thunk from 'redux-thunk';
+import debounce from 'debounce';
 
 // The apps initial state
 const initialState = {};
@@ -104,6 +105,26 @@ let unsubscribe = appStore.subscribe(() => {
 // DOM node with the app class on it
 var rootNode = document.querySelector('.app');
 
+// Only worry about viewport height if its the facebook messenger app Detect FB
+// based on UA
+function ___isFacebookApp() {
+  var ua = navigator.userAgent || navigator.vendor || window.opera;
+  return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
+}
+if (___isFacebookApp()) {
+  function ___fixViewportHeight() {
+    var html = document.querySelector('html');
+    function _onResize(event) {
+      html.style.height = window.innerHeight + 'px';
+    }
+    window.addEventListener('resize', debounce(_onResize, 125));
+    _onResize();
+  }
+  // Start fixing
+  ___fixViewportHeight();
+}
+
+// Proceed if we find the root node
 if (rootNode) {
   render(
     <Provider store={appStore}>
