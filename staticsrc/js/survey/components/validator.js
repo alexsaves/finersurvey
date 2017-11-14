@@ -20,7 +20,7 @@ export default class {
       case "checkbox":
         if (answer && answer.responses) {
           let totalAnswers = answer.responses.length;
-          if (answer.other) {
+          if (answer.other && answer.responses.indexOf(9999) == -1) {
             totalAnswers++;
           }
           if (totalAnswers > 0) {
