@@ -175,7 +175,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         '/s/:surveyGuid/:pg', '/s/:surveyGuid'
     ], (req, res, next) => {
         var guid = req.params.surveyGuid,
-            pg = parseInt(req.params.pg),            
+            pg = parseInt(req.params.pg),
             sv = new SurveyController(pjson.config),
             usSrc = req.headers['user-agent'],
             ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,
@@ -202,7 +202,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                 if (req.query.p) {
                     req.session.approval = req.query.p;
                 }
-                
+
                 req
                     .session
                     .save(() => {
@@ -252,11 +252,26 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
 
             // Handle the done value
             requestEmitter.on('done', function (srvObj) {
-                //console.log("SESSION", req.session);
+
                 // Get the respondent object
                 sv
                     .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, approval, function (resp) {
-                        //console.log("RESP", resp);
+
+                        // Set up the survey variables for this survey
+                        let surveyVariables = {
+                            surveyTitle: srvObj.name,
+                            companyName: srvObj._org.name,
+                            surveyTheme: srvObj.theme,
+                            decisionMakerList: "Sarah Bannister, John Smith, Kevin Hanks",
+                            decisionMaker1: "Sarah Bannister (VP Engineering)",
+                            decisionMaker2: "John Smith (Engineer)",
+                            decisionMaker3: "Kevin Hanks"
+                        };
+
+                        // Save the variables to the respondent
+                        resp.variables = surveyVariables;
+                        resp.commit(pjson.config);
+
                         req.session.rid = resp.id;
                         req
                             .session
@@ -295,15 +310,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                         currentPage: Math.min(pg, srvObj.survey_model.pages.length),
                                         pages: srvObj.survey_model.pages,
                                         answers: existingAnswers || {},
-                                        variables: {
-                                            surveyTitle: srvObj.name,
-                                            companyName: srvObj._org.name,
-                                            surveyTheme: srvObj.theme,
-                                            decisionMakerList: "Sarah Bannister, John Smith, Kevin Hanks",
-                                            decisionMaker1: "Sarah Bannister (VP Engineering)",
-                                            decisionMaker2: "John Smith (Engineer)",
-                                            decisionMaker3: "Kevin Hanks"
-                                        },
+                                        variables: surveyVariables,
                                         saveUrl: '/s/' + encodeURIComponent(guid)
                                     }))
                                 }));

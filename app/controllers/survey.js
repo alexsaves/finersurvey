@@ -120,14 +120,23 @@ SurveyController.prototype.saveSurveyResults = function (guid, submitBody, resp,
                     if (err) {
                         cb(err);
                     } else {
-                        // Now integrate the responses
-                        srv.saveRespondent(this.cfg, resp, submitBody, (err, resp) => {
+                        resp.variables = submitBody.variables;
+                        resp.answers = submitBody.answers;
+                        resp.commit(this.cfg, (err) => {
                             if (err) {
                                 cb(err);
                             } else {
-                                cb(null);
+                                // Now integrate the responses
+                                srv.saveRespondent(this.cfg, resp, submitBody, (err, resp) => {
+                                    if (err) {
+                                        cb(err);
+                                    } else {
+                                        cb(null);
+                                    }
+                                });
                             }
                         });
+
                     }
                 });
 
