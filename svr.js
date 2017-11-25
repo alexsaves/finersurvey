@@ -63,7 +63,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         app = express(),
         bodyParser = require('body-parser'),
         session = require('express-session'),
-        FileStore = require('session-file-store')(session),
+        MySQLStore = require('express-mysql-session')(session),
+        //FileStore = require('session-file-store')(session),
         /*RedisStore = require('connect-redis')(session);
         redisClient = redis.createClient(pjson.config.cache),*/
         enforce = require('express-sslify'),
@@ -126,7 +127,16 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     /*pjson.config.session.store = new RedisStore({
       client: redisClient
     });*/
-    pjson.config.session.store = new FileStore();
+    //pjson.config.session.store = new FileStore();
+    const sessionOptions = {
+        host: pjson.config.db.host,
+        user: pjson.config.db.user,
+        password: pjson.config.db.pw,
+        port: parseInt(pjson.config.db.port),
+        database: pjson.config.db.db
+    };
+
+    pjson.config.session.store = new MySQLStore(sessionOptions);
     app.use(session(pjson.config.session));
 
     /**

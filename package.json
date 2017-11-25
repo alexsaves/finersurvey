@@ -82,6 +82,7 @@
         "encoding": "^0.1.12",
         "express": "^4.15.2",
         "express-force-ssl": "^0.3.2",
+        "express-mysql-session": "^1.2.3",
         "express-session": "^1.15.1",
         "express-sslify": "^1.2.0",
         "express-useragent": "^1.0.7",
