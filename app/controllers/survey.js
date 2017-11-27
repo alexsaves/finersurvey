@@ -32,7 +32,7 @@ SurveyController.prototype.loadSurveyByGuid = function (guid, requestEmitter) {
                             requestEmitter.emit('error', err);
                         } else {
                             srv._org = org;
-                            requestEmitter.emit('done', srv);
+                            requestEmitter.emit('done', srv, org);
                         }
                     }.bind(this));
             }

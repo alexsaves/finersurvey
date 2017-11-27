@@ -44,9 +44,9 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     // Code to run if we're in a worker process
 } else {
     /**
-     * Set up another DB cluster
-     * @type {{connectionLimit: number, host: *, user: *, password: *}}
-     */
+ * Set up another DB cluster
+ * @type {{connectionLimit: number, host: *, user: *, password: *}}
+ */
     var dbCluster = {
             connectionLimit: 5,
             host: pjson.config.db.host,
@@ -66,7 +66,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         MySQLStore = require('express-mysql-session')(session),
         //FileStore = require('session-file-store')(session),
         /*RedisStore = require('connect-redis')(session);
-        redisClient = redis.createClient(pjson.config.cache),*/
+    redisClient = redis.createClient(pjson.config.cache),*/
         enforce = require('express-sslify'),
         templs = new templates(),
         models = finercommon.models,
@@ -88,8 +88,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     console.log("Starting a server on ", port, " @ " + (new Date()).toString() + "...");
 
     /**
-     * Set the powered by
-     */
+ * Set the powered by
+ */
     app.disable('x-powered-by');
 
     // Production SSL enforcer **************************
@@ -98,8 +98,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     }
 
     /**
-     * Run the server on the right port (look for the AWS environment variable)
-     */
+ * Run the server on the right port (look for the AWS environment variable)
+ */
     app.set('port', port);
 
     // Trust the first proxy
@@ -125,8 +125,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
 
     // Set up the session handler
     /*pjson.config.session.store = new RedisStore({
-      client: redisClient
-    });*/
+  client: redisClient
+});*/
     //pjson.config.session.store = new FileStore();
     const sessionOptions = {
         host: pjson.config.db.host,
@@ -140,18 +140,18 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     app.use(session(pjson.config.session));
 
     /**
-     * Favicon request
-     */
+ * Favicon request
+ */
     app.use('/favicon.ico', express.static('./dist/assets/favicon/favicon.ico'));
 
     /**
-     * Static
-     */
+ * Static
+ */
     app.use('/static', express.static('dist'));
 
     /**
-     * Output a proper response
-     */
+ * Output a proper response
+ */
     var _outputResponse = function (res, respObj) {
         var headers = extend({}, basicHeaders, respObj.headers || {});
 
@@ -172,15 +172,15 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     };
 
     /**
-     * Root
-     */
+ * Root
+ */
     app.get('/', (req, res) => {
         res.end("nothing here");
     });
 
     /**
-     * Survey Display
-     */
+ * Survey Display
+ */
     app.get([
         '/s/:surveyGuid/:pg', '/s/:surveyGuid'
     ], (req, res, next) => {
@@ -261,7 +261,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             });
 
             // Handle the done value
-            requestEmitter.on('done', function (srvObj) {
+            requestEmitter.on('done', function (srvObj, orgObj) {
 
                 // Get the respondent object
                 sv
@@ -271,12 +271,18 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                         let surveyVariables = {
                             surveyTitle: srvObj.name,
                             companyName: srvObj._org.name,
-                            surveyTheme: srvObj.theme,
+                            surveyTheme: orgObj.default_survey_template,
                             decisionMakerList: "Sarah Bannister, John Smith, Kevin Hanks",
                             decisionMaker1: "Sarah Bannister (VP Engineering)",
                             decisionMaker2: "John Smith (Engineer)",
                             decisionMaker3: "Kevin Hanks"
                         };
+
+                        // Add features
+                        surveyVariables.feature_list = orgObj.feature_list;
+
+                        // Add competitors
+                        surveyVariables.competitor_list = orgObj.competitor_list;
 
                         // Save the variables to the respondent
                         resp.variables = surveyVariables;
@@ -296,7 +302,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                     session: req.session,
                                     model: srvObj.survey_model,
                                     surveyID: guid,
-                                    theme: srvObj.theme,
+                                    theme: orgObj.default_survey_template,
                                     modelstr: btoa(JSON.stringify({
                                         respondent: resp.id,
                                         isNew: isNew,
@@ -314,7 +320,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                         metadata: {
                                             title: srvObj.name,
                                             guid: srvObj.survey_model.guid,
-                                            theme: srvObj.theme,
+                                            theme: orgObj.default_survey_template,
                                             updated_at: srvObj.updated_at
                                         },
                                         currentPage: Math.min(pg, srvObj.survey_model.pages.length),
@@ -328,13 +334,14 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                     });
             });
 
+            // Load the survey and all associated information
             sv.loadSurveyByGuid(guid, requestEmitter);
         }
     });
 
     /**
-     * Survey Results Save
-     */
+ * Survey Results Save
+ */
     app.post('/s/:surveyGuid', (req, res, next) => {
         var guid = req.params.surveyGuid,
             sv = new SurveyController(pjson.config),
@@ -388,8 +395,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     });
 
     /**
-     * Start up the server
-     */
+ * Start up the server
+ */
     app.listen(app.get('port'));
 }
 
