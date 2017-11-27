@@ -53,9 +53,7 @@ class PageComponent extends React.Component {
     setTimeout(() => {
       // Find the next interactable question
       let nextOne = this.getNextQuestionWithInput(this.state.focusItem, this.props);
-      this.setState({
-        focusItem: nextOne
-      })
+      this.setState({focusItem: nextOne})
     }, 10);
 
   }
@@ -78,7 +76,7 @@ class PageComponent extends React.Component {
   render() {
     let ctx = this,
       remindInstructionsFor = this.props.remindInstructionsFor,
-      pageNumber = this.props.pageNumber;      
+      pageNumber = this.props.pageNumber;
 
     return (
       <div
@@ -106,9 +104,10 @@ class PageComponent extends React.Component {
                     ctx.handleQuestionBeingInteractedWith(indx);
                   };
                 }(idx);
+                let qc = JSON.parse(JSON.stringify(q));
                 return <QuestionComponent
                   key={idx}
-                  {...q}
+                  {...qc}
                   pageNumber={pageNumber}
                   questionNumber={idx}
                   answer={ctx.getAnswerForQuestion(q)}

@@ -135,8 +135,11 @@ class LoadingScreenComponent extends React.Component {
     return false;
   }
 
+  /**
+   * Loading screen is unmounting
+   */
   componentWillUnmount() {
-    console.log("Loading screen unmounts");
+    //console.log("Loading screen unmounts");
   }
 
   /**

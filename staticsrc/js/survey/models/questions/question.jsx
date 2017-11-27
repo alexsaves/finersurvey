@@ -78,7 +78,7 @@ class QuestionComponent extends React.Component {
       answers = this.props.answers,
       pages = this.props.allpages,
       image = this.props.image;
-
+      
     return (
       <div
         className="question"

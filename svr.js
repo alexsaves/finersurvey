@@ -279,10 +279,14 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                         };
 
                         // Add features
-                        surveyVariables.feature_list = orgObj.feature_list;
+                        for (let b = 0; b < orgObj.feature_list.length; b++) {
+                            surveyVariables["feature" + (b + 1)] = orgObj.feature_list[b];
+                        }
 
                         // Add competitors
-                        surveyVariables.competitor_list = orgObj.competitor_list;
+                        for (let b = 0; b < orgObj.competitor_list.length; b++) {
+                            surveyVariables["competitor" + (b + 1)] = orgObj.competitor_list[b];
+                        }
 
                         // Save the variables to the respondent
                         resp.variables = surveyVariables;
