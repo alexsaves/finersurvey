@@ -29,7 +29,7 @@ class SortQuestion extends React.Component {
         .piper
         .pipe(choicesCopy[y], this.props.answers, this.props.allpages, this.props.variables, this.props.messages);
       if (tempVal.trim().length == 0) {
-        choicesCopy.length = y - 1;
+        choicesCopy.length = y;
         break;
       }
     }

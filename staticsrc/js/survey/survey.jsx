@@ -88,7 +88,7 @@ class SurveyComponent extends React.Component {
         ? !!this.props.pages[this.props.currentPage].hideLogo
         : true;
     }
-
+    
     // Spit out the survey
     return (
       <div
@@ -99,7 +99,7 @@ class SurveyComponent extends React.Component {
         .handleTransitionEnd
         .bind(this)}>
         {!showMissingPageUI && <ProgressComponent uid={uid} progress={desiredPage / this.props.pages.length}/>}
-        {!showMissingPageUI && <PageController uid={uid} desiredPage={desiredPage}/>}
+        {!showMissingPageUI && pages.length > 0 && <PageController uid={uid} desiredPage={desiredPage}/>}
         {showMissingPageUI && <MissingPageMessage/>}
         <div
           title={this.props.messages.winLossAnalysis}

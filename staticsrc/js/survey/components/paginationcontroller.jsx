@@ -247,7 +247,7 @@ class PaginationController extends React.Component {
         </div>}
         {pages.map((pg, idx) => {
           return <PageComponent
-            key={idx}
+            key={pg.name}
             questions={pg.elements}
             isSelected={idx === currentPage}
             remindInstructionsFor={remindInstructionsFor}

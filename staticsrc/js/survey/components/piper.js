@@ -151,13 +151,12 @@ export default class {
     if (arguments.length != 5 || !meta) {
       throw new Error("Piper called with incorrect number of arguments.");
     }
+    /*if (text.indexOf('feature1') > -1) {
+      debugger;
+    }*/
     text = text.replace(this.pipeMatch, (match, questionName, position) => {
       let capitalize = false,
         lowercaseize = false;
-      // console.log(questionName);
-      /*if (questionName == "mostImportantVendorCriteria[0]") {
-        debugger;
-      }*/
       if (questionName.substr(0, 1) == "^") {
         questionName = questionName.substr(1);
         capitalize = true;

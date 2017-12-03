@@ -4,11 +4,13 @@ import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
+import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
 */
 class RadioQuestion extends React.Component {
+
   /**
  * Constructor for the survey
  */
@@ -18,10 +20,19 @@ class RadioQuestion extends React.Component {
     this.piper = new Piper();
     this.wasFocused = false;
     this.Randomizer = new Randomizer();
+    var choicesCopy = JSON.parse(JSON.stringify(this.props.choices));
+    for (let k = 0; k < choicesCopy.length; k++) {
+      choicesCopy[k] = this
+        .piper
+        .pipe(choicesCopy[k], props.answers, props.allpages, props.variables, props.messages);
+      if (choicesCopy[k].toString().trim().length == 0) {
+        choicesCopy.length = k;
+        break;
+      }
+    }
     this.state = {
-      srcOrder: this
-        .Randomizer
-        .randomizeChoices(this.props.choices, this.props.random)
+      choices: choicesCopy,
+      srcOrder: JSON.parse(JSON.stringify(this.Randomizer.randomizeChoices(choicesCopy, this.props.random)))
     };
   }
 
@@ -85,7 +96,7 @@ class RadioQuestion extends React.Component {
         }
       }
     }
-    
+
     this
       .props
       .dispatch(changeAnswer(this.props.name, finalResponse));
@@ -94,6 +105,7 @@ class RadioQuestion extends React.Component {
         .props
         .onFullyAnswerQuestion();
     }
+
     // Signal that the user is interacting with the question
     if (this.props.onQuestionBeingInteractedWith) {
       this
@@ -140,7 +152,6 @@ class RadioQuestion extends React.Component {
     } else {
       otherrd.checked = false;
     }
-
   }
 
   /**
@@ -149,7 +160,11 @@ class RadioQuestion extends React.Component {
   render() {
     let qname = this.props.name,
       ctx = this,
-      answer = this.props.answer;
+      answer = this.props.answer,
+      piper = this.piper,
+      panswers = this.props.answers,
+      ppages = this.props.allpages,
+      variables = this.props.variables;
 
     // Check each value
     let shouldOptionBeSelected = function (val) {
@@ -159,23 +174,7 @@ class RadioQuestion extends React.Component {
       return false;
     };
 
-    let piper = this.piper,
-      panswers = this.props.answers,
-      ppages = this.props.allpages,
-      variables = this.props.variables;
-
-    /*if (this.props.isFocused && !this.wasFocused) {
-      setTimeout(() => {
-        this.wasFocused = true;
-        let root = ReactDOM.findDOMNode(this),
-          btns = root.getElementsByTagName('label');
-        if (btns.length > 0) {
-          btns[0].focus();
-        }
-      }, 25);
-    }*/
-
-    return (
+    var opt = (
       <div className="question--radio">
         {this
           .state
@@ -184,7 +183,7 @@ class RadioQuestion extends React.Component {
             let rt = rto.choice,
               idx = rto.originalPosition;
             return <label
-              key={idx}
+              key={Keymaker(idx + rt)}
               onKeyPress={this
               .handleKeyPress
               .bind(this)}
@@ -222,6 +221,8 @@ class RadioQuestion extends React.Component {
         </label>}
       </div>
     );
+
+    return opt;
   }
 }
 

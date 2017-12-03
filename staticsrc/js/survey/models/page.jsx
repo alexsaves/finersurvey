@@ -106,7 +106,7 @@ class PageComponent extends React.Component {
                 }(idx);
                 let qc = JSON.parse(JSON.stringify(q));
                 return <QuestionComponent
-                  key={idx}
+                  key={qc.name}
                   {...qc}
                   pageNumber={pageNumber}
                   questionNumber={idx}

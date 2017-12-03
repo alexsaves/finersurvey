@@ -121,6 +121,7 @@
         "react-dom": "^15.6.1",
         "react-fetch": "0.0.9",
         "react-global-event-decorator": "0.0.1",
+        "react-native-md5": "^1.0.0",
         "react-query-params": "^1.0.6",
         "react-redux": "^5.0.5",
         "react-router": "^4.1.2",
