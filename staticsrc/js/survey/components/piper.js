@@ -147,7 +147,7 @@ export default class {
    * @param {*} text
    * @param {*} answers
    */
-  pipe(text, answers, survey, variables, meta) {
+  _pipe(text, answers, survey, variables, meta) {
     if (arguments.length != 5 || !meta) {
       throw new Error("Piper called with incorrect number of arguments.");
     }
@@ -231,6 +231,21 @@ export default class {
     });
 
     return text;
+  }
+
+  /**
+   * Run piping on answers and some text
+   * @param {*} text
+   * @param {*} answers
+   */
+  pipe(text, answers, survey, variables, meta) {
+    var result = this
+      ._pipe
+      .apply(this, arguments);
+    if (result.indexOf('${') > -1) {
+      return this.pipe(result, answers, survey, variables, meta);
+    }
+    return result;
   }
 
 };
