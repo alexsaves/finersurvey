@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import PageComponent from '../models/page.jsx';
-import Validator from './validator.js';
+import Validator from './validator';
+import Keymaker from './keymaker';
 import {nextPage, prevPage, jumpToPage, changePaginationControllerVisibility} from '../../actions';
 import {BrowserRouter as Router, Link, Route, Switch, Redirect} from 'react-router-dom';
 
@@ -247,7 +248,7 @@ class PaginationController extends React.Component {
         </div>}
         {pages.map((pg, idx) => {
           return <PageComponent
-            key={pg.name}
+            key={Keymaker(idx + pg.name)}
             questions={pg.elements}
             isSelected={idx === currentPage}
             remindInstructionsFor={remindInstructionsFor}

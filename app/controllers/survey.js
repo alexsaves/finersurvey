@@ -16,11 +16,18 @@ SurveyController.prototype.loadOpportunityInfo = function (id, cb) {
     finercommon
         .models
         .CRMOpportunities
-        .GetById(this.cfg, (err, opp) => {
+        .GetById(this.cfg, id, (err, opp) => {
             if (err) {
                 cb(err);
             } else {
-                
+                finercommon.models.CRMContacts.GetByAccountIds(this.cfg, [opp.AccountId], (err, contacts) => {
+                    if (err) {
+                        cb(err);
+                    } else {
+                        opp.contacts = contacts;
+                        cb(null, opp);
+                    }
+                });
             }
         });
 };

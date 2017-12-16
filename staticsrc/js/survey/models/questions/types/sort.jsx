@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
+import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
@@ -525,10 +526,12 @@ class SortQuestion extends React.Component {
         }}/>}
         {realOrder.map((num, idx) => {
           if (num == -1) {
-            return <label key={idx} className={"sortable standalonebutton drag--placeholder"}>&nbsp;</label>;
+            return <label
+              key={Keymaker(idx + '' + num + '_')}
+              className={"sortable standalonebutton drag--placeholder"}>&nbsp;</label>;
           } else if (num == 9999) {
             return <label
-              key={idx}
+              key={Keymaker(idx + '_' + num)}
               onMouseDown={this
               .handleDragStart
               .bind(this)}
@@ -564,7 +567,7 @@ class SortQuestion extends React.Component {
               }
             }
             return <label
-              key={idx}
+              key={Keymaker(idx + '_' + rt)}
               onMouseDown={this
               .handleDragStart
               .bind(this)}

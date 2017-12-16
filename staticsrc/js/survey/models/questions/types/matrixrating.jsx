@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
+import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
@@ -281,7 +282,10 @@ class MatrixRatingQuestion extends React.Component {
                 .bind(this)}></a>;
             })}
         </div>}
-        <div className={"rating-zone" + (isAnimating ? " is-animating" : "")}>
+        <div
+          className={"rating-zone" + (isAnimating
+          ? " is-animating"
+          : "")}>
           <div className="question--rating">
             <div className="buttongroup">
               {ratingScale.map((rt, idx) => {

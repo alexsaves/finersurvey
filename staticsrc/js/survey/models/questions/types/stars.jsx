@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
+import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
@@ -133,7 +134,7 @@ class StarsRatingQuestion extends React.Component {
           .bind(this)}>
           {ratingScale.map((rt, idx) => {
             return <label
-              key={idx}
+              key={Keymaker(idx + '_' + rt)}
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
               data-which={idx}
               onFocus={this

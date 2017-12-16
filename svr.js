@@ -261,8 +261,21 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             });
 
             // Handle the done value
-            requestEmitter.on('done', function (srvObj, orgObj) {
-
+            requestEmitter.on('done', function (srvObj, orgObj, oppObj) {
+                let decisionMakers = "",
+                    decisionMakerList = [];
+                if (oppObj && oppObj.contacts && oppObj.contacts.length > 0) {
+                    for (let v = 0; v < oppObj.contacts.length; v++) {
+                        let contact = oppObj.contacts[v];
+                        var contactInfo = {Name: contact.Name, Title: contact.Title, Full: contact.Name + " (" + contact.Title + ")"};
+                        if (v > 0) {
+                            decisionMakers += ", ";
+                        }
+                        decisionMakers += contactInfo.Name;
+                        decisionMakerList.push(contactInfo);
+                    }
+                    
+                }
                 // Get the respondent object
                 sv
                     .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, approval, function (resp) {
@@ -271,12 +284,14 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                         let surveyVariables = {
                             surveyTitle: srvObj.name,
                             companyName: srvObj._org.name,
-                            surveyTheme: orgObj.default_survey_template,
-                            decisionMakerList: "Sarah Bannister, John Smith, Kevin Hanks",
-                            decisionMaker1: "Sarah Bannister (VP Engineering)",
-                            decisionMaker2: "John Smith (Engineer)",
-                            decisionMaker3: "Kevin Hanks"
+                            surveyTheme: orgObj.default_survey_template
                         };
+                        if (decisionMakers && decisionMakers.length > 0) {
+                            surveyVariables.decisionMakerList = decisionMakers;
+                            for (let b = 0; b < decisionMakerList.length; b++) {
+                                surveyVariables["decisionMaker" + (b + 1)] = decisionMakerList[b].Full;
+                            }
+                        }
 
                         // Add features
                         for (let b = 0; b < orgObj.feature_list.length; b++) {
@@ -296,7 +311,6 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                         req
                             .session
                             .save(() => {
-                                //console.log("is new?", isNew);
                                 _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
                                     title: srvObj.name,
                                     pageUrl: req.protocol + '://' + req.get('host') + '/s/' + guid,

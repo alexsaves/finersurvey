@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
+import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
@@ -105,7 +106,7 @@ class ButtonsQuestion extends React.Component {
               : "Continue";
             finalLabel = piper.pipe(finalLabel, ctx.props.answers, ctx.props.pages, ctx.props.variables, ctx.props.messages);
             return <button
-              key={"_" + idx}
+              key={Keymaker(idx + finalLabel)}
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
               className={"btn " + (val.color || "default")}
               data-choice={idx}
