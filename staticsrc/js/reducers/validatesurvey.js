@@ -4,7 +4,7 @@ import LogicChecker from '../survey/components/logicchecker';
 
 /**
  * Validate a question name
- * @param {String} name 
+ * @param {String} name
  */
 function questionNameIsValid(name) {
   if (name && name.trim().length > 0 && name.trim().length == name.length) {
@@ -13,7 +13,11 @@ function questionNameIsValid(name) {
   return false;
 }
 
-// Does validation
+/**
+ * Performs validation on the survey overall
+ * @param {*} state 
+ * @param {*} action 
+ */
 function surveyValidatorReducer(state = [], action) {
   switch (action.type) {
     case VALIDATE_SURVEY:
@@ -58,6 +62,12 @@ function surveyValidatorReducer(state = [], action) {
       for (let i = 0; i < pages.length; i++) {
         let pg = pages[i],
           els = pg.elements;
+        if (!pg.name) {
+          pg.name = "__" + i;
+        }
+        if (!questionNameIsValid(pg.name)) {
+          throw new Error("Page name is invalid: " + pg.name + " for " + JSON.stringify(pg));
+        }
         if (els) {
           for (let j = 0; j < els.length; j++) {
             let q = els[j];
@@ -68,7 +78,10 @@ function surveyValidatorReducer(state = [], action) {
               q.questionNumber = ++questionCount;
             }
             if (q.modifier) {
-              q.modifier = q.modifier.trim().toLowerCase();
+              q.modifier = q
+                .modifier
+                .trim()
+                .toLowerCase();
             }
             if (q.type == "text") {
               if (typeof q.wordcountlabel == 'undefined') {
@@ -81,7 +94,7 @@ function surveyValidatorReducer(state = [], action) {
                 if ((q.limits.word && q.limits.word.min) || (q.limits.character && q.limits.character.min)) {
                   q.required = true;
                 }
-              }              
+              }
             }
           }
         }
@@ -92,5 +105,5 @@ function surveyValidatorReducer(state = [], action) {
   }
 }
 
-// Modify the meta data
+// Export the validation reducer to the rest of the app
 export default surveyValidatorReducer;

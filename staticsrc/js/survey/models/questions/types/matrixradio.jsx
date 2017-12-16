@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
+import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
@@ -223,7 +224,7 @@ class MatrixRadioQuestion extends React.Component {
               let rt = rto.choice,
                 idx = rto.originalPosition;
               return <div
-                key={idx}
+                key={Keymaker(idx + rt)}
                 className={"choiceitem" + (selectedItem == idxo
                 ? " selected"
                 : "") + (selectedItem == (idxo + 1)
@@ -284,7 +285,7 @@ class MatrixRadioQuestion extends React.Component {
           <div className="question--checkbox">
             {columns.map((rt, idx) => {
               return <label
-                key={idx}
+                key={Keymaker(idx+rt)}
                 onKeyPress={this
                 .handleKeyPress
                 .bind(this)}

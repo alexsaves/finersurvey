@@ -24,7 +24,7 @@ class LoadingScreenComponent extends React.Component {
   /**
    * We're done
    */
-  removeLoadingScreen() {
+  removeLoadingScreen() {    
     sessionStorage.setItem("didLoadSurvey", "true");
     clearTimeout(this.removeFailsafeTimer);
     if (!this.state.didAttemptRemove) {
@@ -51,7 +51,7 @@ class LoadingScreenComponent extends React.Component {
       imgObjs = [],
       didPreviouslyLoad = sessionStorage.getItem("didLoadSurvey") === "true";
 
-    if (didPreviouslyLoad) {
+    if (didPreviouslyLoad) {      
       setTimeout(this.removeLoadingScreen.bind(this), 10);
     } else {
       this.removeFailsafeTimer = setTimeout(this.removeLoadingScreen.bind(this), this.maxTime);
@@ -135,8 +135,11 @@ class LoadingScreenComponent extends React.Component {
     return false;
   }
 
+  /**
+   * Loading screen is unmounting
+   */
   componentWillUnmount() {
-    console.log("Loading screen unmounts");
+    //console.log("Loading screen unmounts");
   }
 
   /**

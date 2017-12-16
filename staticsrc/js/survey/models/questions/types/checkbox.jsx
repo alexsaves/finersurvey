@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
+import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
@@ -195,7 +196,7 @@ class CheckboxQuestion extends React.Component {
             let rt = rto.choice,
               idx = rto.originalPosition;
             return <label
-              key={idx}
+              key={Keymaker(idx + rt)}
               onClick={this
               .handleClick
               .bind(this)}

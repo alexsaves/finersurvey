@@ -8,6 +8,31 @@ var SurveyController = function (cfg) {
 };
 
 /**
+ * Load the opportunity info
+ * @param {*} id
+ * @param {*} cb
+ */
+SurveyController.prototype.loadOpportunityInfo = function (id, cb) {
+    finercommon
+        .models
+        .CRMOpportunities
+        .GetById(this.cfg, id, (err, opp) => {
+            if (err) {
+                cb(err);
+            } else {
+                finercommon.models.CRMContacts.GetByAccountIds(this.cfg, [opp.AccountId], (err, contacts) => {
+                    if (err) {
+                        cb(err);
+                    } else {
+                        opp.contacts = contacts;
+                        cb(null, opp);
+                    }
+                });
+            }
+        });
+};
+
+/**
  * Load survey by guid
  */
 SurveyController.prototype.loadSurveyByGuid = function (guid, requestEmitter) {
@@ -17,7 +42,7 @@ SurveyController.prototype.loadSurveyByGuid = function (guid, requestEmitter) {
     finercommon
         .models
         .Survey
-        .GetByGuid(this.cfg, guid, function (err, srv) {
+        .GetByGuid(this.cfg, guid, (err, srv) => {
             clearTimeout(timeouttimer);
             if (err) {
                 requestEmitter.emit('error', err);
@@ -27,16 +52,22 @@ SurveyController.prototype.loadSurveyByGuid = function (guid, requestEmitter) {
                 finercommon
                     .models
                     .Organization
-                    .GetById(this.cfg, srv.organization_id, function (err, org) {
+                    .GetById(this.cfg, srv.organization_id, (err, org) => {
                         if (err) {
                             requestEmitter.emit('error', err);
                         } else {
                             srv._org = org;
-                            requestEmitter.emit('done', srv);
+                            this.loadOpportunityInfo(srv.opportunity_id, (err, opp) => {
+                                if (err) {
+                                    requestEmitter.emit('error', err);
+                                } else {
+                                    requestEmitter.emit('done', srv, org, opp);
+                                }
+                            });
                         }
-                    }.bind(this));
+                    });
             }
-        }.bind(this));
+        });
 };
 
 /**
