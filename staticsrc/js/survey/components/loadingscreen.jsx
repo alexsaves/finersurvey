@@ -14,7 +14,25 @@ class LoadingScreenComponent extends React.Component {
     super(props);
     this.startTime = new Date();
     this.minTime = 500;
+    this.maxTime = 2000;
     this.imgRx = /url\(['"]*([^'"]*)['"]*\)/i;
+    this.state = {
+      didAttemptRemove: false
+    };
+  }
+
+  /**
+   * We're done
+   */
+  removeLoadingScreen() {    
+    sessionStorage.setItem("didLoadSurvey", "true");
+    clearTimeout(this.removeFailsafeTimer);
+    if (!this.state.didAttemptRemove) {
+      this.setState({didAttemptRemove: true});
+      this
+        .props
+        .dispatch(removeTheLoadingScreen());
+    }
   }
 
   /**
@@ -30,35 +48,38 @@ class LoadingScreenComponent extends React.Component {
       failsafeTImer = null,
       alms = document.querySelectorAll("*"),
       imgsToLoad = [],
-      imgObjs = [];
+      imgObjs = [],
+      didPreviouslyLoad = sessionStorage.getItem("didLoadSurvey") === "true";
 
-    for (let u = 0; u < alms.length; u++) {
-      var bgImg = this.getBackgroundImg(alms[u]);
-      if (bgImg && imgsToLoad.indexOf(bgImg) == -1) {
-        imgsToLoad.push(bgImg);
-        var bgimg = new Image();
-        bgimg.onload = function(img) {
-          return function() {
-            var whichone = imgObjs.find((el) => {
-              return el.src == img;
-            });
-            imgObjs.splice(imgObjs.indexOf(whichone), 1);            
-          };
-        }(bgImg);
-        bgimg.onerror = function(img) {
-          return function() {
-            console.error("This survey has a missing image: ", img);
-            var whichone = imgObjs.find((el) => {
-              return el.src == img;
-            });
-            imgObjs.splice(imgObjs.indexOf(whichone), 1);            
-          };
-        }(bgImg);
-        imgObjs.push({
-          src: bgImg,
-          iObj: bgimg
-        });
-        bgimg.src = bgImg;
+    if (didPreviouslyLoad) {      
+      setTimeout(this.removeLoadingScreen.bind(this), 10);
+    } else {
+      this.removeFailsafeTimer = setTimeout(this.removeLoadingScreen.bind(this), this.maxTime);
+      for (let u = 0; u < alms.length; u++) {
+        var bgImg = this.getBackgroundImg(alms[u]);
+        if (bgImg && imgsToLoad.indexOf(bgImg) == -1) {
+          imgsToLoad.push(bgImg);
+          var bgimg = new Image();
+          bgimg.onload = function (img) {
+            return function () {
+              var whichone = imgObjs.find((el) => {
+                return el.src == img;
+              });
+              imgObjs.splice(imgObjs.indexOf(whichone), 1);
+            };
+          }(bgImg);
+          bgimg.onerror = function (img) {
+            return function () {
+              // This survey has a missing image
+              var whichone = imgObjs.find((el) => {
+                return el.src == img;
+              });
+              imgObjs.splice(imgObjs.indexOf(whichone), 1);
+            };
+          }(bgImg);
+          imgObjs.push({src: bgImg, iObj: bgimg});
+          bgimg.src = bgImg;
+        }
       }
     }
 
@@ -67,9 +88,7 @@ class LoadingScreenComponent extends React.Component {
         return rect1.left == rect2.left && rect1.top == rect2.top && rect1.width == rect2.width && rect1.height == rect2.height;
       },
       done = () => {
-        this
-          .props
-          .dispatch(removeTheLoadingScreen());
+        this.removeLoadingScreen();
       };
 
     // Do the initial minimum delay
@@ -114,6 +133,13 @@ class LoadingScreenComponent extends React.Component {
       }
     }
     return false;
+  }
+
+  /**
+   * Loading screen is unmounting
+   */
+  componentWillUnmount() {
+    //console.log("Loading screen unmounts");
   }
 
   /**

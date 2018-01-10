@@ -107,7 +107,8 @@ export function transmitAnswers() {
         when: (new Date()).getTime(),
         tz: (new Date()).getTimezoneOffset(),
         respondent: st.respondent,
-        answers: answers
+        answers: answers,
+        variables: st.variables
       };
 
     // Send the data

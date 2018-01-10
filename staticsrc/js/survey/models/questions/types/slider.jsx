@@ -19,7 +19,8 @@ class SliderRatingQuestion extends React.Component {
       startScreenX: 0,
       startScreenY: 0,
       isDragging: false,
-      didSetSliderFromAnswer: false
+      didSetSliderFromAnswer: false,
+      didSetInitialValue: false
     };
     this.piper = new Piper();
     this.didMount = false;
@@ -29,13 +30,7 @@ class SliderRatingQuestion extends React.Component {
    * The component is ready
    */
   componentDidMount() {
-    this.didMount = true;
-    if (typeof this.props.answer == 'undefined' && typeof this.props.initialValue != 'undefined') {
-      this
-        .props
-        .dispatch(changeAnswer(this.props.name, this.props.initialValue));
-      this.setState({sliderValue: this.props.initialValue});
-    }
+    this.didMount = true;    
   }
 
   /**
@@ -153,6 +148,18 @@ class SliderRatingQuestion extends React.Component {
       this
         .props
         .onQuestionBeingInteractedWith();
+    }
+  }
+
+  /**
+   * The UI is about to update
+   */
+  componentWillUpdate() {
+    if (typeof this.props.answer == 'undefined' && typeof this.props.initialValue != 'undefined' && this.props.isFocused && !this.state.didSetInitialValue) {
+      this.setState({sliderValue: this.props.initialValue, didSetInitialValue: true});
+      this
+        .props
+        .dispatch(changeAnswer(this.props.name, this.props.initialValue));      
     }
   }
 

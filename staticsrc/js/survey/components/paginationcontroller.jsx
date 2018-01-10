@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import PageComponent from '../models/page.jsx';
-import Validator from './validator.js';
+import Validator from './validator';
+import Keymaker from './keymaker';
 import {nextPage, prevPage, jumpToPage, changePaginationControllerVisibility} from '../../actions';
 import {BrowserRouter as Router, Link, Route, Switch, Redirect} from 'react-router-dom';
 
@@ -193,16 +194,14 @@ class PaginationController extends React.Component {
           advanceButton.dispatchEvent(evObj);
         }, 200);
       }
-    }, 25);    
+    }, 25);
   }
 
   /**
    * Handle when a question is interacted with
-   * @param {*} idx 
+   * @param {*} idx
    */
-  questionBeingInteractedWith(idx) {
-
-  }
+  questionBeingInteractedWith(idx) {}
 
   /**
  * Render the view
@@ -214,7 +213,7 @@ class PaginationController extends React.Component {
       allpages = this.props.allpages,
       messages = this.props.messages,
       variables = this.props.variables,
-      hidePagination = currentPage < 0 || pages.length == 0 || currentPage > pages.length - 1 || !!pages[currentPage].hidePagination,     
+      hidePagination = currentPage < 0 || pages.length == 0 || currentPage > pages.length - 1 || !!pages[currentPage].hidePagination,
       isAnimatingForward = this.state.animatingForward,
       isAnimatingBackward = this.state.animatingBackward,
       remindInstructionsFor = this.state.remindInstructionsFor,
@@ -222,7 +221,8 @@ class PaginationController extends React.Component {
       isValidated = failedValidationItems.length === 0,
       desiredPage = (typeof this.props.desiredPage != 'undefined')
         ? parseInt(this.props.desiredPage) - 1
-        : 0
+        : 0;
+
     if (!this.state.animatingBackward && !this.state.animatingForward && desiredPage != this.props.currentPage) {
       clearTimeout(this.advancejump);
       this.advancejump = setTimeout(() => {
@@ -248,7 +248,7 @@ class PaginationController extends React.Component {
         </div>}
         {pages.map((pg, idx) => {
           return <PageComponent
-            key={idx}
+            key={Keymaker(idx + pg.name)}
             questions={pg.elements}
             isSelected={idx === currentPage}
             remindInstructionsFor={remindInstructionsFor}
@@ -257,7 +257,9 @@ class PaginationController extends React.Component {
             allpages={allpages}
             variables={variables}
             pageNumber={idx}
-            onQuestionBeingInteractedWith={this.questionBeingInteractedWith.bind(this)}
+            onQuestionBeingInteractedWith={this
+            .questionBeingInteractedWith
+            .bind(this)}
             onFullyAnswerQuestion={this
             .handleFullyAnswerQuestion
             .bind(this)}
@@ -266,7 +268,10 @@ class PaginationController extends React.Component {
             animatingInBackward={idx === (currentPage - 1) && isAnimatingBackward}
             animatingInForward={idx === (currentPage + 1) && isAnimatingForward}/>;
         })}
-        <div className={"paginator--backdropmobile" + (hidePagination ? " hidden" : "")}></div>
+        <div
+          className={"paginator--backdropmobile" + (hidePagination
+          ? " hidden"
+          : "")}></div>
         <div
           className={"paginator--buttonholder left " + ((currentPage === 0 || hidePagination)
           ? "hidden"
@@ -305,10 +310,10 @@ class PaginationController extends React.Component {
 // we want to expose through props to our component.
 const mapStateToProps = (state/*, props*/) => {
   return {
-    metadata: state.metadata, 
-    pages: state.validatedPages, 
-    allpages: state.pages, 
-    currentPage: state.currentPage, 
+    metadata: state.metadata,
+    pages: state.validatedPages,
+    allpages: state.pages,
+    currentPage: state.currentPage,
     answers: state.answers,
     variables: state.variables,
     messages: state.messages,

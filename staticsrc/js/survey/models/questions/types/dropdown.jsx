@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
+import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
@@ -102,7 +103,7 @@ class DropdownQuestion extends React.Component {
             .map((rto, idxo) => {
               let rt = rto.choice,
                 idx = rto.originalPosition;
-              return <option key={idx} value={idx}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}</option>
+              return <option key={Keymaker(idx + '_' + rt)} value={idx}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}</option>
             })}
         </select>
       </div>

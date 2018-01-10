@@ -3,9 +3,11 @@
   text-align: center;
   .rating-zone {
     margin-top: $general_padding;
-    transition: opacity $slow_anim_timing;
+    transition: opacity $fast_anim_timing;
+    
     opacity: 1;
     &.is-animating {
+      transition-delay: 0.15s;
       opacity: 0;
     }
     label {
@@ -61,22 +63,22 @@
         display: inline-block;
       }
       &.afSelected {
-        transition: left $slow_anim_timing, opacity $slow_anim_timing;
+        transition: left $fast_anim_timing, opacity $fast_anim_timing;
         left: -30%;
         opacity: 0;
       }
       &.abSelected {
-        transition: left $slow_anim_timing, opacity $slow_anim_timing;
+        transition: left $fast_anim_timing, opacity $fast_anim_timing;
         left: 30%;
         opacity: 0;
       }
       &.abPrevSelected {
-        transition: left $slow_anim_timing, opacity $slow_anim_timing;
+        transition: left $fast_anim_timing, opacity $fast_anim_timing;
         left: 0;
         opacity: 1;
       }
       &.nextselected {
-        transition: left $slow_anim_timing, opacity $slow_anim_timing;
+        transition: left $fast_anim_timing, opacity $fast_anim_timing;
         left: -70%;
         opacity: 0;
         display: inline-block;

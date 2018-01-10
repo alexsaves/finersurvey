@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
+import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question

@@ -50,7 +50,6 @@ if (stateElm) {
         }
       }
     }
-    startupState.validatedPages = JSON.parse(JSON.stringify(startupState.pages));
     if (startupState.metadata) {
       surveyHash = startupState.metadata.guid + "_" + startupState.respondent;
       persistentKey += "_" + startupState.metadata.guid;

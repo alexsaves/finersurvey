@@ -44,9 +44,9 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     // Code to run if we're in a worker process
 } else {
     /**
-     * Set up another DB cluster
-     * @type {{connectionLimit: number, host: *, user: *, password: *}}
-     */
+ * Set up another DB cluster
+ * @type {{connectionLimit: number, host: *, user: *, password: *}}
+ */
     var dbCluster = {
             connectionLimit: 5,
             host: pjson.config.db.host,
@@ -63,9 +63,10 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         app = express(),
         bodyParser = require('body-parser'),
         session = require('express-session'),
-        FileStore = require('session-file-store')(session),
+        MySQLStore = require('express-mysql-session')(session),
+        //FileStore = require('session-file-store')(session),
         /*RedisStore = require('connect-redis')(session);
-        redisClient = redis.createClient(pjson.config.cache),*/
+    redisClient = redis.createClient(pjson.config.cache),*/
         enforce = require('express-sslify'),
         templs = new templates(),
         models = finercommon.models,
@@ -87,8 +88,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     console.log("Starting a server on ", port, " @ " + (new Date()).toString() + "...");
 
     /**
-     * Set the powered by
-     */
+ * Set the powered by
+ */
     app.disable('x-powered-by');
 
     // Production SSL enforcer **************************
@@ -97,8 +98,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     }
 
     /**
-     * Run the server on the right port (look for the AWS environment variable)
-     */
+ * Run the server on the right port (look for the AWS environment variable)
+ */
     app.set('port', port);
 
     // Trust the first proxy
@@ -124,24 +125,33 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
 
     // Set up the session handler
     /*pjson.config.session.store = new RedisStore({
-      client: redisClient
-    });*/
-    pjson.config.session.store = new FileStore();
+  client: redisClient
+});*/
+    //pjson.config.session.store = new FileStore();
+    const sessionOptions = {
+        host: pjson.config.db.host,
+        user: pjson.config.db.user,
+        password: pjson.config.db.pw,
+        port: parseInt(pjson.config.db.port),
+        database: pjson.config.db.db
+    };
+
+    pjson.config.session.store = new MySQLStore(sessionOptions);
     app.use(session(pjson.config.session));
 
     /**
-     * Favicon request
-     */
+ * Favicon request
+ */
     app.use('/favicon.ico', express.static('./dist/assets/favicon/favicon.ico'));
 
     /**
-     * Static
-     */
+ * Static
+ */
     app.use('/static', express.static('dist'));
 
     /**
-     * Output a proper response
-     */
+ * Output a proper response
+ */
     var _outputResponse = function (res, respObj) {
         var headers = extend({}, basicHeaders, respObj.headers || {});
 
@@ -162,20 +172,20 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     };
 
     /**
-     * Root
-     */
+ * Root
+ */
     app.get('/', (req, res) => {
         res.end("nothing here");
     });
 
     /**
-     * Survey Display
-     */
+ * Survey Display
+ */
     app.get([
         '/s/:surveyGuid/:pg', '/s/:surveyGuid'
     ], (req, res, next) => {
         var guid = req.params.surveyGuid,
-            pg = parseInt(req.params.pg),            
+            pg = parseInt(req.params.pg),
             sv = new SurveyController(pjson.config),
             usSrc = req.headers['user-agent'],
             ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,
@@ -202,7 +212,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                 if (req.query.p) {
                     req.session.approval = req.query.p;
                 }
-                
+
                 req
                     .session
                     .save(() => {
@@ -251,17 +261,56 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
             });
 
             // Handle the done value
-            requestEmitter.on('done', function (srvObj) {
-                //console.log("SESSION", req.session);
+            requestEmitter.on('done', function (srvObj, orgObj, oppObj) {
+                let decisionMakers = "",
+                    decisionMakerList = [];
+                if (oppObj && oppObj.contacts && oppObj.contacts.length > 0) {
+                    for (let v = 0; v < oppObj.contacts.length; v++) {
+                        let contact = oppObj.contacts[v];
+                        var contactInfo = {Name: contact.Name, Title: contact.Title, Full: contact.Name + " (" + contact.Title + ")"};
+                        if (v > 0) {
+                            decisionMakers += ", ";
+                        }
+                        decisionMakers += contactInfo.Name;
+                        decisionMakerList.push(contactInfo);
+                    }
+                    
+                }
                 // Get the respondent object
                 sv
                     .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, approval, function (resp) {
-                        //console.log("RESP", resp);
+
+                        // Set up the survey variables for this survey
+                        let surveyVariables = {
+                            surveyTitle: srvObj.name,
+                            companyName: srvObj._org.name,
+                            surveyTheme: orgObj.default_survey_template
+                        };
+                        if (decisionMakers && decisionMakers.length > 0) {
+                            surveyVariables.decisionMakerList = decisionMakers;
+                            for (let b = 0; b < decisionMakerList.length; b++) {
+                                surveyVariables["decisionMaker" + (b + 1)] = decisionMakerList[b].Full;
+                            }
+                        }
+
+                        // Add features
+                        for (let b = 0; b < orgObj.feature_list.length; b++) {
+                            surveyVariables["feature" + (b + 1)] = orgObj.feature_list[b];
+                        }
+
+                        // Add competitors
+                        for (let b = 0; b < orgObj.competitor_list.length; b++) {
+                            surveyVariables["competitor" + (b + 1)] = orgObj.competitor_list[b];
+                        }
+
+                        // Save the variables to the respondent
+                        resp.variables = surveyVariables;
+                        resp.commit(pjson.config);
+
                         req.session.rid = resp.id;
                         req
                             .session
                             .save(() => {
-                                //console.log("is new?", isNew);
                                 _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
                                     title: srvObj.name,
                                     pageUrl: req.protocol + '://' + req.get('host') + '/s/' + guid,
@@ -271,7 +320,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                     session: req.session,
                                     model: srvObj.survey_model,
                                     surveyID: guid,
-                                    theme: srvObj.theme,
+                                    theme: orgObj.default_survey_template,
                                     modelstr: btoa(JSON.stringify({
                                         respondent: resp.id,
                                         isNew: isNew,
@@ -289,21 +338,13 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                                         metadata: {
                                             title: srvObj.name,
                                             guid: srvObj.survey_model.guid,
-                                            theme: srvObj.theme,
+                                            theme: orgObj.default_survey_template,
                                             updated_at: srvObj.updated_at
                                         },
                                         currentPage: Math.min(pg, srvObj.survey_model.pages.length),
                                         pages: srvObj.survey_model.pages,
                                         answers: existingAnswers || {},
-                                        variables: {
-                                            surveyTitle: srvObj.name,
-                                            companyName: srvObj._org.name,
-                                            surveyTheme: srvObj.theme,
-                                            decisionMakerList: "Sarah Bannister, John Smith, Kevin Hanks",
-                                            decisionMaker1: "Sarah Bannister (VP Engineering)",
-                                            decisionMaker2: "John Smith (Engineer)",
-                                            decisionMaker3: "Kevin Hanks"
-                                        },
+                                        variables: surveyVariables,
                                         saveUrl: '/s/' + encodeURIComponent(guid)
                                     }))
                                 }));
@@ -311,13 +352,14 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                     });
             });
 
+            // Load the survey and all associated information
             sv.loadSurveyByGuid(guid, requestEmitter);
         }
     });
 
     /**
-     * Survey Results Save
-     */
+ * Survey Results Save
+ */
     app.post('/s/:surveyGuid', (req, res, next) => {
         var guid = req.params.surveyGuid,
             sv = new SurveyController(pjson.config),
@@ -371,8 +413,8 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     });
 
     /**
-     * Start up the server
-     */
+ * Start up the server
+ */
     app.listen(app.get('port'));
 }
 

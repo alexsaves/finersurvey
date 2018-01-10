@@ -14,6 +14,7 @@ export default class {
   randomizeChoices(choices = [], doRandom = false) {
     var result = [],
       which = 0;
+
     choices.forEach((ch) => {
       result.push({
         originalPosition: which++,
@@ -50,5 +51,4 @@ export default class {
     }
     return result;
   }
-
 };

@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
+import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
@@ -21,12 +22,26 @@ class SortQuestion extends React.Component {
     this.iptThrottle = null;
     this.stopRepositioning = false;
     this.didMount = false;
+    var choicesCopy = JSON.parse(JSON.stringify(this.props.choices));
+
+    // Prep the list and remove any empty items
+    for (let y = 0; y < choicesCopy.length; y++) {
+      let tempVal = this
+        .piper
+        .pipe(choicesCopy[y], this.props.answers, this.props.allpages, this.props.variables, this.props.messages);
+      if (tempVal.trim().length == 0) {
+        choicesCopy.length = y;
+        break;
+      }
+    }
+
     this.state = {
       isDragging: false,
       dragItem: -1,
       hoverPosition: -1,
       currentOrder: [],
       dragOrder: [],
+      choices: choicesCopy,
       positionOtherInput: false,
       hideOtherOverlay: true,
       otherInputX: 0,
@@ -36,11 +51,11 @@ class SortQuestion extends React.Component {
       didDrop: false,
       srcOrder: this
         .Randomizer
-        .randomizeChoices(this.props.choices, this.props.random)
+        .randomizeChoices(choicesCopy, this.props.random)
     };
     this.isAnimating = false;
     this.initialOther = null;
-    for (let j = 0; j < this.props.choices.length; j++) {
+    for (let j = 0; j < this.state.choices.length; j++) {
       this
         .state
         .currentOrder
@@ -445,7 +460,7 @@ class SortQuestion extends React.Component {
     let qname = this.props.name,
       ctx = this,
       answers = this.props.answer,
-      choices = this.props.choices,
+      choices = this.state.choices,
       variables = this.props.variables,
       count = 1,
       st = this.state,
@@ -511,10 +526,12 @@ class SortQuestion extends React.Component {
         }}/>}
         {realOrder.map((num, idx) => {
           if (num == -1) {
-            return <label key={idx} className={"sortable standalonebutton drag--placeholder"}>&nbsp;</label>;
+            return <label
+              key={Keymaker(idx + '' + num + '_')}
+              className={"sortable standalonebutton drag--placeholder"}>&nbsp;</label>;
           } else if (num == 9999) {
             return <label
-              key={idx}
+              key={Keymaker(idx + '_' + num)}
               onMouseDown={this
               .handleDragStart
               .bind(this)}
@@ -550,7 +567,7 @@ class SortQuestion extends React.Component {
               }
             }
             return <label
-              key={idx}
+              key={Keymaker(idx + '_' + rt)}
               onMouseDown={this
               .handleDragStart
               .bind(this)}
