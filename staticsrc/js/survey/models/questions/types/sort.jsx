@@ -237,7 +237,7 @@ class SortQuestion extends React.Component {
     window.addEventListener('mouseup', this.proxySD, true);
     window.addEventListener('touchcancel', this.proxySD, true);
     window.addEventListener('touchend', this.proxySD, true);
-
+    
     if (e.touches && e.touches.length > 0) {
       e = e.touches[0];
     }
@@ -261,8 +261,10 @@ class SortQuestion extends React.Component {
     for (let i = 0; i < sortables.length; i++) {
       regions.push(getRect(sortables[i]));
     }
+    
     this.regions = regions;
     this.draggy = targ.cloneNode(true);
+    
     let internalSpacer = targ.getElementsByClassName('sortitem--container')[0];
     let isOther = !internalSpacer;
     if (isOther) {
@@ -277,13 +279,16 @@ class SortQuestion extends React.Component {
         .draggy
         .getElementsByClassName('other--textfield')[0];
     }
+    
     dragSpacer.style.width = internalRect.w + "px";
     this.draggy.style.top = this.targetCoords.y + "px";
     this.draggy.style.left = this.targetCoords.x + "px";
     this.draggy.className += " dragging";
+    
     document
       .body
       .appendChild(this.draggy);
+      
     var dragOrder = this.calcDragOrderForSelected(hoverIndex, targWhich),
       newState = {
         dragOrder: dragOrder,
@@ -294,6 +299,7 @@ class SortQuestion extends React.Component {
         startClientY: e.clientY,
         hideOtherOverlay: true
       };
+      
     this.setState(newState);
     return false;
   }
@@ -369,7 +375,7 @@ class SortQuestion extends React.Component {
     let diffX = e.clientX - this.state.startClientX,
       diffY = e.clientY - this.state.startClientY,
       hoverPosition = 0;
-
+    //console.log("DRAG MOVE", e.clientX, e.clientY);
     this.draggy.style.top = (this.targetCoords.y + diffY) + "px";
     this.draggy.style.left = (this.targetCoords.x + diffX) + "px";
 
@@ -464,6 +470,8 @@ class SortQuestion extends React.Component {
       variables = this.props.variables,
       count = 1,
       st = this.state,
+      isDragging = st.isDragging,
+      dragOrder = st.dragOrder,
       dragPlaceholderCSS = {},
       initialOther = this.initialOther;
 
@@ -484,10 +492,14 @@ class SortQuestion extends React.Component {
     }
 
     var realOrder = this.state.currentOrder;
-    if (this.state.isDragging) {
+    var hideCSS = {
+    };    
+    //console.log(realOrder, this.state.dragOrder);
+    /*if (this.state.isDragging) {
       realOrder = this.state.dragOrder;
-    }
-    if (st.isDragging) {
+    }*/
+    if (isDragging) {
+      hideCSS = {opacity: 0};
       dragPlaceholderCSS.width = this.targetCoords.w;
       dragPlaceholderCSS.height = this.targetCoords.h;
     }
@@ -530,6 +542,13 @@ class SortQuestion extends React.Component {
               key={Keymaker(idx + '' + num + '_')}
               className={"sortable standalonebutton drag--placeholder"}>&nbsp;</label>;
           } else if (num == 9999) {
+            let itemCSS = {
+
+            };
+            if (dragOrder[idx] === -1) {
+              itemCSS.backgroundColor = "#ffffCC";
+              itemCSS.borderColor = "#333333";
+            }
             return <label
               key={Keymaker(idx + '_' + num)}
               onMouseDown={this
@@ -543,8 +562,8 @@ class SortQuestion extends React.Component {
               data-which={num}
               className={"sortable standalonebutton otherstandalone " + ((!st.isDragging && st.didDrop)
               ? " dropAnim drop" + idx
-              : "")}>
-              <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/>
+              : "")} style={itemCSS}>
+              <div className="sortitem--container text--container" style={hideCSS}><span className="sorticon fa fa-sort"/>
                 <span className="numholder">{idx + 1}.</span><input
                   type="text"
                   tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + 999}
@@ -566,6 +585,13 @@ class SortQuestion extends React.Component {
                 rt = ctx.state.srcOrder[b].choice;
               }
             }
+            let itemCSS = {
+
+            };
+            if (dragOrder[idx] === -1) {
+              itemCSS.backgroundColor = "#ffffCC";
+              itemCSS.borderColor = "#333333";
+            }
             return <label
               key={Keymaker(idx + '_' + rt)}
               onMouseDown={this
@@ -579,8 +605,8 @@ class SortQuestion extends React.Component {
               data-which={num}
               className={"sortable standalonebutton" + ((!st.isDragging && st.didDrop)
               ? " dropAnim drop" + idx
-              : "")}>
-              <div className="sortitem--container text--container"><span className="sorticon fa fa-sort"/> {idx + 1}. {piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}<input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
+              : "")} style={itemCSS}>
+              <div className="sortitem--container text--container" style={hideCSS}><span className="sorticon fa fa-sort"/> {idx + 1}. {piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}<input type="hidden" className="otherinputfield" name={idx} value={idx}/></div>
             </label>;
           }
         })}
