@@ -31,6 +31,7 @@ class RadioQuestion extends React.Component {
       }
     }
     this.state = {
+      otherisselected: false,
       choices: choicesCopy,
       srcOrder: JSON.parse(JSON.stringify(this.Randomizer.randomizeChoices(choicesCopy, this.props.random)))
     };
@@ -149,8 +150,10 @@ class RadioQuestion extends React.Component {
 
     if (val.length > 0) {
       otherrd.checked = true;
+      this.setState({otherisselected: true});
     } else {
       otherrd.checked = false;
+      this.setState({otherisselected: false});
     }
   }
 
@@ -164,7 +167,8 @@ class RadioQuestion extends React.Component {
       piper = this.piper,
       panswers = this.props.answers,
       ppages = this.props.allpages,
-      variables = this.props.variables;
+      variables = this.props.variables,
+      otherisselected = this.state.otherisselected;
 
     // Check each value
     let shouldOptionBeSelected = function (val) {
@@ -207,7 +211,7 @@ class RadioQuestion extends React.Component {
           .handleAnswerChange
           .bind(ctx)}/><input
           type="text"
-          className="other--textfield"
+          className={"other--textfield " + (otherisselected ? "selected" : "")}
           placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables, this.props.messages)}
           defaultValue={(this.props.answer && this.props.answer.other)
           ? this.props.answer.other

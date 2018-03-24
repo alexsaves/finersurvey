@@ -205,6 +205,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         if (req.query && (req.query.a || req.query.p)) {
             isNew = true;
             try {
+                req.session.rid = null;
                 if (req.query.a) {
                     existingAnswers = JSON.parse(req.query.a);
                     req.session.existingAnswers = existingAnswers;
@@ -267,14 +268,18 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                 if (oppObj && oppObj.contacts && oppObj.contacts.length > 0) {
                     for (let v = 0; v < oppObj.contacts.length; v++) {
                         let contact = oppObj.contacts[v];
-                        var contactInfo = {Name: contact.Name, Title: contact.Title, Full: contact.Name + " (" + contact.Title + ")"};
+                        var contactInfo = {
+                            Name: contact.Name,
+                            Title: contact.Title,
+                            Full: contact.Name + " (" + contact.Title + ")"
+                        };
                         if (v > 0) {
                             decisionMakers += ", ";
                         }
                         decisionMakers += contactInfo.Name;
                         decisionMakerList.push(contactInfo);
                     }
-                    
+
                 }
                 // Get the respondent object
                 sv

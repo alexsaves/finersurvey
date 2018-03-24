@@ -20,6 +20,9 @@ class CheckboxQuestion extends React.Component {
     this.piper = new Piper();
     this.Randomizer = new Randomizer();
     this.state = {
+      otherval: ((this.props.answer && this.props.answer.other)
+      ? this.props.answer.other
+      : ""),
       srcOrder: this
         .Randomizer
         .randomizeChoices(this.props.choices, this.props.random)
@@ -99,6 +102,7 @@ class CheckboxQuestion extends React.Component {
       finalResponse.other = otherval;
       if (otherval && otherval.trim().length > 0) {
         responses.push(9999);
+        this.setState({otherval: otherval});
       }
     }
     if ((!limits || typeof limits.max == 'undefined') || (limits.max >= howManySelected)) {
@@ -147,8 +151,8 @@ class CheckboxQuestion extends React.Component {
           cb = targ.getElementsByTagName("input")[0];
 
         cb.checked = !!!cb.checked;
-        e.currentTarget = cb;
-        this.handleAnswerChange(e);
+        e.currentTarget = cb;        
+        this.handleAnswerChange(e);        
       }
     }
   }
@@ -156,10 +160,12 @@ class CheckboxQuestion extends React.Component {
   /**
    * Handle when the text input changes (on a throttle)
    */
-  handleIptThrottleChange() {
+  handleIptThrottleChange(e) {
+    let targ = e.currentTarget;
     clearTimeout(this.iptThrottle);
     this.iptThrottle = setTimeout(() => {
       this.handleAnswerChange();
+      this.setState({otherval: targ.value});
     }, 200);
   }
 
@@ -173,7 +179,8 @@ class CheckboxQuestion extends React.Component {
       variables = this.props.variables,
       piper = this.piper,
       panswers = this.props.answers,
-      ppages = this.props.allpages;
+      ppages = this.props.allpages,
+      otherval = this.state.otherval;
 
     // Check each value
     let shouldOptionBeSelected = function (val) {
@@ -218,7 +225,9 @@ class CheckboxQuestion extends React.Component {
           })}
         {this.props.other === true && <input
           type="text"
-          className="other--textfield"
+          className={"other--textfield " + ((typeof(otherval) != null && otherval.length > 0)
+          ? "selected"
+          : "")}
           tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + this.state.srcOrder.length + 1}
           onFocus={this
           .handleFocus
