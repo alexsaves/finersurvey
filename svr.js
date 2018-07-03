@@ -41,6 +41,18 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         cluster.fork();
     }
 
+    cluster
+        .on('exit', function (deadWorker, code, signal) {
+            console.log('Worker %d died (%s). restarting...', deadWorker.process.pid, signal || code);
+
+            // Restart the worker
+            var worker = cluster.fork();
+
+            // Log the event
+            console.log(`worker ${worker.process.pid} died.`);
+            console.log(`worker ${deadWorker.process.pid} born.`);
+        });
+
     // Code to run if we're in a worker process
 } else {
     /**
