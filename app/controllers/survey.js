@@ -20,11 +20,13 @@ SurveyController.prototype.loadOpportunityInfo = function (id, cb) {
             if (err) {
                 cb(err);
             } else {
-                finercommon.models.CRMContacts.GetByAccountIds(this.cfg, [opp.AccountId], (err, contacts) => {
+                finercommon.models.CRMOpportunityRoles.GetByOpportunityIdWithContacts(this.cfg, opp.id, (err, contacts) => {
                     if (err) {
                         cb(err);
                     } else {
-                        opp.contacts = contacts;
+                        opp.contacts = contacts.map((c) => {
+                            return c.contact;
+                        });
                         cb(null, opp);
                     }
                 });
