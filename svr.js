@@ -286,7 +286,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                             Full: contact.Name + " (" + contact.Title + ")"
                         };
                         if (contact.Title == null || contact.Title.toString().toLowerCase() == "null") {
-                            contactInfo.Full = contact.name;
+                            contactInfo.Full = contact.Name;
                             contactInfo.Title = "";
                         }
                         if (v > 0) {
