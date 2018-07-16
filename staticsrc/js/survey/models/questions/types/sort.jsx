@@ -147,7 +147,7 @@ class SortQuestion extends React.Component {
       }
       e.preventDefault();
     };
-    root.addEventListener("touchstart", this.touchHandler, {passive: true});
+    root.addEventListener("touchstart", this.touchHandler, true);
     this.positionOtherInput();
     this.generalPositionTimer = setInterval(() => {
       if (this.didMount && this.props.isSelected && !this.props.isAnimating) {
@@ -232,7 +232,7 @@ class SortQuestion extends React.Component {
       .dropDrag
       .bind(this);
 
-    window.addEventListener('touchmove', this.proxyDM, {passivde: true});
+    window.addEventListener('touchmove', this.proxyDM, true);
     window.addEventListener('mousemove', this.proxyDM, true);
     window.addEventListener('mouseup', this.proxySD, true);
     window.addEventListener('touchcancel', this.proxySD, true);
@@ -422,7 +422,7 @@ class SortQuestion extends React.Component {
       return;
     }
     this.stopRepositioning = false;
-    window.removeEventListener('touchmove', this.proxyDM, {passive:true});
+    window.removeEventListener('touchmove', this.proxyDM, true);
     window.removeEventListener('mousemove', this.proxyDM, true);
     window.removeEventListener('mouseup', this.proxySD, true);
     window.removeEventListener('touchcancel', this.proxySD, true);
