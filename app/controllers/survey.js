@@ -61,6 +61,7 @@ SurveyController.prototype.loadSurveyByGuid = function (guid, requestEmitter) {
                             srv._org = org;
                             this.loadOpportunityInfo(srv.opportunity_id, (err, opp) => {
                                 if (err) {
+                                    console.log("err: ", err);
                                     requestEmitter.emit('error', err);
                                 } else {
                                     requestEmitter.emit('done', srv, org, opp);

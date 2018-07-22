@@ -1,6 +1,6 @@
 {
     "name": "survey",
-    "version": "0.4.25",
+    "version": "0.4.26",
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
@@ -30,14 +30,14 @@
             "port": 6379,
             "return_buffers": true
         },
-        "db_": {
+        "db": {
             "host": "localhost",
             "user": "finerAdmin",
             "pw": "finerPass",
             "db": "finerinkprod",
             "ssl": "false"
         },
-        "db": {
+        "db_": {
             "host": "finerinkprod.ckumtmamqoyw.us-west-2.rds.amazonaws.com",
             "user": "finerinkadmin",
             "pw": "J39dK$sl_1!",
@@ -82,8 +82,8 @@
         "express-vue": "^5.6.5",
         "extend": "^3.0.1",
         "fetch": "^1.1.0",
-        "finercommon": "git+https://2bac8defa59ab38af52813592ce04ca026a3702f:x-oauth-basic@github.com/thefinerink/finercommon.git#0.2.23",
-        "finerlib": "git+https://1e37470bfae9c1cb98c12c99b100edaea16bc73e:x-oauth-basic@github.com/thefinerink/finerlib.git#0.2.3",
+        "finercommon": "git+https://2bac8defa59ab38af52813592ce04ca026a3702f:x-oauth-basic@github.com/thefinerink/finercommon.git#0.2.25",
+        "finerlib": "git+https://1e37470bfae9c1cb98c12c99b100edaea16bc73e:x-oauth-basic@github.com/thefinerink/finerlib.git#0.2.4",
         "font-awesome": "^4.7.0",
         "forever-monitor": "^1.7.1",
         "form-serializer": "^2.5.0",
