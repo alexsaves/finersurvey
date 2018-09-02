@@ -305,7 +305,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                             models.CRMAccounts.GetById(pjson.config, crmopp.AccountId, (err, crmact) => {
                                 // Set up the survey variables for this survey
                                 let surveyVariables = {
-                                    prospectName: crmact.Name,
+                                    prospectName: crmact ? crmact.Name : crmopp.Name,
                                     surveyTitle: srvObj.name,
                                     companyName: srvObj._org.name,
                                     surveyTheme: orgObj.default_survey_template
