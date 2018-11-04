@@ -187,7 +187,47 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
  * Root
  */
     app.get('/', (req, res) => {
-        res.end("nothing here");
+        res.end(`<!doctype html>
+        <html>
+        <head><style>
+        * {box-sizing: border-box;}
+        html {
+            --header-height: 60px;
+            
+        }
+        
+        html, body  {
+            overscroll-behavior-y: contain;
+            display:block;
+            margin: 0;
+        } 
+        .bottomdiv {
+            position: fixed;
+            bottom: 0;
+            color: black;
+            text-align:center;
+            height: 2em;
+            width: 100%;
+            z-index: 999999;}</style>
+            <script>
+            /*function _fixViewportHeight() {
+                var html = document.querySelector('html');
+            
+                function _onResize(event) {
+                    html.style.height = window.innerHeight + 'px';
+                    document.body.style.height = window.innerHeight + 'px';
+                }
+            
+                window.addEventListener('resize', _onResize);
+            
+                _onResize();
+            }
+            
+            _fixViewportHeight();*/
+            </script>
+            <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, target-densityDpi=device-dpi"><title>BlastTech Feedback</title></head>
+        <body><div class="bottomdiv">Im at bottom br!</div></body>
+        </html>`);
     });
 
     /**
