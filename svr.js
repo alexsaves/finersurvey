@@ -60,11 +60,11 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
  * @type {{connectionLimit: number, host: *, user: *, password: *}}
  */
     var dbCluster = {
-            connectionLimit: 5,
-            host: pjson.config.db.host,
-            user: pjson.config.db.user,
-            password: pjson.config.db.pw
-        },
+        connectionLimit: 5,
+        host: pjson.config.db.host,
+        user: pjson.config.db.user,
+        password: pjson.config.db.pw
+    },
         basicHeaders = {
             "Access-Control-Allow-Origin": "*",
             "App-Server-Version": pjson
@@ -106,7 +106,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
 
     // Production SSL enforcer **************************
     if (process.env.NODE_ENV == 'production') {
-        app.use(enforce.HTTPS({trustProtoHeader: true}));
+        app.use(enforce.HTTPS({ trustProtoHeader: true }));
     }
 
     /**
@@ -121,7 +121,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     if (process.env.NODE_ENV == 'production') {
         console.log("Enforcing SSL...");
         app.use((req, res, next) => {
-            if (req.headers['x-forwarded-proto'] === 'https') 
+            if (req.headers['x-forwarded-proto'] === 'https')
                 return next();
             return res.redirect(301, 'https://' + path.join(req.hostname, req.url));
         });
@@ -130,7 +130,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     }
 
     // Add body parser url parser
-    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.urlencoded({ extended: true }));
 
     // Parse JSON
     app.use(bodyParser.json());
@@ -176,7 +176,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         }
         res.status(respObj.status || 200);
 
-        if (!respObj.body || (typeof(respObj.body) != 'string' && !(respObj.body instanceof Buffer))) {
+        if (!respObj.body || (typeof (respObj.body) != 'string' && !(respObj.body instanceof Buffer))) {
             respObj.body = ' ';
         }
 
@@ -187,7 +187,47 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
  * Root
  */
     app.get('/', (req, res) => {
-        res.end("nothing here");
+        res.end(`<!doctype html>
+        <html>
+        <head><style>
+        * {box-sizing: border-box;}
+        html {
+            --header-height: 60px;
+            
+        }
+        
+        html, body  {
+            overscroll-behavior-y: contain;
+            display:block;
+            margin: 0;
+        } 
+        .bottomdiv {
+            position: fixed;
+            bottom: 0;
+            color: black;
+            text-align:center;
+            height: 2em;
+            width: 100%;
+            z-index: 999999;}</style>
+            <script>
+            /*function _fixViewportHeight() {
+                var html = document.querySelector('html');
+            
+                function _onResize(event) {
+                    html.style.height = window.innerHeight + 'px';
+                    document.body.style.height = window.innerHeight + 'px';
+                }
+            
+                window.addEventListener('resize', _onResize);
+            
+                _onResize();
+            }
+            
+            _fixViewportHeight();*/
+            </script>
+            <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, target-densityDpi=device-dpi"><title>BlastTech Feedback</title></head>
+        <body><div class="bottomdiv">Im at bottom br!</div></body>
+        </html>`);
     });
 
     /**
@@ -286,7 +326,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                             Full: contact.Name + " (" + contact.Title + ")"
                         };
                         if (contact.Title == null || contact.Title.toString().toLowerCase() == "null") {
-                            contactInfo.Full = contact.name;
+                            contactInfo.Full = contact.Name;
                             contactInfo.Title = "";
                         }
                         if (v > 0) {
@@ -300,76 +340,82 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
                 // Get the respondent object
                 sv
                     .getRespondentFromSession(req.session, requestEmitter, guid, usSrc, ip, approval, function (resp) {
+                        // Get the opportunity object
+                        models.CRMOpportunities.GetById(pjson.config, srvObj.opportunity_id, (err, crmopp) => {
+                            models.CRMAccounts.GetById(pjson.config, crmopp.AccountId, (err, crmact) => {
+                                // Set up the survey variables for this survey
+                                let surveyVariables = {
+                                    prospectName: crmact ? crmact.Name : crmopp.Name,
+                                    surveyTitle: srvObj.name,
+                                    companyName: srvObj._org.name,
+                                    surveyTheme: orgObj.default_survey_template
+                                };
+                                if (decisionMakers && decisionMakers.length > 0) {
+                                    surveyVariables.decisionMakerList = decisionMakers;
+                                    for (let b = 0; b < decisionMakerList.length; b++) {
+                                        surveyVariables["decisionMaker" + (b + 1)] = decisionMakerList[b].Full;
+                                    }
+                                }
 
-                        // Set up the survey variables for this survey
-                        let surveyVariables = {
-                            surveyTitle: srvObj.name,
-                            companyName: srvObj._org.name,
-                            surveyTheme: orgObj.default_survey_template
-                        };
-                        if (decisionMakers && decisionMakers.length > 0) {
-                            surveyVariables.decisionMakerList = decisionMakers;
-                            for (let b = 0; b < decisionMakerList.length; b++) {
-                                surveyVariables["decisionMaker" + (b + 1)] = decisionMakerList[b].Full;
-                            }
-                        }
+                                // Add features
+                                for (let b = 0; b < orgObj.feature_list.length; b++) {
+                                    surveyVariables["feature" + (b + 1)] = orgObj.feature_list[b];
+                                }
 
-                        // Add features
-                        for (let b = 0; b < orgObj.feature_list.length; b++) {
-                            surveyVariables["feature" + (b + 1)] = orgObj.feature_list[b];
-                        }
+                                // Add competitors
+                                for (let b = 0; b < orgObj.competitor_list.length; b++) {
+                                    surveyVariables["competitor" + (b + 1)] = orgObj.competitor_list[b];
+                                }
 
-                        // Add competitors
-                        for (let b = 0; b < orgObj.competitor_list.length; b++) {
-                            surveyVariables["competitor" + (b + 1)] = orgObj.competitor_list[b];
-                        }
+                                // Save the variables to the respondent
+                                resp.variables = surveyVariables;
+                                resp.commit(pjson.config);
 
-                        // Save the variables to the respondent
-                        resp.variables = surveyVariables;
-                        resp.commit(pjson.config);
-
-                        req.session.rid = resp.id;
-                        req
-                            .session
-                            .save(() => {
-                                _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
-                                    title: srvObj.name,
-                                    pageUrl: req.protocol + '://' + req.get('host') + '/s/' + guid,
-                                    surveyDescription: "Help " + srvObj._org.name + " by giving your feedback on your recent interactions.",
-                                    surveyImage: req.protocol + '://' + req.get('host') + "/static/assets/logos/finerink.svg",
-                                    respondent: resp.id,
-                                    session: req.session,
-                                    model: srvObj.survey_model,
-                                    surveyID: guid,
-                                    theme: orgObj.default_survey_template,
-                                    modelstr: btoa(JSON.stringify({
-                                        respondent: resp.id,
-                                        isNew: isNew,
-                                        messages: {
-                                            prevPage: "Previous page",
-                                            nextPage: "Next page",
-                                            reqQuestion: "This question is required.",
-                                            pageNotFound: "That page was not found.",
-                                            startOver: "Don't worry. We'll return you to the beginning of the survey.",
-                                            ok: "OK",
-                                            requiredQ: "This question is required",
-                                            winLossAnalysis: "Sales Win/Loss Analysis",
-                                            otherDefaultValue: "Other"
-                                        },
-                                        metadata: {
+                                req.session.rid = resp.id;
+                                req
+                                    .session
+                                    .save(() => {
+                                        _outputResponse(res, templs.renderWithBase('surveybase', 'standardsurvey', {
                                             title: srvObj.name,
-                                            guid: srvObj.survey_model.guid,
+                                            pageUrl: req.protocol + '://' + req.get('host') + '/s/' + guid,
+                                            surveyDescription: "Help " + srvObj._org.name + " by giving your feedback on your recent interactions.",
+                                            surveyImage: req.protocol + '://' + req.get('host') + "/static/assets/logos/finerink.svg",
+                                            respondent: resp.id,
+                                            session: req.session,
+                                            model: srvObj.survey_model,
+                                            surveyID: guid,
                                             theme: orgObj.default_survey_template,
-                                            updated_at: srvObj.updated_at
-                                        },
-                                        currentPage: Math.min(pg, srvObj.survey_model.pages.length),
-                                        pages: srvObj.survey_model.pages,
-                                        answers: existingAnswers || {},
-                                        variables: surveyVariables,
-                                        saveUrl: '/s/' + encodeURIComponent(guid)
-                                    }))
-                                }));
+                                            modelstr: btoa(JSON.stringify({
+                                                respondent: resp.id,
+                                                isNew: isNew,
+                                                messages: {
+                                                    prevPage: "Previous page",
+                                                    nextPage: "Next page",
+                                                    reqQuestion: "This question is required.",
+                                                    pageNotFound: "That page was not found.",
+                                                    startOver: "Don't worry. We'll return you to the beginning of the survey.",
+                                                    ok: "OK",
+                                                    requiredQ: "This question is required",
+                                                    winLossAnalysis: "Sales Win/Loss Analysis",
+                                                    otherDefaultValue: "Other"
+                                                },
+                                                metadata: {
+                                                    title: srvObj.name,
+                                                    guid: srvObj.survey_model.guid,
+                                                    theme: orgObj.default_survey_template,
+                                                    updated_at: srvObj.updated_at
+                                                },
+                                                currentPage: Math.min(pg, srvObj.survey_model.pages.length),
+                                                pages: srvObj.survey_model.pages,
+                                                answers: existingAnswers || {},
+                                                variables: surveyVariables,
+                                                saveUrl: '/s/' + encodeURIComponent(guid)
+                                            }))
+                                        }));
+                                    });
                             });
+                        });
+
                     });
             });
 
@@ -397,7 +443,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         // Handles successful completion
         requestEmitter.on('done', function (respondent) {
             _outputResponse(res, {
-                body: JSON.stringify({success: true, respondent: respondent.id}),
+                body: JSON.stringify({ success: true, respondent: respondent.id }),
                 status: 200,
                 headers: {
                     "Content-Type": "application/json"
@@ -409,7 +455,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
         requestEmitter.on('error', function () {
             requestEmitter.removeAllListeners();
             _outputResponse(res, {
-                body: JSON.stringify({error: "There was an error saving the data.", respondent: req.body.respondent}),
+                body: JSON.stringify({ error: "There was an error saving the data.", respondent: req.body.respondent }),
                 status: 500,
                 headers: {
                     "Content-Type": "application/json"
