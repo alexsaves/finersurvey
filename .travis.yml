@@ -37,9 +37,9 @@ deploy:
   secret_access_key:
     secure: QvMy3GLZ0cdJyczF+LBHNfbw6cIT2gV1dI0+AWZfbqc9XRjilcPkKFl3OfpXTzEA5Zjh1yIyf56JaZOo2JwRqFHEC7CAz6HB+PkaXI/aA1Wbaw0Q7+7kNZscO+8Lq/W7TjSUb+afj7N1IXexxeXvd9Ix9TQLl1m6pFqVGOQ42bcJrElvdMWXmH0MpS8BPcmLXwGrwBAD15nQYVo9A7WgZcCLV6aOhI8DRZFkkF6bG80mGsjcx5mmksa/HQTU30u0i7aSPMgcGv04M7wg7zZuXovtC+C3LHLtSlO2MervTLIs9E5UUmTRRCTLrcBV9uLv9EYIueXSxoGgAjWYONjZ1IuY+ygGCj7G2S13UPUcztanJGaV0vtYFR4TgGNF/rUWOOwEBLemSZe4KNnCtXUz+rhhLUniTXQS+9XQUepSt6UtDD0Qg+sZLU9dYrJAr6hIc4Qyc6UkP+B/7FTquE7RwVuAjBXTfdj4WKf5eKe+Yy21aFKVljEb+oZ+yqNjLiZgUYKhY1A9Jz4hE6vrHMFc7Nsg+uoE5WvshG/Q/ABTfnJl+MWr+9drfOUytSqWTV2Bn1N3ptubxRPVES08l+Jg9hCkwusyax/3oRsHAsdYa90KkddDvdtils7mSU+5VT9l+WvzRKvaxldIEbaNV2JayOJ5GRdBz+BBA88dpK/mq/Q=
   region: us-west-2
-  app: FinerPortal
-  env: Finerportal-env  
-  bucket_name: finerportaldeploy
-  zip_file: dist/finerportal.zip
+  app: FinerSurvey
+  env: Finersurvey-env  
+  bucket_name: finersurveydeploy
+  zip_file: dist/finersurvey.zip
   on:
     branch: master
