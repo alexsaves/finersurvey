@@ -27,7 +27,6 @@ notifications:
   slack:
     secure: cpUTEQNPkmmu3LUh6L19nCDJjJEdLnxwRrh6I9fFgwoJFqo56Zpd6eZ3XcXTqy3EDugZAzK+fi9GleQ8TRfh3ocF2lG1GV7xhZdzIDZ4SraUeIoSMJNF1Fggr8WewqipP+HPXahLJWjwNm92Ug4ubMoLvoLBJ5S2MYKzS6mIXSuvqTr4uOM2Mz9/cIRFxTfw/wgTyawQ1pxKNAz4Jw+ru/oIGC4sMc1BhM8v/y723Q8RNOigDiBSnWfqPPd3+ionm4I3Ylh3GOKInVHiKzFQjF0WuufeQwZgD9/foortsg4GZTkP4UaNC6Rrk9COw8uBa9Og+XAnzn6I6S0aXl54QKUtHvL+Ean0ZHe+bIoYqgNynFK2Wd4NWk/F8fxG5s7X8JFc7x9xbd8oa1z3VHXzs3YLB6Cd+QA3OJM38CuTbhnuqjS1iJuSjTYC386uNwNQgXS8KcK+t4e0uZhLvmEMQ+yzilTgx5HLRlgW0+60gtqoQTaUdgGGhclA7Tbb/unVJCzUbuaD9HphROe2fVaWFsas9+4eilBY6O/l11VNwyAYo7sZ2whVdcaQBTp3B7EDEWn3Az6rpRstt/o7KYzCwVVDXcyIql+AamFag7nKSoZ7sdehWzmGmMShXDEtVrGTR1rM3kDxd+dl6g7rQgGROGkAEfjMvvD2OvYQ3dOLEB8=
 before_deploy:
-  - npm run prod
   - npm run package
   - export ELASTIC_BEANSTALK_LABEL=$(node -e "console.log(require('./package.json').version);")
 deploy:
