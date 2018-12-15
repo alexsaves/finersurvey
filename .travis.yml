@@ -29,10 +29,11 @@ install:
 - npm install --unsafe-perm=true
 - npm run prod
 env:
-- survey_config_db_host=127.0.0.1
-- survey_config_db_ssl=false
-- survey_config_db_user=root
-- survey_config_db_pw=
+  global:
+  - survey_config_db_host=127.0.0.1
+  - survey_config_db_ssl=false
+  - survey_config_db_user=root
+  - survey_config_db_pw=
 services:
 - mysql
 - redis-server
