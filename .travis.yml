@@ -11,11 +11,10 @@ addons:
     - zeromq
     - pkgconfig
     - git-lfs
-    - mysql
+    - mysql@5.7
 before_install:
-- brew tap homebrew/services
 - brew services start mysql
-- mysqladmin -u root password 'pass'
+- mysqladmin --user="root" --host="127.0.0.1" password 'pass'
 - npm install node-gyp --global
 - npm install gyp --global
 - mysql --user="root" --password="pass" --host="127.0.0.1" -e 'CREATE DATABASE IF NOT EXISTS finerinkprod;'
@@ -30,9 +29,6 @@ env:
   - survey_config_db_ssl=false
   - survey_config_db_user=root
   - survey_config_db_pw=pass
-services:
-- mysql
-- redis-server
 notifications:
   email:
   - alexei.white@gmail.com
