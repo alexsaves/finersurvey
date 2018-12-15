@@ -1,22 +1,22 @@
 /**
  * Global dependencies.
  */
-var mysql = require('mysql'),
-    express = require('express'),
-    cluster = require('cluster'),
-    pjson = require('./app/utils/environ'),
-    timeout = require('connect-timeout'),
-    extend = require('extend'),
-    useragent = require('express-useragent'),
-    AWS = require('aws-sdk'),
-    encoding = require("encoding"),
-    redis = require('redis'),
-    templates = require('./app/utils/templates'),
-    finercommon = require('finercommon'),
-    events = require('events'),
-    port = process.env.PORT || 8080,
-    btoa = require('btoa'),
-    path = require('path');
+const mysql = require('mysql');
+const express = require('express');
+const cluster = require('cluster');
+const pjson = require('./app/utils/environ');
+const timeout = require('connect-timeout');
+const extend = require('extend');
+const useragent = require('express-useragent');
+const AWS = require('aws-sdk');
+const encoding = require("encoding");
+const redis = require('redis');
+const templates = require('./app/utils/templates');
+const finercommon = require('finercommon');
+const events = require('events');
+const port = process.env.PORT || 8080;
+const btoa = require('btoa');
+const path = require('path');
 
 // Set the time zone
 process.env.TZ = pjson.config.aws.timeZone;
@@ -159,7 +159,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
     /**
  * Static
  */
-    app.use('/static', express.static('dist'));
+    app.use('/static', express.static('static'));
 
     /**
  * Output a proper response
@@ -187,47 +187,7 @@ if (cluster.isMaster && process.env.NODE_ENV == 'production') {
  * Root
  */
     app.get('/', (req, res) => {
-        res.end(`<!doctype html>
-        <html>
-        <head><style>
-        * {box-sizing: border-box;}
-        html {
-            --header-height: 60px;
-            
-        }
-        
-        html, body  {
-            overscroll-behavior-y: contain;
-            display:block;
-            margin: 0;
-        } 
-        .bottomdiv {
-            position: fixed;
-            bottom: 0;
-            color: black;
-            text-align:center;
-            height: 2em;
-            width: 100%;
-            z-index: 999999;}</style>
-            <script>
-            /*function _fixViewportHeight() {
-                var html = document.querySelector('html');
-            
-                function _onResize(event) {
-                    html.style.height = window.innerHeight + 'px';
-                    document.body.style.height = window.innerHeight + 'px';
-                }
-            
-                window.addEventListener('resize', _onResize);
-            
-                _onResize();
-            }
-            
-            _fixViewportHeight();*/
-            </script>
-            <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, target-densityDpi=device-dpi"><title>BlastTech Feedback</title></head>
-        <body><div class="bottomdiv">Im at bottom br!</div></body>
-        </html>`);
+        res.redirect("https://finer.ink");
     });
 
     /**

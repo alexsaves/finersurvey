@@ -2,7 +2,7 @@ const path = require('path');
 
 var paths = {
     APP_SRC: './staticsrc/js/',
-    DIST: './dist/js/'
+    DIST: './static/app/'
 };
 
 module.exports = {

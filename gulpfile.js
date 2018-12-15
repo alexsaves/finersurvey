@@ -9,7 +9,7 @@ const gulp = require('gulp'),
 
 // Root folder for everything
 const src = "./staticsrc",
-    dist = "./dist";
+    dist = "./static";
 
 // Are we in debug mode?
 var isDebug = false;
