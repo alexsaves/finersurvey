@@ -13,6 +13,7 @@ addons:
     - git-lfs
     - mysql@5.7
 before_install:
+- echo 'export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"' >> ~/.bash_profile
 - brew services start mysql
 - mysqladmin --user="root" --host="127.0.0.1" password 'pass'
 - npm install node-gyp --global
