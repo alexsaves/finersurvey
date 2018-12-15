@@ -1,13 +1,13 @@
 {
     "name": "survey",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
         "gulpwatch": "gulp",
         "wpwatch": "webpack -d --watch",
         "prod": "webpack -p && gulp",
-        "package": "zip -r dist/finerportal.zip . -x npm-debug.log -x staticsrc/\\* -x **/*.sh -x app/bower_components/\\* -x node_modules/\\* -x dist/**/* -x .git/\\* -x sessions/\\* -x **/*.md -x **/*.yml",
+        "package": "zip -r dist/finersurvey.zip . -x npm-debug.log -x staticsrc/\\* -x **/*.sh -x app/bower_components/\\* -x node_modules/\\* -x dist/**/* -x .git/\\* -x sessions/\\* -x **/*.md -x **/*.yml",
         "start": "node index.js",
         "debug": "node svr.js"
     },
