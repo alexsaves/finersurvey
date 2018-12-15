@@ -14,9 +14,16 @@ addons:
 before_install:
 - npm install node-gyp --global
 - npm install gyp --global
+- mysql -e 'CREATE DATABASE IF NOT EXISTS finerinkprod;'
+- mysql --user="root" --database="finerinkprod" --host="127.0.0.1" --password="" < "node_modules/finerdocker/mysql/data/schema/db.sql"
 install:
 - npm install --unsafe-perm=true
 - npm run prod
+env:
+- survey_config_db_host=127.0.0.1
+- survey_config_db_ssl=false
+- survey_config_db_user=root
+- survey_config_db_pw=
 services:
 - mysql
 - redis-server
@@ -27,17 +34,17 @@ notifications:
   slack:
     secure: cpUTEQNPkmmu3LUh6L19nCDJjJEdLnxwRrh6I9fFgwoJFqo56Zpd6eZ3XcXTqy3EDugZAzK+fi9GleQ8TRfh3ocF2lG1GV7xhZdzIDZ4SraUeIoSMJNF1Fggr8WewqipP+HPXahLJWjwNm92Ug4ubMoLvoLBJ5S2MYKzS6mIXSuvqTr4uOM2Mz9/cIRFxTfw/wgTyawQ1pxKNAz4Jw+ru/oIGC4sMc1BhM8v/y723Q8RNOigDiBSnWfqPPd3+ionm4I3Ylh3GOKInVHiKzFQjF0WuufeQwZgD9/foortsg4GZTkP4UaNC6Rrk9COw8uBa9Og+XAnzn6I6S0aXl54QKUtHvL+Ean0ZHe+bIoYqgNynFK2Wd4NWk/F8fxG5s7X8JFc7x9xbd8oa1z3VHXzs3YLB6Cd+QA3OJM38CuTbhnuqjS1iJuSjTYC386uNwNQgXS8KcK+t4e0uZhLvmEMQ+yzilTgx5HLRlgW0+60gtqoQTaUdgGGhclA7Tbb/unVJCzUbuaD9HphROe2fVaWFsas9+4eilBY6O/l11VNwyAYo7sZ2whVdcaQBTp3B7EDEWn3Az6rpRstt/o7KYzCwVVDXcyIql+AamFag7nKSoZ7sdehWzmGmMShXDEtVrGTR1rM3kDxd+dl6g7rQgGROGkAEfjMvvD2OvYQ3dOLEB8=
 before_deploy:
-  - npm run package
-  - export ELASTIC_BEANSTALK_LABEL=$(node -e "console.log(require('./package.json').version);")
+- npm run package
+- export ELASTIC_BEANSTALK_LABEL=$(node -e "console.log(require('./package.json').version);")
 deploy:
   skip_cleanup: true
   provider: elasticbeanstalk
   access_key_id: AKIAI6TGU6PMR6ICWY2Q
   secret_access_key:
-    secure: QvMy3GLZ0cdJyczF+LBHNfbw6cIT2gV1dI0+AWZfbqc9XRjilcPkKFl3OfpXTzEA5Zjh1yIyf56JaZOo2JwRqFHEC7CAz6HB+PkaXI/aA1Wbaw0Q7+7kNZscO+8Lq/W7TjSUb+afj7N1IXexxeXvd9Ix9TQLl1m6pFqVGOQ42bcJrElvdMWXmH0MpS8BPcmLXwGrwBAD15nQYVo9A7WgZcCLV6aOhI8DRZFkkF6bG80mGsjcx5mmksa/HQTU30u0i7aSPMgcGv04M7wg7zZuXovtC+C3LHLtSlO2MervTLIs9E5UUmTRRCTLrcBV9uLv9EYIueXSxoGgAjWYONjZ1IuY+ygGCj7G2S13UPUcztanJGaV0vtYFR4TgGNF/rUWOOwEBLemSZe4KNnCtXUz+rhhLUniTXQS+9XQUepSt6UtDD0Qg+sZLU9dYrJAr6hIc4Qyc6UkP+B/7FTquE7RwVuAjBXTfdj4WKf5eKe+Yy21aFKVljEb+oZ+yqNjLiZgUYKhY1A9Jz4hE6vrHMFc7Nsg+uoE5WvshG/Q/ABTfnJl+MWr+9drfOUytSqWTV2Bn1N3ptubxRPVES08l+Jg9hCkwusyax/3oRsHAsdYa90KkddDvdtils7mSU+5VT9l+WvzRKvaxldIEbaNV2JayOJ5GRdBz+BBA88dpK/mq/Q=
+    secure: Hu2jfDEPT53wuMaT5PnpXHgfHs7LlerJ4X85lEZcLY00QgRhoEfMsxPgaYoSGNrWLcdiP+goPYT0pekFU75kCrqIBHcI1AOkzllYsrVfTlQQlxwKz6iM43Xmdr7j12PtcstoGrmqORzXtnrV3KW/LvMmgZbZL4CRJhJUCo/ea/I+nUYCGqKhBs7s4p/HnOOw87HxSuYNHGXUgRxvZRxK2btDxRPw8u0CTfMJmbd1MsGymxYMcpEdi1tk4RHLDDmnu1oqMx5INIWpI/RWZO0Nk25O28lbxm2YHjb2SH0NfU/anv05eJKEqJBtnzx6ZnjU/Ce6Tk0zeO07cpwtMrdhmqIMhx81fdxyqXztTfUECNOcU5j3eBWteAT7QnvqFzrhaXBE6IQVj/+oOL83JsV5LalXbItriY2p9hvmX0fGzZHZ0Zo1bS0r8maTVd4OvYjweYl24E2CehEYxHQZJLbHJD846Qmt+EJ6t0iYF9JvvyJ/gLkYMjDgqMi3zpnHheBP8rdQwYaCYW3fMCDCEKUwoWo75JRyK+sZYuaYt8a0OgAAOlSyHchsokFOhggh3K/ay6zO0geE9u5XHGQFE9EDFOtwtRp2bU7ckbQB46Q9NfUIYEkMuZAkyvjvxchcxCRenZ8HQ9K1M4tYfeVxxLmQoIEXL1kQN94sBjJ/3EjJLrA=
   region: us-west-2
-  app: FinerSurvey
-  env: Finersurvey-env  
+  app: FinkSurvey
+  env: Finksurvey-env
   bucket_name: finersurveydeploy
   zip_file: dist/finersurvey.zip
   on:
