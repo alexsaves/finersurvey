@@ -14,7 +14,7 @@ addons:
     - mysql@5.7
 before_install:
 - export PATH=$PATH:/usr/local/opt/mysql@5.7/bin
-- brew services start mysql@5.7
+- mysql.server start
 - mysqladmin --user="root" --host="127.0.0.1" password 'pass'
 - npm install node-gyp --global
 - npm install gyp --global
