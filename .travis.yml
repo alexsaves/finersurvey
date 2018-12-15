@@ -9,7 +9,6 @@ addons:
     - cairo
     - pango
     - zeromq
-    - pkgconfig
     - git-lfs
     - mysql@5.7
 before_install:
