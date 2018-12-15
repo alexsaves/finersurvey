@@ -22,7 +22,6 @@ before_install:
 install:
 - npm install --unsafe-perm=true
 - npm run prod
-after_install:
 - mysql --user="root" --database="finerinkprod" --host="127.0.0.1" --password="pass" < "node_modules/finerdocker/mysql/data/schema/db.sql"
 env:
   global:
