@@ -11,29 +11,25 @@ addons:
     - zeromq
     - pkgconfig
     - git-lfs
-  apt:
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - libmysqlclient-dev
-      - libmysqlclient20
-      - mysql-community-client
-      - mysql-common
-      - mysql-community-server
+    - mysql
 before_install:
+- brew tap homebrew/services
+- brew services start mysql
+- mysqladmin -u root password 'pass'
 - npm install node-gyp --global
 - npm install gyp --global
-- mysql -e 'CREATE DATABASE IF NOT EXISTS finerinkprod;'
-- mysql --user="root" --database="finerinkprod" --host="127.0.0.1" --password="" < "node_modules/finerdocker/mysql/data/schema/db.sql"
+- mysql --user="root" --password="pass" --host="127.0.0.1" -e 'CREATE DATABASE IF NOT EXISTS finerinkprod;'
 install:
 - npm install --unsafe-perm=true
 - npm run prod
+after_install:
+- mysql --user="root" --database="finerinkprod" --host="127.0.0.1" --password="pass" < "node_modules/finerdocker/mysql/data/schema/db.sql"
 env:
   global:
   - survey_config_db_host=127.0.0.1
   - survey_config_db_ssl=false
   - survey_config_db_user=root
-  - survey_config_db_pw=
+  - survey_config_db_pw=pass
 services:
 - mysql
 - redis-server
