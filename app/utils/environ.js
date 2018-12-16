@@ -16,7 +16,7 @@ function crawlRewrite(obj, root) {
     root = root + '_';
   }
   for (var elm in obj) {
-    if (elm != 'scripts' && elm != 'name' && elm != 'dependencies' && elm != 'version' && elm != 'main' && elm != 'author' && elm != 'license' && elm != 'description') {
+    if (elm != 'scripts' && elm != 'name' && elm != 'dependencies' && elm != 'devDependencies' && elm != 'version' && elm != 'main' && elm != 'author' && elm != 'license' && elm != 'description') {
       if (typeof(obj[elm]) == 'object') {
         crawlRewrite(obj[elm], root + elm);
       } else {

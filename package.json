@@ -1,6 +1,6 @@
 {
     "name": "finersurvey",
-    "version": "0.5.19",
+    "version": "0.5.20",
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
@@ -32,14 +32,14 @@
             "port": 6379,
             "return_buffers": true
         },
-        "db": {
+        "db_": {
             "host": "localhost",
             "user": "finerAdmin",
             "pw": "finerPass",
             "db": "finerinkprod",
             "ssl": "false"
         },
-        "dbProd": {
+        "db": {
             "host": "finerink-cluster.cluster-ckumtmamqoyw.us-west-2.rds.amazonaws.com",
             "user": "finerinkadmin",
             "pw": "J39dK$sl_1!",
@@ -85,7 +85,7 @@
         "express-vue": "^5.6.5",
         "extend": "^3.0.1",
         "fetch": "^1.1.0",
-        "finercommon": "git+https://b5502c48cbb355b1cb71b9aea45c794682f180e1:x-oauth-basic@github.com/thefinerink/finercommon.git#0.3.8",
+        "finercommon": "git+https://b5502c48cbb355b1cb71b9aea45c794682f180e1:x-oauth-basic@github.com/thefinerink/finercommon.git#0.3.9",
         "finerdocker": "git+https://b5502c48cbb355b1cb71b9aea45c794682f180e1:x-oauth-basic@github.com/thefinerink/finerdocker.git#1.1.5",
         "font-awesome": "^4.7.0",
         "forever-monitor": "^1.7.1",
