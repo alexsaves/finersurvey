@@ -1,10 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import PageComponent from '../models/page.jsx';
-import Validator from './validator.js';
-import {nextPage, prevPage, jumpToPage} from '../../actions';
-import {BrowserRouter as Router, Link, Route, Switch, Redirect} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 /**
 * Shows a missing page UI
@@ -21,7 +17,6 @@ class MissingPageController extends React.Component {
  * Render the view
  */
   render() {
-
     return (
       <div className="paginator">
         <div className="page selected">

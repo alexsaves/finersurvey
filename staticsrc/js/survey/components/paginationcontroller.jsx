@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PageComponent from '../models/page.jsx';
 import Validator from './validator';
 import Keymaker from './keymaker';
-import {nextPage, prevPage, jumpToPage, changePaginationControllerVisibility} from '../../actions';
-import {BrowserRouter as Router, Link, Route, Switch, Redirect} from 'react-router-dom';
+import { nextPage, prevPage, jumpToPage } from '../../actions';
+import { Link } from 'react-router-dom';
 
 /**
 * Represents the entire survey
@@ -29,14 +29,14 @@ class PaginationController extends React.Component {
    * Animate to the next page
    */
   animateForward() {
-    this.setState({animatingForward: true});
+    this.setState({ animatingForward: true });
   }
 
   /**
    * Animate to the previous page
    */
   animateBackward() {
-    this.setState({animatingBackward: true});
+    this.setState({ animatingBackward: true });
   }
 
   /**
@@ -44,7 +44,7 @@ class PaginationController extends React.Component {
    */
   cancelValidation() {
     clearTimeout(this._advanceTimer);
-    this.setState({showValidation: false});
+    this.setState({ showValidation: false });
   }
 
   /**
@@ -57,10 +57,10 @@ class PaginationController extends React.Component {
     }
     let failedValidationItems = this.hasRequiredAnswersForPage(this.props.currentPage),
       validated = failedValidationItems.length === 0;
-    this.setState({showValidation: false, remindInstructionsFor: []});
+    this.setState({ showValidation: false, remindInstructionsFor: [] });
     if (!validated) {
       this._advanceTimer = setTimeout(() => {
-        this.setState({showValidation: true, remindInstructionsFor: failedValidationItems});
+        this.setState({ showValidation: true, remindInstructionsFor: failedValidationItems });
       }, 20);
       if (e) {
         e.stopPropagation();
@@ -95,7 +95,6 @@ class PaginationController extends React.Component {
    */
   hasRequiredAnswersForPage(pageNumber) {
     let pageObj = this.props.pages[pageNumber],
-      didPass = true,
       answers = this.props.answers,
       validator = new Validator(),
       faledQList = [];
@@ -108,11 +107,9 @@ class PaginationController extends React.Component {
             // Required question
             let theanswer = answers[elm.name];
             if (typeof theanswer == 'undefined') {
-              didPass = false;
               faledQList.push(elm.name);
             } else {
               if (!validator.validate(elm, theanswer)) {
-                didPass = false;
                 faledQList.push(elm.name);
               }
             }
@@ -129,9 +126,6 @@ class PaginationController extends React.Component {
    */
   pageCanAutoAdvance(pageNumber) {
     let pageObj = this.props.pages[pageNumber],
-      didPass = true,
-      answers = this.props.answers,
-      faledQList = [],
       howmanyrealquestions = 0;
 
     if (pageNumber == this.props.pages.length - 1) {
@@ -147,7 +141,6 @@ class PaginationController extends React.Component {
       });
 
     if (howmanyrealquestions < 2) {
-      let qt = pageObj.elements[0].type
       return pageObj
         .elements
         .find((elm) => {
@@ -164,7 +157,7 @@ class PaginationController extends React.Component {
   handleAnimationEnd(e) {
     let targ = e.target;
     if (targ.className.indexOf('page') > -1) {
-      this.setState({animatingForward: false, animatingBackward: false});
+      this.setState({ animatingForward: false, animatingBackward: false });
       if (this.state.animatingForward) {
         this
           .props
@@ -175,7 +168,7 @@ class PaginationController extends React.Component {
           .dispatch(prevPage());
       }
     } else if (targ.className.indexOf("instructions") > -1) {
-      this.setState({remindInstructionsFor: []});
+      this.setState({ remindInstructionsFor: [] });
     }
   }
 
@@ -201,7 +194,7 @@ class PaginationController extends React.Component {
    * Handle when a question is interacted with
    * @param {*} idx
    */
-  questionBeingInteractedWith(idx) {}
+  questionBeingInteractedWith() { }
 
   /**
  * Render the view
@@ -235,14 +228,14 @@ class PaginationController extends React.Component {
       <div
         className="paginator"
         onAnimationEnd={this
-        .handleAnimationEnd
-        .bind(this)}>
+          .handleAnimationEnd
+          .bind(this)}>
         {this.state.showValidation && <div
           className={"validation--holder " + (this.state.showValidation
-          ? "visible "
-          : "") + (currentPage === (this.props.pages.length - 1)
-          ? "hidden"
-          : "")}>
+            ? "visible "
+            : "") + (currentPage === (this.props.pages.length - 1)
+              ? "hidden"
+              : "")}>
           <div className="validationcontainer">
             <div className="rightarrow"></div>{this.props.messages.requiredQ}</div>
         </div>}
@@ -258,48 +251,48 @@ class PaginationController extends React.Component {
             variables={variables}
             pageNumber={idx}
             onQuestionBeingInteractedWith={this
-            .questionBeingInteractedWith
-            .bind(this)}
+              .questionBeingInteractedWith
+              .bind(this)}
             onFullyAnswerQuestion={this
-            .handleFullyAnswerQuestion
-            .bind(this)}
+              .handleFullyAnswerQuestion
+              .bind(this)}
             animatingOutBackward={idx === currentPage && isAnimatingBackward}
             animatingOutForward={idx === currentPage && isAnimatingForward}
             animatingInBackward={idx === (currentPage - 1) && isAnimatingBackward}
-            animatingInForward={idx === (currentPage + 1) && isAnimatingForward}/>;
+            animatingInForward={idx === (currentPage + 1) && isAnimatingForward} />;
         })}
         <div
           className={"paginator--backdropmobile" + (hidePagination
-          ? " hidden"
-          : "")}></div>
+            ? " hidden"
+            : "")}></div>
         <div
           className={"paginator--buttonholder left " + ((currentPage === 0 || hidePagination)
-          ? "hidden"
-          : "")}>
+            ? "hidden"
+            : "")}>
           <Link
             to={"/s/" + this.props.uid + "/" + (currentPage)}
             className="paginator--button"
             title={this.props.messages.prevPage}
             onClick={this
-            .handlePreviousRequest
-            .bind(this)}>&lt;</Link>
+              .handlePreviousRequest
+              .bind(this)}>&lt;</Link>
         </div>
         <div
           className={"paginator--buttonholder right " + (((currentPage === (this.props.pages.length - 1)) || hidePagination)
-          ? "hidden"
-          : "")}>
+            ? "hidden"
+            : "")}>
           <Link
             to={"/s/" + this.props.uid + "/" + (currentPage + 2)}
             className={"paginator--button advance--button " + (isValidated
-            ? "validated"
-            : "")}
+              ? "validated"
+              : "")}
             title={this.props.messages.nextPage}
             onMouseOut={this
-            .cancelValidation
-            .bind(this)}
+              .cancelValidation
+              .bind(this)}
             onClick={this
-            .handleAdvanceRequest
-            .bind(this)}>&gt;</Link>
+              .handleAdvanceRequest
+              .bind(this)}>&gt;</Link>
         </div>
       </div>
     );

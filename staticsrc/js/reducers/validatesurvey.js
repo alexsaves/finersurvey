@@ -20,7 +20,7 @@ function questionNameIsValid(name) {
  */
 function surveyValidatorReducer(state = [], action) {
   switch (action.type) {
-    case VALIDATE_SURVEY:
+    case VALIDATE_SURVEY: {
       let answers = action.answers,
         pages = clone(action.pages),
         variables = clone(action.variables || {}),
@@ -100,6 +100,7 @@ function surveyValidatorReducer(state = [], action) {
         }
       }
       return pages;
+    }
     default:
       return state
   }

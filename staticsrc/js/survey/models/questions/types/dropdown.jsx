@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import {changeAnswer} from '../../../../actions';
+import { connect } from 'react-redux';
+import { changeAnswer } from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
 import Keymaker from '../../../components/keymaker';
@@ -43,9 +43,8 @@ class DropdownQuestion extends React.Component {
    * Handle input from the user
    * @param {*} e
    */
-  handleAnswerChange(e) {
-    let targ = e && e.target,
-      root = ReactDOM.findDOMNode(this),
+  handleAnswerChange() {
+    let root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByClassName("dropdown-select");
     this
       .props
@@ -74,33 +73,22 @@ class DropdownQuestion extends React.Component {
       panswers = this.props.answers,
       ppages = this.props.allpages;
 
-    /*if (this.props.isFocused && !this.wasFocused) {
-      setTimeout(() => {
-        this.wasFocused = true;
-        let root = ReactDOM.findDOMNode(this),
-          btns = root.getElementsByTagName('select');
-        if (btns.length > 0) {
-          btns[0].focus();
-        }
-      }, 25);
-    }*/
-
     return (
       <div className="question--dropdown">
         <select
           tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
           onChange={this
-          .handleAnswerChange
-          .bind(this)}
+            .handleAnswerChange
+            .bind(this)}
           className="dropdown-select"
-          defaultValue={(typeof(answer) != 'undefined' && answer !== null)
-          ? answer
-          : -1}>
+          defaultValue={(typeof (answer) != 'undefined' && answer !== null)
+            ? answer
+            : -1}>
           <option disabled={true} value={-1}>{piper.pipe(this.props.placeholder || "Choose one...", panswers, ppages, variables, this.props.messages)}</option>
           {this
             .state
             .srcOrder
-            .map((rto, idxo) => {
+            .map((rto) => {
               let rt = rto.choice,
                 idx = rto.originalPosition;
               return <option key={Keymaker(idx + '_' + rt)} value={idx}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}</option>

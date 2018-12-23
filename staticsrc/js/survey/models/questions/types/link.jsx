@@ -1,9 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
-import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
-import Randomizer from '../../../components/randomizer';
 
 /**
 * Represents a link

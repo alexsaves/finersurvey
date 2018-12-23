@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import {changeAnswer} from '../../../../actions';
+import { connect } from 'react-redux';
+import { changeAnswer } from '../../../../actions';
 import Piper from '../../../components/piper';
 
 /**
@@ -30,7 +30,7 @@ class SliderRatingQuestion extends React.Component {
    * The component is ready
    */
   componentDidMount() {
-    this.didMount = true;    
+    this.didMount = true;
   }
 
   /**
@@ -84,14 +84,14 @@ class SliderRatingQuestion extends React.Component {
    * Stop dragging
    * @param {*} e
    */
-  dropDrag(e) {
+  dropDrag() {
     window.removeEventListener('mousemove', this.proxyDM);
     window.removeEventListener('mouseup', this.proxySD);
     window.removeEventListener('mouseleave', this.proxySD);
     window.removeEventListener('touchmove', this.proxyDM);
     window.removeEventListener('touchcancel', this.proxySD);
     window.removeEventListener('touchend', this.proxySD);
-    this.setState({isDragging: false});
+    this.setState({ isDragging: false });
     this
       .props
       .dispatch(changeAnswer(this.props.name, this.state.sliderValue));
@@ -111,9 +111,7 @@ class SliderRatingQuestion extends React.Component {
       e = e.touches[0];
     }
     let screenX = e.screenX,
-      screenY = e.screenY,
       xDiff = this.state.startScreenX - screenX,
-      yDiff = this.state.startScreenY - screenY,
       xWidth = this.backdrop.offsetWidth,
       xPerc = xDiff / xWidth;
     this.setState({
@@ -127,14 +125,13 @@ class SliderRatingQuestion extends React.Component {
    */
   handleLineTap(e) {
     let root = ReactDOM.findDOMNode(this),
-      targ = e.target,
       screenX = e.pageX,
       backdrop = root.getElementsByClassName('slider--backdrop')[0],
       bpos = backdrop.getBoundingClientRect(),
       perc = (screenX - bpos.left) / bpos.width,
       newslidervalue = Math.min(100, Math.max(0, perc * 100));
 
-    this.setState({sliderValue: newslidervalue});
+    this.setState({ sliderValue: newslidervalue });
     this
       .props
       .dispatch(changeAnswer(this.props.name, newslidervalue));
@@ -154,12 +151,12 @@ class SliderRatingQuestion extends React.Component {
   /**
    * The UI is about to update
    */
-  componentWillUpdate() {
+  UNSAFE_componentWillUpdate() {
     if (typeof this.props.answer == 'undefined' && typeof this.props.initialValue != 'undefined' && this.props.isFocused && !this.state.didSetInitialValue) {
-      this.setState({sliderValue: this.props.initialValue, didSetInitialValue: true});
+      this.setState({ sliderValue: this.props.initialValue, didSetInitialValue: true });
       this
         .props
-        .dispatch(changeAnswer(this.props.name, this.props.initialValue));      
+        .dispatch(changeAnswer(this.props.name, this.props.initialValue));
     }
   }
 
@@ -167,23 +164,17 @@ class SliderRatingQuestion extends React.Component {
  * Render the view
  */
   render() {
-    let qname = this.props.name,
-      ctx = this,
-      answer = this.props.answer,
+    let answer = this.props.answer,
       sliderValue = this.state.sliderValue;
 
     if (!this.state.didSetSliderFromAnswer && typeof answer != "undefined") {
       sliderValue = answer;
       setTimeout(() => {
         if (this.didMount) {
-          this.setState({didSetSliderFromAnswer: true});
+          this.setState({ didSetSliderFromAnswer: true });
         }
       }, 20);
     }
-
-    let piper = this.piper,
-      panswers = this.props.answers,
-      ppages = this.props.allpages;
 
     return (
       <div className="question--rating slider">
@@ -191,23 +182,23 @@ class SliderRatingQuestion extends React.Component {
           <div
             className="slider--backdrop"
             onMouseDownCapture={this
-            .handleLineTap
-            .bind(this)}>
-            <div className="sliderMidpoint"/>
+              .handleLineTap
+              .bind(this)}>
+            <div className="sliderMidpoint" />
           </div>
           <a
             className={"slider--ball" + (this.state.isDragging
-            ? " dragging"
-            : "")}
+              ? " dragging"
+              : "")}
             style={{
-            left: sliderValue + '%'
-          }}
+              left: sliderValue + '%'
+            }}
             onTouchStartCapture={this
-            .handleMouseDragStart
-            .bind(this)}
+              .handleMouseDragStart
+              .bind(this)}
             onMouseDownCapture={this
-            .handleMouseDragStart
-            .bind(this)}></a>
+              .handleMouseDragStart
+              .bind(this)}></a>
         </div>
         <div className="labelcontainer">
           {this.props.low && <span className="smalllabel lowlabel">{this.props.low}</span>}

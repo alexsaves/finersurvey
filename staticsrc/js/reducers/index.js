@@ -1,4 +1,4 @@
-import {combineReducers, applyMiddleware} from 'redux';
+import {combineReducers} from 'redux';
 import metadata from './metadata';
 import pages from './pages';
 import currentPage from './currentpage';
@@ -10,7 +10,6 @@ import respondent from './respondent';
 import isNew from './isnew';
 import {loadingStatus} from './loading';
 import surveyValidatorReducer from './validatesurvey';
-import {routerReducer} from 'react-router-redux';
 
 /**
  * The set of reducers

@@ -9,7 +9,7 @@ function metadata(state = {}, action) {
       tmp = Object.assign(tmp, action.attrObj);
       return tmp;
     default:
-      return state
+      return state;
   }
 }
 

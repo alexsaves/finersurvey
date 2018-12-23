@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import {changeAnswer} from '../../../../actions';
+import { connect } from 'react-redux';
+import { changeAnswer } from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
 import Keymaker from '../../../components/keymaker';
@@ -21,8 +21,8 @@ class CheckboxQuestion extends React.Component {
     this.Randomizer = new Randomizer();
     this.state = {
       otherval: ((this.props.answer && this.props.answer.other)
-      ? this.props.answer.other
-      : ""),
+        ? this.props.answer.other
+        : ""),
       srcOrder: this
         .Randomizer
         .randomizeChoices(this.props.choices, this.props.random)
@@ -102,7 +102,7 @@ class CheckboxQuestion extends React.Component {
       finalResponse.other = otherval;
       if (otherval && otherval.trim().length > 0) {
         responses.push(9999);
-        this.setState({otherval: otherval});
+        this.setState({ otherval: otherval });
       }
     }
     if ((!limits || typeof limits.max == 'undefined') || (limits.max >= howManySelected)) {
@@ -150,9 +150,9 @@ class CheckboxQuestion extends React.Component {
         let targ = e.currentTarget,
           cb = targ.getElementsByTagName("input")[0];
 
-        cb.checked = !!!cb.checked;
-        e.currentTarget = cb;        
-        this.handleAnswerChange(e);        
+        cb.checked = !cb.checked;
+        e.currentTarget = cb;
+        this.handleAnswerChange(e);
       }
     }
   }
@@ -165,7 +165,7 @@ class CheckboxQuestion extends React.Component {
     clearTimeout(this.iptThrottle);
     this.iptThrottle = setTimeout(() => {
       this.handleAnswerChange();
-      this.setState({otherval: targ.value});
+      this.setState({ otherval: targ.value });
     }, 200);
   }
 
@@ -173,8 +173,7 @@ class CheckboxQuestion extends React.Component {
  * Render the view
  */
   render() {
-    let qname = this.props.name,
-      ctx = this,
+    let ctx = this,
       answers = this.props.answer,
       variables = this.props.variables,
       piper = this.piper,
@@ -205,40 +204,40 @@ class CheckboxQuestion extends React.Component {
             return <label
               key={Keymaker(idx + rt)}
               onClick={this
-              .handleClick
-              .bind(this)}
+                .handleClick
+                .bind(this)}
               data-originalValue={idx}
               onKeyPress={this
-              .handleKeyPress
-              .bind(this)}
+                .handleKeyPress
+                .bind(this)}
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
-              ? "selected"
-              : "")}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}<input
-              type="checkbox"
-              name={idx}
-              value={idx}
-              defaultChecked={shouldOptionBeSelected(idx)}
-              onChange={ctx
-              .handleAnswerChange
-              .bind(ctx)}/></label>
+                ? "selected"
+                : "")}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}<input
+                type="checkbox"
+                name={idx}
+                value={idx}
+                defaultChecked={shouldOptionBeSelected(idx)}
+                onChange={ctx
+                  .handleAnswerChange
+                  .bind(ctx)} /></label>
           })}
         {this.props.other === true && <input
           type="text"
-          className={"other--textfield " + ((typeof(otherval) != null && otherval.length > 0)
-          ? "selected"
-          : "")}
+          className={"other--textfield " + ((otherval !== null && otherval.length > 0)
+            ? "selected"
+            : "")}
           tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + this.state.srcOrder.length + 1}
           onFocus={this
-          .handleFocus
-          .bind(this)}
+            .handleFocus
+            .bind(this)}
           placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables, this.props.messages)}
           onKeyUp={ctx
-          .handleIptThrottleChange
-          .bind(ctx)}
+            .handleIptThrottleChange
+            .bind(ctx)}
           defaultValue={((this.props.answer && this.props.answer.other)
-          ? this.props.answer.other
-          : "")}/>}
+            ? this.props.answer.other
+            : "")} />}
       </div>
     );
   }

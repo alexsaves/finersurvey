@@ -167,7 +167,7 @@ class MatrixRadioQuestion extends React.Component {
         let targ = e.currentTarget,
           cb = targ.getElementsByTagName("input")[0];
 
-        cb.checked = !!!cb.checked;
+        cb.checked = !cb.checked;
         e.currentTarget = cb;
         this.handleAnswerChange(e);
       }
@@ -178,12 +178,10 @@ class MatrixRadioQuestion extends React.Component {
  * Render the view
  */
   render() {
-    let qname = this.props.name,
-      ctx = this,
+    let ctx = this,
       selectedItem = this.state.selectedItem,
       animatingBackward = this.state.animatingBackward,
       animatingForward = this.state.animatingForward,
-      answer = (this.props.answer && this.props.answer[this.state.selectedItem]) || null,
       piper = this.piper,
       variables = this.props.variables,
       panswers = this.props.answers,

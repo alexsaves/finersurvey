@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import {removeTheLoadingScreen, validateSurvey} from '../../actions';
+import { connect } from 'react-redux';
+import { removeTheLoadingScreen, validateSurvey } from '../../actions';
 
 /**
 * Represents the entire survey
@@ -24,11 +24,11 @@ class LoadingScreenComponent extends React.Component {
   /**
    * We're done
    */
-  removeLoadingScreen() {    
+  removeLoadingScreen() {
     sessionStorage.setItem("didLoadSurvey", "true");
     clearTimeout(this.removeFailsafeTimer);
     if (!this.state.didAttemptRemove) {
-      this.setState({didAttemptRemove: true});
+      this.setState({ didAttemptRemove: true });
       this
         .props
         .dispatch(removeTheLoadingScreen());
@@ -51,7 +51,7 @@ class LoadingScreenComponent extends React.Component {
       imgObjs = [],
       didPreviouslyLoad = sessionStorage.getItem("didLoadSurvey") === "true";
 
-    if (didPreviouslyLoad) {      
+    if (didPreviouslyLoad) {
       setTimeout(this.removeLoadingScreen.bind(this), 10);
     } else {
       this.removeFailsafeTimer = setTimeout(this.removeLoadingScreen.bind(this), this.maxTime);
@@ -77,7 +77,7 @@ class LoadingScreenComponent extends React.Component {
               imgObjs.splice(imgObjs.indexOf(whichone), 1);
             };
           }(bgImg);
-          imgObjs.push({src: bgImg, iObj: bgimg});
+          imgObjs.push({ src: bgImg, iObj: bgimg });
           bgimg.src = bgImg;
         }
       }
@@ -85,8 +85,8 @@ class LoadingScreenComponent extends React.Component {
 
     // Compare rectangles
     var rectsAreTheSame = function (rect1, rect2) {
-        return rect1.left == rect2.left && rect1.top == rect2.top && rect1.width == rect2.width && rect1.height == rect2.height;
-      },
+      return rect1.left == rect2.left && rect1.top == rect2.top && rect1.width == rect2.width && rect1.height == rect2.height;
+    },
       done = () => {
         this.removeLoadingScreen();
       };
@@ -149,8 +149,8 @@ class LoadingScreenComponent extends React.Component {
     return (
       <div
         className={"loading--container" + (this.props.loadingComplete
-        ? " complete"
-        : "")}>
+          ? " complete"
+          : "")}>
         <div className="loading--inner">
           <svg
             version="1.0"
@@ -161,7 +161,7 @@ class LoadingScreenComponent extends React.Component {
             <g><path
               d="M78.75 16.18V1.56a64.1 64.1 0 0 1 47.7 47.7H111.8a49.98 49.98 0 0 0-33.07-33.08zM16.43 49.25H1.8a64.1 64.1 0 0 1 47.7-47.7V16.2a49.98 49.98 0 0 0-33.07 33.07zm33.07 62.32v14.62A64.1 64.1 0 0 1 1.8 78.5h14.63a49.98 49.98 0 0 0 33.07 33.07zm62.32-33.07h14.62a64.1 64.1 0 0 1-47.7 47.7v-14.63a49.98 49.98 0 0 0 33.08-33.07z"
               fill="#3e885b"
-              fillOpacity="1"/>
+              fillOpacity="1" />
               <animateTransform
                 attributeName="transform"
                 type="rotate"
@@ -176,6 +176,7 @@ class LoadingScreenComponent extends React.Component {
           href="https://www.finer.ink"
           title="Sales Win/Loss Analysis"
           target="_blank"
+          rel="noopener noreferrer"
           className="logo--finerink"></a>
         <div className="fontTestZone">giItT1WQy@!-/#
           <div className="subTest">giItT1WQy@!-/#</div>
@@ -188,7 +189,7 @@ class LoadingScreenComponent extends React.Component {
 // This is our select function that will extract from the state the data slice
 // we want to expose through props to our component.
 const mapStateToProps = (state/*, props*/) => {
-  return {metadata: state.metadata, pages: state.pages, currentPage: state.currentPage, answers: state.answers}
+  return { metadata: state.metadata, pages: state.pages, currentPage: state.currentPage, answers: state.answers }
 }
 
 // Connect the loading UI

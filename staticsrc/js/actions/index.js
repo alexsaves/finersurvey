@@ -18,7 +18,7 @@ export const CHANGE_NEW_STATUS = "CHANGE_NEW_STATUS";
  */
 function _changeAnswer(questionName, answerState) {
   return {type: CHANGE_ANSWER, questionName, answerState};
-};
+}
 
 /**
  * Change or add an answer
@@ -34,49 +34,49 @@ export function changeAnswer(questionName, answerState) {
       dispatch(transmitAnswers());
     }
   };
-};
+}
 
 /*
  * Modify meta-data
  */
 export function modifyMetaData(attrObj) {
   return {type: MODIFY_METADATA, attrObj};
-};
+}
 
 /*
  * Next page
  */
 export function nextPage() {
   return {type: NEXT_PAGE};
-};
+}
 
 /*
  * Prev page
  */
 export function prevPage() {
   return {type: PREV_PAGE};
-};
+}
 
 /*
  * Jump to a page
  */
 export function jumpToPage(pg) {
   return {type: JUMP_TO_PAGE, pg};
-};
+}
 
 /*
  * Remove a loading screen
  */
 export function removeTheLoadingScreen() {
   return {type: LOADING_SCREEN_REMOVE};
-};
+}
 
 /*
  * Validate the entire survey with all the showIf conditions
  */
 function _validateSurvey(answers, pages, variables) {
   return {type: VALIDATE_SURVEY, answers, pages, variables};
-};
+}
 
 /*
  * Validate the entire survey with all the showIf conditions
@@ -86,14 +86,14 @@ export function validateSurvey() {
     var st = getState();
     dispatch(_validateSurvey(st.answers, st.pages, st.variables || {}));
   };
-};
+}
 
 /*
  * Change the respondent
  */
 function setRespondentId(respid) {
   return {type: CHANGE_RESPONDENT, respid};
-};
+}
 
 /*
  * Transmit answers to server
@@ -124,11 +124,11 @@ export function transmitAnswers() {
       dispatch(setRespondentId(data.respondent));
     });
   };
-};
+}
 
 /*
  * Set the is-new status of the respondent
  */
 export function changeIsNewStatus(isNew) {
   return {type: CHANGE_NEW_STATUS, isNew};
-};
+}

@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
 import RadioQuestion from './types/radio.jsx';
 import CheckboxQuestion from './types/checkbox.jsx';
 import RatingQuestion from './types/rating.jsx';

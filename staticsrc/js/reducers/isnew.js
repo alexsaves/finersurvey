@@ -5,7 +5,6 @@ function isnew(state = [], action) {
   switch (action.type) {
     case CHANGE_NEW_STATUS:
       return !!action.isNew;
-      break;
     default:
       return state
   }
