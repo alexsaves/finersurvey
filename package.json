@@ -1,6 +1,6 @@
 {
     "name": "finersurvey",
-    "version": "0.5.21",
+    "version": "0.5.22",
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
@@ -32,14 +32,14 @@
             "port": 6379,
             "return_buffers": true
         },
-        "db_": {
+        "db": {
             "host": "localhost",
             "user": "finerAdmin",
             "pw": "finerPass",
             "db": "finerinkprod",
             "ssl": "false"
         },
-        "db": {
+        "dbProd": {
             "host": "finerink-cluster.cluster-ckumtmamqoyw.us-west-2.rds.amazonaws.com",
             "user": "finerinkadmin",
             "pw": "J39dK$sl_1!",
