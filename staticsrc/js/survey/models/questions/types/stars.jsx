@@ -1,7 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import {changeAnswer} from '../../../../actions';
+import { connect } from 'react-redux';
+import { changeAnswer } from '../../../../actions';
 import Piper from '../../../components/piper';
 import Keymaker from '../../../components/keymaker';
 
@@ -65,15 +64,15 @@ class StarsRatingQuestion extends React.Component {
   handleStarHover(e) {
     let targ = e.currentTarget,
       hoverNumber = parseInt(targ.getAttribute('data-which'));
-    this.setState({hoverNumber: hoverNumber});
+    this.setState({ hoverNumber: hoverNumber });
   }
 
   /**
    * The user moused out of the star zone
    * @param {*} e
    */
-  handleHoverLeave(e) {
-    this.setState({hoverNumber: -1});
+  handleHoverLeave() {
+    this.setState({ hoverNumber: -1 });
   }
 
   /**
@@ -86,7 +85,7 @@ class StarsRatingQuestion extends React.Component {
         let targ = e.currentTarget,
           cb = targ.getElementsByTagName("input")[0];
 
-        cb.checked = !!!cb.checked;
+        cb.checked = !cb.checked;
         e.currentTarget = cb;
         this.handleAnswerChange(e);
       }
@@ -109,56 +108,42 @@ class StarsRatingQuestion extends React.Component {
       ],
       hoverNumber = this.state.hoverNumber,
       ctx = this,
-      answer = this.props.answer || 0,
-      piper = this.piper,
-      panswers = this.props.answers,
-      ppages = this.props.allpages;
-
-    /*if (this.props.isFocused && !this.wasFocused) {
-      setTimeout(() => {
-        this.wasFocused = true;
-        let root = ReactDOM.findDOMNode(this),
-          btns = root.getElementsByTagName('label');
-        if (btns.length > 0) {
-          btns[0].focus();
-        }
-      }, 25);
-    }*/
+      answer = this.props.answer || 0;
 
     return (
       <div className="question--rating stars">
         <div
           className="buttongroup"
           onMouseLeave={this
-          .handleHoverLeave
-          .bind(this)}>
+            .handleHoverLeave
+            .bind(this)}>
           {ratingScale.map((rt, idx) => {
             return <label
               key={Keymaker(idx + '_' + rt)}
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
               data-which={idx}
               onFocus={this
-              .handleStarHover
-              .bind(this)}
+                .handleStarHover
+                .bind(this)}
               onMouseEnter={this
-              .handleStarHover
-              .bind(this)}
+                .handleStarHover
+                .bind(this)}
               onKeyPress={this
-              .handleKeyPress
-              .bind(this)}
-              className={"star--button fa fa-star" + (!!(rt <= answer)
-              ? " selected"
-              : "") + (hoverNumber >= idx
-              ? " hovered "
-              : "")}>
+                .handleKeyPress
+                .bind(this)}
+              className={"star--button fa fa-star" + ((rt <= answer)
+                ? " selected"
+                : "") + (hoverNumber >= idx
+                  ? " hovered "
+                  : "")}>
               <span className={"fa fa-star-o star--inner"}></span><input
                 type="checkbox"
                 checked={!!(rt <= answer)}
                 name={qname}
                 value={rt}
                 onChange={ctx
-              .handleAnswerChange
-              .bind(ctx)}/></label>
+                  .handleAnswerChange
+                  .bind(ctx)} /></label>
           })}
         </div>
         <div className="labelcontainer">

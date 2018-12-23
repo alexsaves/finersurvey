@@ -1,16 +1,13 @@
 import React from 'react';
-import {render} from 'react-dom';
-import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
-import {Provider} from 'react-redux';
+import { render } from 'react-dom';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
 import Application from './application.jsx';
-import {ConnectedRouter, routerMiddleware, push} from 'react-router-redux';
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import reducers from './reducers';
 import createHistory from 'history/createBrowserHistory';
 import thunk from 'redux-thunk';
 import debounce from 'debounce';
-
-// The apps initial state
-const initialState = {};
 
 // Provides default application messages
 const MESSAGES = {
@@ -60,14 +57,14 @@ if (stateElm) {
       ansObj = JSON.parse(oldAnswers);
     }
     if (typeof startupState.isNew == "undefined") {
-      startupState.isNew = !!!localStorage.getItem("_" + startupState.metadata.guid);
+      startupState.isNew = !localStorage.getItem("_" + startupState.metadata.guid);
     }
     localStorage.setItem("_" + startupState.metadata.guid, (new Date()).getTime().toString());
     startupState.messages = Object.assign({}, MESSAGES, startupState.messages);
     let existingAnsOnObject = JSON.stringify(startupState.answers);
     if (existingAnsOnObject && existingAnsOnObject.length > 1 && existingAnsOnObject != "{}") {
       //console.log("OVERWRITING WITH", startupState.answers);
-      localStorage.setItem(persistentKey, JSON.stringify({key: persistentKey, hash: surveyHash, answers: startupState.answers}));
+      localStorage.setItem(persistentKey, JSON.stringify({ key: persistentKey, hash: surveyHash, answers: startupState.answers }));
     }
     if (ansObj.key == persistentKey && ansObj.hash == surveyHash && (!existingAnsOnObject || existingAnsOnObject == '{}')) {
       //console.log("Writing to ", ansObj.answers);
@@ -83,7 +80,7 @@ var __lastAnsState;
 
 // Build the middleware for intercepting and dispatching navigation actions
 let appStore = createStore(reducers, startupState, applyMiddleware(thunk), applyMiddleware(routerMiddleware(history)));
-let unsubscribe = appStore.subscribe(() => {
+appStore.subscribe(() => {
   let st = appStore.getState(),
     ansState = {
       key: persistentKey,
@@ -110,15 +107,15 @@ function ___isFacebookApp() {
   var ua = navigator.userAgent || navigator.vendor || window.opera;
   return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
 }
-if (___isFacebookApp()) {
-  function ___fixViewportHeight() {
-    var html = document.querySelector('html');
-    function _onResize(event) {
-      html.style.height = window.innerHeight + 'px';
-    }
-    window.addEventListener('resize', debounce(_onResize, 125));
-    _onResize();
+function ___fixViewportHeight() {
+  var html = document.querySelector('html');
+  function _onResize() {
+    html.style.height = window.innerHeight + 'px';
   }
+  window.addEventListener('resize', debounce(_onResize, 125));
+  _onResize();
+}
+if (___isFacebookApp()) {
   // Start fixing
   ___fixViewportHeight();
 }
@@ -127,8 +124,8 @@ if (___isFacebookApp()) {
 if (rootNode) {
   render(
     <Provider store={appStore}>
-    <ConnectedRouter history={history}>
-      <Application/>
-    </ConnectedRouter>
-  </Provider>, rootNode);
+      <ConnectedRouter history={history}>
+        <Application />
+      </ConnectedRouter>
+    </Provider>, rootNode);
 }

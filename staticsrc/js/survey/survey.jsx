@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import ProgressComponent from './components/progress.jsx';
 import PageController from './components/paginationcontroller.jsx';
 import LoadingScreen from './components/loadingscreen.jsx';
 import MissingPageMessage from './components/missingpagemessage.jsx';
-import {nextPage, prevPage, jumpToPage, changeIsNewStatus} from '../actions';
-import {Link} from 'react-router-dom';
+import { changeIsNewStatus } from '../actions';
+import { Link } from 'react-router-dom';
 
 /**
 * Represents the entire survey
@@ -54,7 +54,7 @@ class SurveyComponent extends React.Component {
     let surveyNode = document.getElementsByClassName("survey")[0],
       isOverflowing = surveyNode.scrollHeight > surveyNode.offsetHeight;
     if (isOverflowing != this.state.isOverflowing) {
-      this.setState({isOverflowing: isOverflowing});
+      this.setState({ isOverflowing: isOverflowing });
     }
   }
 
@@ -64,7 +64,7 @@ class SurveyComponent extends React.Component {
   handleTransitionEnd(e) {
     let targ = e.target;
     if (targ.className.indexOf('loading--container') > -1) {
-      this.setState({hideLoadingScreen: true});
+      this.setState({ hideLoadingScreen: true });
     }
   }
 
@@ -88,26 +88,26 @@ class SurveyComponent extends React.Component {
         ? !!this.props.pages[this.props.currentPage].hideLogo
         : true;
     }
-    
+
     // Spit out the survey
     return (
       <div
         className={"survey" + (this.state.isOverflowing
-        ? " overflowing"
-        : "")}
+          ? " overflowing"
+          : "")}
         onTransitionEnd={this
-        .handleTransitionEnd
-        .bind(this)}>
-        {!showMissingPageUI && <ProgressComponent uid={uid} progress={desiredPage / this.props.pages.length}/>}
-        {!showMissingPageUI && pages.length > 0 && <PageController uid={uid} desiredPage={desiredPage}/>}
-        {showMissingPageUI && <MissingPageMessage/>}
+          .handleTransitionEnd
+          .bind(this)}>
+        {!showMissingPageUI && <ProgressComponent uid={uid} progress={desiredPage / this.props.pages.length} />}
+        {!showMissingPageUI && pages.length > 0 && <PageController uid={uid} desiredPage={desiredPage} />}
+        {showMissingPageUI && <MissingPageMessage />}
         <div
           title={this.props.messages.winLossAnalysis}
           target="_blank"
           className={"logo--finerink" + (hideLogo
-          ? " hidden"
-          : "")}></div>
-        {showingLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete}/>}
+            ? " hidden"
+            : "")}></div>
+        {showingLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete} />}
         <Link to={"/s/" + uid} aria-hidden="true" className="resetSurveyLink"></Link>
       </div>
     );
@@ -124,7 +124,6 @@ const mapStateToProps = (state/*, props*/) => {
     variables: state.variables,
     messages: state.messages,
     loadingComplete: !!state.loadingComplete,
-    messages: state.messages,
     answers: state.answers,
     isNew: state.isNew
   }

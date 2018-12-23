@@ -1,10 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {changeAnswer} from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
-import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
@@ -167,7 +165,7 @@ class MatrixRatingQuestion extends React.Component {
         let targ = e.currentTarget,
           cb = targ.getElementsByTagName("input")[0];
 
-        cb.checked = !!!cb.checked;
+        cb.checked = !cb.checked;
         e.currentTarget = cb;
         this.handleAnswerChange(e);
       }
@@ -198,17 +196,6 @@ class MatrixRatingQuestion extends React.Component {
       panswers = this.props.answers,
       ppages = this.props.allpages,
       variables = this.props.variables;
-
-    /*if (this.props.isFocused && !this.wasFocused) {
-      setTimeout(() => {
-        this.wasFocused = true;
-        let root = ReactDOM.findDOMNode(this),
-          btns = root.getElementsByClassName('selectbutton');
-        if (btns.length > 0) {
-          btns[0].focus();
-        }
-      }, 100);
-    }*/
 
     // Spit out the question node
     return (
@@ -295,7 +282,7 @@ class MatrixRatingQuestion extends React.Component {
                   .handleKeyPress
                   .bind(this)}
                   tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
-                  className={"selectbutton question--ratingitem" + (!!(rt <= answer)
+                  className={"selectbutton question--ratingitem" + ((rt <= answer)
                   ? " selected"
                   : "")}>{rt}<input
                   type="checkbox"

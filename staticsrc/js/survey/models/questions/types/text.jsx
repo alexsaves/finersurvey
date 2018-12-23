@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import {changeAnswer} from '../../../../actions';
+import { connect } from 'react-redux';
+import { changeAnswer } from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
 
@@ -30,9 +30,8 @@ class TextQuestion extends React.Component {
    * Handle input from the user
    * @param {*} e
    */
-  handleAnswerChange(e) {
-    let targ = e && e.target,
-      root = ReactDOM.findDOMNode(this),
+  handleAnswerChange() {
+    let root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByClassName("main--textfield");
 
     if (this.props.modifier == 'number' || this.props.modifier == 'integer') {
@@ -119,12 +118,12 @@ class TextQuestion extends React.Component {
         9
       ];
       if (validKeys.indexOf(e.keyCode) == -1 && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
-        if ((this.props.modifier == 'number') && !!!e.key.match(/[0-9\.]/)) {
+        if ((this.props.modifier == 'number') && !e.key.match(/[0-9.]/)) {
           e.stopPropagation();
           e.preventDefault();
           return false;
         }
-        if ((this.props.modifier == 'integer') && !!!e.key.match(/[0-9]/)) {
+        if ((this.props.modifier == 'integer') && !e.key.match(/[0-9]/)) {
           e.stopPropagation();
           e.preventDefault();
           return false;
@@ -137,22 +136,22 @@ class TextQuestion extends React.Component {
    * Handle focus on the input
    * @param {*} e
    */
-  handleFocus(e) {
+  handleFocus() {
     // Signal that the user is interacting with the question
     if (this.props.onQuestionBeingInteractedWith) {
       this
         .props
         .onQuestionBeingInteractedWith();
     }
-    this.setState({isFocused: true});
+    this.setState({ isFocused: true });
   }
 
   /**
    * Handle blur on the input
    * @param {*} e
    */
-  handleBlur(e) {
-    this.setState({isFocused: false});
+  handleBlur() {
+    this.setState({ isFocused: false });
   }
 
   /**
@@ -160,10 +159,7 @@ class TextQuestion extends React.Component {
  */
   render() {
     let ctx = this,
-      isMultiline = !!(this.props.modifier && this.props.modifier.trim().toLowerCase() == "multiline"),
-      piper = this.piper,
-      panswers = this.props.answers,
-      ppages = this.props.allpages,
+      isMultiline = !!(this.props.modifier && this.props.modifier.trim().toLowerCase() == "multiline"),      
       limits = this.props.limits,
       charlim = limits && limits.character,
       wordlim = limits && limits.word,
@@ -239,46 +235,46 @@ class TextQuestion extends React.Component {
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
               placeholder={this.props.placeholder || ''}
               onFocus={this
-              .handleFocus
-              .bind(this)}
+                .handleFocus
+                .bind(this)}
               onBlur={this
-              .handleBlur
-              .bind(this)}
+                .handleBlur
+                .bind(this)}
               onKeyDownCapture={this
-              .validateKeyDown
-              .bind(this)}
+                .validateKeyDown
+                .bind(this)}
               onKeyUp={this
-              .handleIptThrottleChange
-              .bind(this)}
+                .handleIptThrottleChange
+                .bind(this)}
               defaultValue={this.props.answer}></textarea>{limittext != null && <span
-              className={"textquestion--charcount" + (limitalarm
-              ? " bad"
-              : "")}>{limittext}</span>}</div>{!!wordlimittext && <span
-            className={"textquestion--wordcount" + (wordlimitalarm
-            ? " bad"
-            : "")}>{wordlimittext}</span>}</div>}
+                className={"textquestion--charcount" + (limitalarm
+                  ? " bad"
+                  : "")}>{limittext}</span>}</div>{!!wordlimittext && <span
+                    className={"textquestion--wordcount" + (wordlimitalarm
+                      ? " bad"
+                      : "")}>{wordlimittext}</span>}</div>}
         {!isMultiline && <div className="text--outercontainer">
           <div className="text--inputcontainer"><input
             type={iptType}
             tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
             onKeyDownCapture={this
-          .validateKeyDown
-          .bind(this)}
+              .validateKeyDown
+              .bind(this)}
             onFocus={this
-          .handleFocus
-          .bind(this)}
+              .handleFocus
+              .bind(this)}
             className="main--textfield"
             placeholder={this.props.placeholder || ''}
             onKeyUp={this
-          .handleIptThrottleChange
-          .bind(this)}
-            defaultValue={this.props.answer}/>{limittext != null && <span
+              .handleIptThrottleChange
+              .bind(this)}
+            defaultValue={this.props.answer} />{limittext != null && <span
               className={"textquestion--charcount" + (limitalarm
-              ? " bad"
-              : "")}>{limittext}</span>}</div>{!!wordlimittext && <span
-            className={"textquestion--wordcount" + (wordlimitalarm
-            ? " bad"
-            : "")}>{wordlimittext}</span>}</div>}
+                ? " bad"
+                : "")}>{limittext}</span>}</div>{!!wordlimittext && <span
+                  className={"textquestion--wordcount" + (wordlimitalarm
+                    ? " bad"
+                    : "")}>{wordlimittext}</span>}</div>}
       </div>
     );
   }

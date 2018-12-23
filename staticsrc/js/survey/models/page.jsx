@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
 import QuestionComponent from './questions/question.jsx';
 
 /**

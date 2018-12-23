@@ -64,17 +64,17 @@ gulp.task('libs', function () {
 /**
  * Main entry point
  */
-gulp.task('default', ['sass', 'js', 'assets', 'libs']);
+gulp.task('default', gulp.series('sass', 'js', 'assets', 'libs'));
 
 /**
  * Watch task
  */
-gulp.task('watch', ['default'], function () {
+gulp.task('watch', gulp.series('default'), function () {
     isDebug = true;
     console.log("Running in DEBUG MODE!".yellow);
     gulp.watch([
         src + '/js/*.js',
         src + '/css/**/*.scss',
         src + '/assets/**/*'
-    ], ['default']);
+    ], gulp.series('default'));
 });

@@ -6,7 +6,7 @@ export default class {
    * Set up a new piper
    */
   constructor() {
-    this.pipeMatch = /\$\{([\^@\.\[\]a-zA-Z0-9_]*)\}/g;
+    this.pipeMatch = /\$\{([\^@.[\]a-zA-Z0-9_]*)\}/g;
     this.quickMatch = {};
   }
 
@@ -63,7 +63,7 @@ export default class {
           }
           return answer[subQuestion].trim();
         }
-      case "rating":
+      case "rating": {
         if (isOther) {
           throw new Error("Other is not supported in piping for rating questions.");
         }
@@ -78,6 +78,7 @@ export default class {
           default:
             throw new Error("Pipine error. Unknown rating modifier: " + modifier);
         }
+      }
       case "radio":
         if (isOther) {
           return answer.other || (meta && meta.otherDefaultValue);
@@ -154,7 +155,7 @@ export default class {
     /*if (text.indexOf('feature1') > -1) {
       debugger;
     }*/
-    text = text.replace(this.pipeMatch, (match, questionName, position) => {
+    text = text.replace(this.pipeMatch, (match, questionName) => {
       let capitalize = false,
         lowercaseize = false;
       if (questionName.substr(0, 1) == "^") {
@@ -184,7 +185,7 @@ export default class {
         subQuestion = 9999;
         questionName = questionName.substr(0, questionName.toLowerCase().indexOf('[other]'));
       } else if (questionName.indexOf('[') > -1) {
-        subQuestion = parseInt(questionName.substr(questionName.indexOf('[')).replace(/[\[\]]/g, ''));
+        subQuestion = parseInt(questionName.substr(questionName.indexOf('[')).replace(/[[\]]/g, ''));
         questionName = questionName.substr(0, questionName.toLowerCase().indexOf('['));
       }
 
@@ -206,7 +207,7 @@ export default class {
         if (q) {
           let a = this._getAnswerFromKeyName(q, answers, questionName);
           if (a) {
-            let fres = this._parseAnswer(q, a, questionName, isOther, subQuestion, meta);            
+            let fres = this._parseAnswer(q, a, questionName, isOther, subQuestion, meta);
             fres = fres.toString();
 
             if (fres != null && typeof fres != 'undefined') {
@@ -247,5 +248,4 @@ export default class {
     }
     return result;
   }
-
-};
+}

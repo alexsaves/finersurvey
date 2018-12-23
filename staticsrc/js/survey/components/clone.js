@@ -4,8 +4,8 @@ export default function clone(item) {
   } // null, undefined values check
 
   var types = [
-      Number, String, Boolean
-    ],
+    Number, String, Boolean
+  ],
     result;
 
   // normalizing primitives if someone did new String('aaa'), or new
@@ -19,13 +19,13 @@ export default function clone(item) {
   if (typeof result == "undefined") {
     if (Object.prototype.toString.call(item) === "[object Array]") {
       result = [];
-      item.forEach(function (child, index, array) {
+      item.forEach(function (child, index) {
         result[index] = clone(child);
       });
     } else if (typeof item == "object") {
       // testing that this is DOM
       if (item.nodeType && typeof item.cloneNode == "function") {
-        var result = item.cloneNode(true);
+        result = item.cloneNode(true);
       } else if (!item.prototype) { // check that this is a literal
         if (item instanceof Date) {
           result = new Date(item);
@@ -39,12 +39,8 @@ export default function clone(item) {
       } else {
         // depending what you would like here, just keep the reference, or create new
         // object
-        if (false && item.constructor) {
-          // would not advice to do that, reason? Read below
-          result = new item.constructor();
-        } else {
-          result = item;
-        }
+        result = item;
+
       }
     } else {
       result = item;
@@ -52,4 +48,4 @@ export default function clone(item) {
   }
 
   return result;
-};
+}

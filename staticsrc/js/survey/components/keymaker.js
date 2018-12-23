@@ -10,8 +10,8 @@ export default function (str) {
   if (orig) {
     return orig.val;
   } else {
-    var keyv = "_" + md5.b64_md5(str).replace(/[\/\\]/g, '');
+    var keyv = "_" + md5.b64_md5(str).replace(/[/\\]/g, '');
     ____pastKeys.push({src: str, val: keyv});
     return keyv;
   }
-};
+}

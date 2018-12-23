@@ -5,7 +5,7 @@ export default class {
   /**
    * Set up a new validator
    */
-  constructor() {}
+  constructor() { }
 
   /**
    * Validate the results of a question
@@ -50,7 +50,7 @@ export default class {
         return false;
       case "radio":
         return answer && (answer.other || typeof answer.response != "undefined");
-      case "text":
+      case "text": {
         if (question.limits) {
           let lim = question.limits;
           if (lim.character) {
@@ -74,15 +74,16 @@ export default class {
         }
         let _thasanswer = answer && (answer.length > 0);
         if (_thasanswer && question.modifier == "number") {
-          return !!!answer.match(/[a-zA-Z]/);
+          return !answer.match(/[a-zA-Z]/);
         } else if (_thasanswer && question.modifier == "integer") {
-          return !!!answer.match(/[a-zA-Z\.]/);
+          return !answer.match(/[a-zA-Z.]/);
         } else if (_thasanswer && question.modifier == "email") {
           return !!answer
             .trim()
-            .match(/[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]+/gi);
+            .match(/[a-zA-Z0-9.]+@[a-zA-Z0-9.]+/gi);
         }
         return _thasanswer;
+      }
       case "dropdown":
         return (typeof answer != undefined) && (answer > -1);
       case "matrixrating":
@@ -95,5 +96,4 @@ export default class {
         return false;
     }
   }
-
-};
+}

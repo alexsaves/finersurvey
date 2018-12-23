@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import {changeAnswer} from '../../../../actions';
+import { connect } from 'react-redux';
+import { changeAnswer } from '../../../../actions';
 import Piper from '../../../components/piper';
-import Keymaker from '../../../components/keymaker';
 
 /**
 * Represents a question
@@ -70,10 +69,7 @@ class RatingQuestion extends React.Component {
         7
       ],
       ctx = this,
-      answer = this.props.answer || 0,
-      piper = this.piper,
-      panswers = this.props.answers,
-      ppages = this.props.allpages;
+      answer = this.props.answer || 0;
 
     if (this.props.isFocused && !this.wasFocused) {
       setTimeout(() => {
@@ -92,17 +88,17 @@ class RatingQuestion extends React.Component {
           {ratingScale.map((rt, idx) => {
             return <label
               key={idx}
-              className={"selectbutton question--ratingitem" + (!!(rt <= answer)
-              ? " selected"
-              : "")}>{rt}<input
-              type="checkbox"
-              checked={!!(rt <= answer)}
-              name={qname}
-              tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
-              value={rt}
-              onChange={ctx
-              .handleAnswerChange
-              .bind(ctx)}/></label>
+              className={"selectbutton question--ratingitem" + ((rt <= answer)
+                ? " selected"
+                : "")}>{rt}<input
+                type="checkbox"
+                checked={!!(rt <= answer)}
+                name={qname}
+                tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber}
+                value={rt}
+                onChange={ctx
+                  .handleAnswerChange
+                  .bind(ctx)} /></label>
           })}
         </div>
         <div className="labelcontainer">

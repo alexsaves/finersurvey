@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import {changeAnswer} from '../../../../actions';
+import { connect } from 'react-redux';
+import { changeAnswer } from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
 import Keymaker from '../../../components/keymaker';
@@ -55,7 +55,7 @@ class RadioQuestion extends React.Component {
    * Handle focus on the input
    * @param {*} e
    */
-  handleFocus(e) {
+  handleFocus() {
     // Signal that the user is interacting with the question
     if (this.props.onQuestionBeingInteractedWith) {
       this
@@ -69,8 +69,7 @@ class RadioQuestion extends React.Component {
    * @param {*} e
    */
   handleAnswerChange(e, e2, skipAutoAdvance) {
-    let targ = e && e.target,
-      root = ReactDOM.findDOMNode(this),
+    let root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByTagName("input"),
       value = null,
       otherval = "",
@@ -125,7 +124,7 @@ class RadioQuestion extends React.Component {
         let targ = e.currentTarget,
           cb = targ.getElementsByTagName("input")[0];
 
-        cb.checked = !!!cb.checked;
+        cb.checked = !cb.checked;
         e.currentTarget = cb;
         this.handleAnswerChange(e);
       }
@@ -150,10 +149,10 @@ class RadioQuestion extends React.Component {
 
     if (val.length > 0) {
       otherrd.checked = true;
-      this.setState({otherisselected: true});
+      this.setState({ otherisselected: true });
     } else {
       otherrd.checked = false;
-      this.setState({otherisselected: false});
+      this.setState({ otherisselected: false });
     }
   }
 
@@ -189,18 +188,18 @@ class RadioQuestion extends React.Component {
             return <label
               key={Keymaker(idx + rt)}
               onKeyPress={this
-              .handleKeyPress
-              .bind(this)}
+                .handleKeyPress
+                .bind(this)}
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}
               className={"standalonebutton " + (shouldOptionBeSelected(idx)
-              ? "selected"
-              : "")}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}<input
-              type="radio"
-              name={qname}
-              value={idx}
-              onClick={ctx
-              .handleAnswerChange
-              .bind(ctx)}/></label>
+                ? "selected"
+                : "")}>{piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}<input
+                type="radio"
+                name={qname}
+                value={idx}
+                onClick={ctx
+                  .handleAnswerChange
+                  .bind(ctx)} /></label>
           })}
         {this.props.other === true && <label className="otherLabelStackButton"><input
           type="radio"
@@ -208,20 +207,20 @@ class RadioQuestion extends React.Component {
           className="other--rd"
           value={9999}
           onClick={ctx
-          .handleAnswerChange
-          .bind(ctx)}/><input
-          type="text"
-          className={"other--textfield " + (otherisselected ? "selected" : "")}
-          placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables, this.props.messages)}
-          defaultValue={(this.props.answer && this.props.answer.other)
-          ? this.props.answer.other
-          : ''}
-          onFocus={ctx
-          .handleFocus
-          .bind(ctx)}
-          onKeyUp={ctx
-          .handleIptThrottleChange
-          .bind(ctx)}/>
+            .handleAnswerChange
+            .bind(ctx)} /><input
+            type="text"
+            className={"other--textfield " + (otherisselected ? "selected" : "")}
+            placeholder={piper.pipe(this.props.otherplaceholder || '', panswers, ppages, variables, this.props.messages)}
+            defaultValue={(this.props.answer && this.props.answer.other)
+              ? this.props.answer.other
+              : ''}
+            onFocus={ctx
+              .handleFocus
+              .bind(ctx)}
+            onKeyUp={ctx
+              .handleIptThrottleChange
+              .bind(ctx)} />
         </label>}
       </div>
     );

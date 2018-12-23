@@ -9,7 +9,6 @@ function respondent(state = {}, action) {
       } else {
         return state;
       }
-      break;
     default:
       return state
   }

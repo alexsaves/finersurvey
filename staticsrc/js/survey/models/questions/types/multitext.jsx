@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import {changeAnswer} from '../../../../actions';
+import { connect } from 'react-redux';
+import { changeAnswer } from '../../../../actions';
 import Piper from '../../../components/piper';
 import Randomizer from '../../../components/randomizer';
 import Keymaker from '../../../components/keymaker';
@@ -43,9 +43,8 @@ class MultiTextQuestion extends React.Component {
    * Handle input from the user
    * @param {*} e
    */
-  handleAnswerChange(e) {
-    let targ = e && e.target,
-      root = ReactDOM.findDOMNode(this),
+  handleAnswerChange() {
+    let root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByClassName("ipt"),
       dvals = [];
 
@@ -73,7 +72,6 @@ class MultiTextQuestion extends React.Component {
     let root = ReactDOM.findDOMNode(this),
       ipts = root.getElementsByClassName('ipt'),
       targ = e.target,
-      dataWhich = parseInt(targ.getAttribute("data-which")),
       dataOrder = parseInt(targ.getAttribute("data-order"));
 
     if (e && e.keyCode == 13 && !(this.props.modifier && this.props.modifier.trim().toLowerCase() == "multiline")) {
@@ -99,7 +97,7 @@ class MultiTextQuestion extends React.Component {
    * Handle focus on the input
    * @param {*} e
    */
-  handleFocus(e) {
+  handleFocus() {
     // Signal that the user is interacting with the question
     if (this.props.onQuestionBeingInteractedWith) {
       this
@@ -113,7 +111,6 @@ class MultiTextQuestion extends React.Component {
  */
   render() {
     let ctx = this,
-      isMultiline = !!(this.props.modifier && this.props.modifier.trim().toLowerCase() == "multiline"),
       piper = this.piper,
       panswer = this.props.answer,
       panswers = this.props.answers,
@@ -152,16 +149,16 @@ class MultiTextQuestion extends React.Component {
               key={Keymaker(idx + rt)}
               tabIndex={(ctx.props.pageNumber * 1000) + ctx.props.questionNumber + idxo}
               onFocus={this
-              .handleFocus
-              .bind(this)}
+                .handleFocus
+                .bind(this)}
               data-which={idx}
               data-order={idxo}
               placeholder={piper.pipe(rt, panswers, ppages, variables, ctx.props.messages)}
               defaultValue={storedValue}
               onKeyDown={this
-              .handleTypeThrottle
-              .bind(this)}
-              className="ipt"/>
+                .handleTypeThrottle
+                .bind(this)}
+              className="ipt" />
           })}
       </div>
     );
