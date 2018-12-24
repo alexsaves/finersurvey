@@ -11,6 +11,7 @@ addons:
     - zeromq
     - git-lfs
     - mysql@5.7
+    - redis
 before_install:
 - export PATH=$PATH:/usr/local/opt/mysql@5.7/bin
 - mysql.server start

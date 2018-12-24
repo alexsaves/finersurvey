@@ -1,6 +1,6 @@
 {
     "name": "finersurvey",
-    "version": "0.5.22",
+    "version": "0.5.23",
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
@@ -84,8 +84,8 @@
         "express-vue": "^5.6.5",
         "extend": "^3.0.1",
         "fetch": "^1.1.0",
-        "finercommon": "git+https://b5502c48cbb355b1cb71b9aea45c794682f180e1:x-oauth-basic@github.com/thefinerink/finercommon.git#0.4.2",
-        "finerdocker": "git+https://b5502c48cbb355b1cb71b9aea45c794682f180e1:x-oauth-basic@github.com/thefinerink/finerdocker.git#1.1.5",
+        "finercommon": "git+https://b5502c48cbb355b1cb71b9aea45c794682f180e1:x-oauth-basic@github.com/thefinerink/finercommon.git#0.4.3",
+        "finerdocker": "git+https://b5502c48cbb355b1cb71b9aea45c794682f180e1:x-oauth-basic@github.com/thefinerink/finerdocker.git#1.1.6",
         "font-awesome": "^4.7.0",
         "forever-monitor": "^1.7.1",
         "form-serializer": "^2.5.0",
