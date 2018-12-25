@@ -93,20 +93,17 @@ const store = createStore(
 );
 // TODO RECONCILS
 // Build the middleware for intercepting and dispatching navigation actions
-/*let appStore = createStore(reducers, startupState, applyMiddleware(thunk), applyMiddleware(routerMiddleware(history)));
-appStore.subscribe(() => {
-  let st = appStore.getState(),
+
+store.subscribe(() => {
+  let st = store.getState(),
     ansState = {
       key: persistentKey,
       hash: surveyHash,
       answers: st.answers || {}
     },
     ansStateStr = JSON.stringify(ansState);
-  if (ansStateStr != __lastAnsState && !st.isNew) {
-    __lastAnsState = ansStateStr;
-    localStorage.setItem(persistentKey, ansStateStr);
-  }
-});*/
+  localStorage.setItem(persistentKey, ansStateStr);
+});
 
 // console.log(appStore.getState()) appStore.subscribe(() =>
 // console.log(store.getState())) The only way to mutate the internal state is
