@@ -7,6 +7,7 @@ import LoadingScreen from './components/loadingscreen.jsx';
 import MissingPageMessage from './components/missingpagemessage.jsx';
 import { changeIsNewStatus } from '../actions';
 import { Link } from 'react-router-dom';
+import { validateSurvey } from '../actions/index';
 
 /**
 * Represents the entire survey
@@ -21,6 +22,17 @@ class SurveyComponent extends React.Component {
       isOverflowing: false,
       hideLoadingScreen: false,
       didShowLoadingScreen: false
+    };
+  }
+
+  /**
+   * Get the location from the URL
+   */
+  getCurrentLocation() {
+    var bits = window.location.pathname.split('/');
+    return {
+      pg: parseInt(bits[bits.length - 1], 10),
+      uid: bits[bits.length - 2]
     };
   }
 
@@ -45,6 +57,8 @@ class SurveyComponent extends React.Component {
         }
       }
     }
+
+    this.props.dispatch(validateSurvey());
   }
 
   /**
@@ -72,8 +86,9 @@ class SurveyComponent extends React.Component {
  * Render the view
  */
   render() {
-    let uid = this.props.match.params.uid,
-      desiredPage = this.props.match.params.pg || 0,
+    let pageInfo = this.getCurrentLocation(),
+      uid = pageInfo.uid,
+      desiredPage = pageInfo.pg || 0,
       pages = this.props.pages,
       hideLogo = false,
       showMissingPageUI = false,
@@ -88,7 +103,7 @@ class SurveyComponent extends React.Component {
         ? !!this.props.pages[this.props.currentPage].hideLogo
         : true;
     }
-
+    
     // Spit out the survey
     return (
       <div
@@ -107,7 +122,7 @@ class SurveyComponent extends React.Component {
           className={"logo--finerink" + (hideLogo
             ? " hidden"
             : "")}></div>
-        {showingLoadingScreen && <LoadingScreen loadingComplete={this.props.loadingComplete} />}
+        {showingLoadingScreen && <LoadingScreen />}
         <Link to={"/s/" + uid} aria-hidden="true" className="resetSurveyLink"></Link>
       </div>
     );

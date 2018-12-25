@@ -40,6 +40,13 @@ class PageComponent extends React.Component {
   }
 
   /**
+   * Clean up
+   */
+  componentWillUnmount() {
+    clearTimeout(this._tm);
+  }
+
+  /**
    * A question was fully answered
    */
   handleQuestionFullyAnswered() {
@@ -48,7 +55,7 @@ class PageComponent extends React.Component {
         .props
         .onFullyAnswerQuestion();
     }
-    setTimeout(() => {
+    this._tm = setTimeout(() => {
       // Find the next interactable question
       let nextOne = this.getNextQuestionWithInput(this.state.focusItem, this.props);
       this.setState({focusItem: nextOne})

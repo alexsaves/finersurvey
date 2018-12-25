@@ -48,6 +48,16 @@ class PaginationController extends React.Component {
   }
 
   /**
+   * Clean up stuff
+   */
+  componentWillUnmount() {
+    clearTimeout(this.advancejump);
+    clearTimeout(this._advanceTimer);
+    clearTimeout(this._autoAdvance);
+    clearTimeout(this._int);
+  }
+
+  /**
    * Handle advancing
    */
   handleAdvanceRequest(e) {
@@ -179,7 +189,7 @@ class PaginationController extends React.Component {
     clearTimeout(this._autoAdvance);
     this._autoAdvance = setTimeout(() => {
       if (this.pageCanAutoAdvance(this.props.currentPage)) {
-        setTimeout(() => {
+        this._int = setTimeout(() => {
           let root = ReactDOM.findDOMNode(this),
             advanceButton = root.getElementsByClassName('advance--button')[0];
           var evObj = document.createEvent('MouseEvents');

@@ -1,6 +1,6 @@
 {
     "name": "finersurvey",
-    "version": "0.5.24",
+    "version": "0.5.26",
     "description": "Survey Delivery Platform",
     "main": "index.js",
     "scripts": {
@@ -84,7 +84,7 @@
         "express-vue": "^5.6.5",
         "extend": "^3.0.1",
         "fetch": "^1.1.0",
-        "finercommon": "git+https://b5502c48cbb355b1cb71b9aea45c794682f180e1:x-oauth-basic@github.com/thefinerink/finercommon.git#0.4.4",
+        "finercommon": "git+https://b5502c48cbb355b1cb71b9aea45c794682f180e1:x-oauth-basic@github.com/thefinerink/finercommon.git#0.4.6",
         "finerdocker": "git+https://b5502c48cbb355b1cb71b9aea45c794682f180e1:x-oauth-basic@github.com/thefinerink/finerdocker.git#1.1.7",
         "font-awesome": "^4.7.0",
         "forever-monitor": "^1.7.1",
@@ -127,6 +127,7 @@
         "@babel/preset-react": "^7.0.0",
         "@babel/runtime": "^7.2.0",
         "babel-loader": "^8.0.4",
+        "connected-react-router": "^6.0.0",
         "gulp": "^4.0.0",
         "gulp-concat": "^2.6.1",
         "gulp-html-replace": "^1.6.2",
@@ -141,7 +142,7 @@
         "react-date-range": "^0.9.4",
         "react-dom": "^16.7.0",
         "react-native-md5": "^1.0.0",
-        "react-redux": "^5.1.1",
+        "react-redux": "^6.0.0",
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
         "react-router-redux": "^4.0.8",

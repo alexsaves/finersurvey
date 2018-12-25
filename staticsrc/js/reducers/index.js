@@ -1,4 +1,6 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux'
+import { connectRouter } from 'connected-react-router'
+
 import metadata from './metadata';
 import pages from './pages';
 import currentPage from './currentpage';
@@ -14,7 +16,10 @@ import surveyValidatorReducer from './validatesurvey';
 /**
  * The set of reducers
  */
-const surveyReducers = combineReducers({
+
+// All the reducers
+export default (history) => combineReducers({
+  router: connectRouter(history),
   metadata, 
   pages, 
   currentPage, 
@@ -27,6 +32,3 @@ const surveyReducers = combineReducers({
   messages,
   isNew
 });
-
-// Export it
-export default surveyReducers;

@@ -29,6 +29,7 @@ class RatingQuestion extends React.Component {
    */
   componentWillUnmount() {
     this.mounted = false;
+    clearTimeout(this._fcs);
   }
 
   /**
@@ -72,7 +73,7 @@ class RatingQuestion extends React.Component {
       answer = this.props.answer || 0;
 
     if (this.props.isFocused && !this.wasFocused) {
-      setTimeout(() => {
+      this._fcs = setTimeout(() => {
         this.wasFocused = true;
         let root = ReactDOM.findDOMNode(this),
           btns = root.getElementsByTagName('label');
