@@ -40,7 +40,6 @@ class SurveyComponent extends React.Component {
    * The UI has mounted
    */
   componentDidMount() {
-    console.log("SURVEY MOUNTED");
     this.updateOverflowStatus();
     // Only let it be new once
     if (this.props.isNew) {
@@ -104,7 +103,7 @@ class SurveyComponent extends React.Component {
         ? !!this.props.pages[this.props.currentPage].hideLogo
         : true;
     }
-    console.log("SHOWING LOADING?", showingLoadingScreen);
+    
     // Spit out the survey
     return (
       <div

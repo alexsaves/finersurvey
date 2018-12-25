@@ -362,7 +362,7 @@ class SortQuestion extends React.Component {
     let diffX = e.clientX - this.state.startClientX,
       diffY = e.clientY - this.state.startClientY,
       hoverPosition = 0;
-    //console.log("DRAG MOVE", e.clientX, e.clientY);
+      
     this.draggy.style.top = (this.targetCoords.y + diffY) + "px";
     this.draggy.style.left = (this.targetCoords.x + diffX) + "px";
 

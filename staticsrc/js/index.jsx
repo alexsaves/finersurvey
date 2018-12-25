@@ -59,11 +59,9 @@ if (stateElm) {
     startupState.messages = Object.assign({}, MESSAGES, startupState.messages);
     let existingAnsOnObject = JSON.stringify(startupState.answers);
     if (existingAnsOnObject && existingAnsOnObject.length > 1 && existingAnsOnObject != "{}") {
-      //console.log("OVERWRITING WITH", startupState.answers);
       localStorage.setItem(persistentKey, JSON.stringify({ key: persistentKey, hash: surveyHash, answers: startupState.answers }));
     }
     if (ansObj.key == persistentKey && ansObj.hash == surveyHash && (!existingAnsOnObject || existingAnsOnObject == '{}')) {
-      //console.log("Writing to ", ansObj.answers);
       startupState.answers = ansObj.answers;
     }
   }
@@ -105,8 +103,7 @@ store.subscribe(() => {
   localStorage.setItem(persistentKey, ansStateStr);
 });
 
-// console.log(appStore.getState()) appStore.subscribe(() =>
-// console.log(store.getState())) The only way to mutate the internal state is
+// The only way to mutate the internal state is
 // to dispatch an action. The actions can be serialized, logged or stored and
 // later replayed. appStore.dispatch({type: 'INCREMENT'}) Bind the app to the
 // DOM node with the app class on it
