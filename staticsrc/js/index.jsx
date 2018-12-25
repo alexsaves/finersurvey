@@ -1,12 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import Survey from './survey/survey.jsx';
 import { Provider } from 'react-redux';
-import Application from './application.jsx';
-import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-import reducers from './reducers';
-import createHistory from 'history/createBrowserHistory';
-import thunk from 'redux-thunk';
+import { ConnectedRouter } from 'connected-react-router';
 import debounce from 'debounce';
 
 // Provides default application messages
@@ -73,13 +69,31 @@ if (stateElm) {
   }
 }
 
-// Set up a history object
-const history = createHistory();
 
-var __lastAnsState;
+//var __lastAnsState;
 
+
+import { createBrowserHistory } from 'history';
+import { applyMiddleware, compose, createStore } from 'redux';
+import { routerMiddleware } from 'connected-react-router';
+import createRootReducer from './reducers';
+import thunk from 'redux-thunk';
+
+const history = createBrowserHistory();
+
+const store = createStore(
+  createRootReducer(history), // root reducer with router state
+  startupState,
+  compose(
+    applyMiddleware(
+      routerMiddleware(history), // for dispatching history actions
+      thunk
+    ),
+  ),
+);
+// TODO RECONCILS
 // Build the middleware for intercepting and dispatching navigation actions
-let appStore = createStore(reducers, startupState, applyMiddleware(thunk), applyMiddleware(routerMiddleware(history)));
+/*let appStore = createStore(reducers, startupState, applyMiddleware(thunk), applyMiddleware(routerMiddleware(history)));
 appStore.subscribe(() => {
   let st = appStore.getState(),
     ansState = {
@@ -92,7 +106,7 @@ appStore.subscribe(() => {
     __lastAnsState = ansStateStr;
     localStorage.setItem(persistentKey, ansStateStr);
   }
-});
+});*/
 
 // console.log(appStore.getState()) appStore.subscribe(() =>
 // console.log(store.getState())) The only way to mutate the internal state is
@@ -123,9 +137,9 @@ if (___isFacebookApp()) {
 // Proceed if we find the root node
 if (rootNode) {
   render(
-    <Provider store={appStore}>
+    <Provider store={store}>
       <ConnectedRouter history={history}>
-        <Application />
+        <Survey />
       </ConnectedRouter>
     </Provider>, rootNode);
 }

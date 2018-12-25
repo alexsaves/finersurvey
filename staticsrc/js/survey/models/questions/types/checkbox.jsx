@@ -206,7 +206,7 @@ class CheckboxQuestion extends React.Component {
               onClick={this
                 .handleClick
                 .bind(this)}
-              data-originalValue={idx}
+              data-originalvalue={idx}
               onKeyPress={this
                 .handleKeyPress
                 .bind(this)}

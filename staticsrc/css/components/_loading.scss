@@ -6,12 +6,17 @@
   height: 100%;
   background-color: $background-image-match;
   z-index: 9999999;
-  transition: opacity $fast_anim_timing;
+  transition: all ($fast_anim_timing * 2);
   opacity: 1;
   &.complete {
-    opacity: 0;
+    opacity: 0;    
+    .loading--inner {
+      transform: scale(10, 10);
+    }
   }
   .loading--inner {
+    transition: all ($fast_anim_timing * 2.5);
+    transform: scale(1,1);
     position: fixed;
     width: 100%;
     height: 100%;

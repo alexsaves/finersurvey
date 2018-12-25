@@ -66,15 +66,11 @@ gulp.task('libs', function () {
  */
 gulp.task('default', gulp.series('sass', 'js', 'assets', 'libs'));
 
+
 /**
  * Watch task
  */
-gulp.task('watch', gulp.series('default'), function () {
-    isDebug = true;
-    console.log("Running in DEBUG MODE!".yellow);
-    gulp.watch([
-        src + '/js/*.js',
-        src + '/css/**/*.scss',
-        src + '/assets/**/*'
-    ], gulp.series('default'));
-});
+gulp.task("watch", gulp.series('default', () => {
+    gulp.watch(src + '/css/**/*.scss', gulp.series('sass'));
+    gulp.watch(src + '/assets/**/*', gulp.series('assets'));
+}));
