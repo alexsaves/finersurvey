@@ -40,16 +40,16 @@
             "ssl": "false"
         },
         "dbProd": {
-            "host": "finerink-cluster.cluster-ckumtmamqoyw.us-west-2.rds.amazonaws.com",
+            "host": "",
             "user": "finerinkadmin",
-            "pw": "J39dK$sl_1!",
+            "pw": "",
             "db": "finerinkprod",
             "ssl": "true"
         },
         "aws": {
             "region": "us-west-2",
-            "accessKeyId": "AKIAJYRCOXQIAUWOTAUA",
-            "secretAccessKey": "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",
+            "accessKeyId": "",
+            "secretAccessKey": "",
             "timeZone": "America/Los_Angeles"
         }
     },
